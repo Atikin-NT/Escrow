@@ -8,7 +8,7 @@ struct order{
     uint value;
 }
 
-contract Garant{
+contract Escrow{
     mapping(address => mapping( address => order)) public transactionList; //change to private
     address public admin; //change to private
     uint public hold;
