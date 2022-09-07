@@ -1,3 +1,5 @@
 # Игнор иро вать установленные npm пакеты
 node_modules
-package-lock.json
+/package-lock.json
+solidity/package-lock.json
+solidity/artifacts

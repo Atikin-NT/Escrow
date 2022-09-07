@@ -5,6 +5,6 @@
     "hardhat": "^2.11.1"
   },
   "dependencies": {
-    "ethers": "^5.7.0"
+    "dotenv": "^16.0.2"
   }
 }
