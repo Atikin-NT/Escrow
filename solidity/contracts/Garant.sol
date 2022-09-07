@@ -9,9 +9,9 @@ struct order{
 }
 
 contract Garant{
-    mapping(address => mapping( address => order)) public transactionList; //change to private
-    address public admin; //change to private
-    uint public hold;
+    mapping(address => mapping( address => order)) private transactionList;
+    address private admin;
+    uint private hold;
 
     constructor(){
         admin = msg.sender;
