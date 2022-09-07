@@ -1,87 +1,76 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >=0.8.9 <0.9.0;
 
-struct order{
-    bool moneyCheck;
-    bool sendAction;
-    uint value;
-}
-
-contract Escrow{
-    mapping(address => mapping( address => order)) public transactionList; //change to private
-    address public admin; //change to private
+// Author: @avezorgen
+contract Escrow {
+    struct props {
+        uint value;
+        bool confBuyer;
+        bool confSeller;
+    }
+    mapping(address => mapping(address => props)) public deals;
+    address public owner;
     uint public hold;
 
-    constructor(){
-        admin = msg.sender;
+    constructor() {
+        owner = msg.sender;
     }
 
-    modifier dealExist(address buyer) {
-        require(transactionList[buyer][msg.sender].value != 0, "Deal does not exist");
-        _;
+    function create(address buyer, address seller, uint value) external {
+        require(msg.sender == buyer || msg.sender == seller, "Don't have permission ");
+        require(value != 0, "Can't provide deal with 0 value");
+        require(deals[buyer][seller].value == 0, "Deal already exists");
+        deals[buyer][seller].value = value;
     }
 
-    modifier moneyConfimWith(address buyer){
-        require(transactionList[buyer][msg.sender].moneyCheck == true, "Money not confim");
-        _;
+    function sendB(address seller) external payable {
+        require(msg.value != 0, "Value can't be zero");
+        require(deals[msg.sender][seller].confBuyer == false, "Money was already sent");
+        require(msg.value == deals[msg.sender][seller].value, "Need more money");
+        deals[msg.sender][seller].confBuyer = true;
     }
 
-    modifier sendConfim(address toSeller){
-        require(transactionList[msg.sender][toSeller].moneyCheck == true, "Send not confim");
-        _;
+    function sendS(address buyer) external {
+        require(deals[buyer][msg.sender].confBuyer == true, "Money was not sent");
+        require(deals[buyer][msg.sender].confSeller == false, "Subject was already sent");
+        deals[buyer][msg.sender].confSeller = true;
     }
 
-    // call by buyer
-    function transferTo(address to) external payable{
-        if(transactionList[msg.sender][to].value == 0) {
-            transactionList[msg.sender][to].moneyCheck = false;
-            transactionList[msg.sender][to].sendAction = false;
+    function cancel(address buyer, address seller) external {
+        require(msg.sender == buyer || msg.sender == seller, "Don't have permission");
+        require(deals[buyer][seller].value != 0, "Deal does not exist");
+        require(deals[buyer][seller].confSeller == false, "Seller already sent");
+        if (deals[buyer][seller].confBuyer) {
+            if (msg.sender == seller) {
+                //seller отменил сделку, когда buyer уже отправил деньги
+            }
+            payable(buyer).transfer(deals[buyer][seller].value);
         }
-        transactionList[msg.sender][to].value += msg.value;
+        delete deals[buyer][seller];
     }
 
-    // call by seller
-    function moneyForMeFrom(address buyer) external view returns (uint){
-        return transactionList[buyer][msg.sender].value;
+    function approve(address seller) external {
+        require(deals[msg.sender][seller].confSeller == true, "Seller did not confirm the transaction");
+        uint fee = deals[msg.sender][seller].value / 1000 * 25;
+        hold += fee;
+        payable(seller).transfer(deals[msg.sender][seller].value - fee);
+        delete deals[msg.sender][seller];
     }
 
-    // call by seller
-    function moneyForMeConfim(address buyer) external dealExist(buyer){
-        transactionList[buyer][msg.sender].moneyCheck = true;
+    function disapprove(address seller) external {
+        require(deals[msg.sender][seller].confSeller == true, "Seller did not confirm the transaction");
+        payable(msg.sender).transfer(deals[msg.sender][seller].value); //buyer отправлял и seller отправлял
+        delete deals[msg.sender][seller];
     }
 
-    // call by seller
-    function moneyForMeCancel(address buyer) external dealExist(buyer){
-        payable(buyer).transfer(transactionList[buyer][msg.sender].value);
-        delete transactionList[buyer][msg.sender];
-    }
-
-    // call by seller
-    function sendActionConfim(address buyer) external moneyConfimWith(buyer){
-        transactionList[buyer][msg.sender].moneyCheck = true;
-    }
-
-    // call by buyer
-    function getBoxConfim(address seller) external sendConfim(seller){
-        uint tmp = transactionList[msg.sender][seller].value / 1000 * 25;
-        hold += tmp;
-        payable(seller).transfer(transactionList[msg.sender][seller].value - tmp);
-        delete transactionList[msg.sender][seller];
-    }
-
-    // call by buyer
-    function getBoxCancel(address seller) external sendConfim(seller){
-        payable(msg.sender).transfer(transactionList[msg.sender][seller].value);
-    }
-
-    function getBalance() external view returns(uint){
-        return address(this).balance;
-    }
-
-    function sendToAdmin() external{
-        payable(admin).transfer(hold);
+    function withdraw() external {
+        require(msg.sender == owner, "Caller is not owner");
+        payable(owner).transfer(hold);
         hold = 0;
     }
-
+    
+    receive() external payable {
+        hold += msg.value;
+    }
 }

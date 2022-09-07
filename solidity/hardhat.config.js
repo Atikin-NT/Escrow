@@ -7,7 +7,6 @@ const { API_URL, GOERLI_PRIVATE_KEY } = process.env;
 module.exports = {
   solidity: "0.8.9",
   networks: {
-    defaultNetwork: 'hardhat',
     hardhat: {
     },
     goerli: {
