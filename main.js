@@ -8,8 +8,8 @@ provider = new ethers.getDefaultProvider("http://localhost:8545");
 
 const app = express();
 
-const hostname = '127.0.0.2';
-const port = 3000;
+const hostname = '127.0.0.1';
+const port = 4000;
 
 app.use(express.static(__dirname + '/public/'));
 app.use(bodyParser.urlencoded({ extended: true }));
