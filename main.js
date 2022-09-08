@@ -2,7 +2,7 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const ethers = require("ethers");
-const GarantChain = require('./lib/GarantChain');
+const escrowRoutes = require("./routes/escrow.js")
 
 provider = new ethers.getDefaultProvider("http://localhost:8545");
 
@@ -14,6 +14,8 @@ const port = 4000;
 app.use(express.static(__dirname + '/public/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(escrowRoutes);
+
 app.engine('handlebars', expressHandlebars.engine({
   defaultLayout: 'main',
 }));
@@ -24,19 +26,10 @@ app.get('/', (req, res) => {
   res.render('metamask');
 });
 
-app.post('/login', GarantChain.login);
-app.post('/create', GarantChain.create);
-app.post('/sendB', GarantChain.sendB);
-app.post('/sendS', GarantChain.sendS);
-app.post('/cancel', GarantChain.cancel);
-app.post('/approve', GarantChain.approve);
-app.post('/disapprove', GarantChain.disapprove);
-app.post('/withdraw', GarantChain.withdraw);
-
-app.use((req, res) => {
-  res.status(404);
-  res.render('404 - Error');
-});
+// app.use((req, res) => {
+//   res.status(404);
+//   res.render('404 - Error');
+// });
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
