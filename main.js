@@ -13,17 +13,15 @@ garant = new garantProvider(signer1);
 
 const send = async () => {
   const tx = {
-    to: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    value: 100000000000000000,
+    value: ethers.utils.parseEther("1.0"),
     gasLimit: 3000000,
   };
 
   await garant.createDealByBuyer(signer2.address, tx);
+  await garant.getBalance();
 };
 
 send();
-
-garant.getBalance();
 
 async function tmp(){
   var balance = await signer1.getBalance();
