@@ -3,33 +3,11 @@ const expressHandlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
 const garantProvider = require('./lib/GarantProvider.js');
 const ethers = require("ethers");
+const GarantChain = require('./lib/GarantChain');
 
 provider = new ethers.getDefaultProvider("http://localhost:8545");
 
-signer1 = new ethers.Wallet("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80", provider);
-signer2 = new ethers.Wallet("0xdbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97", provider);
-
 garant = new garantProvider(signer1);
-
-const send = async () => {
-  const tx = {
-    value: ethers.utils.parseEther("1.0"),
-    gasLimit: 3000000,
-  };
-
-  await garant.createDealByBuyer(signer2.address, tx);
-  await garant.getBalance();
-};
-
-send();
-
-async function tmp(){
-  var balance = await signer1.getBalance();
-  console.log("signer1 = " + balance);
-  balance = await signer2.getBalance();
-  console.log("signer2 = " + balance);
-}
-tmp();
 
 const app = express();
 
@@ -48,6 +26,14 @@ app.set('view engine', 'handlebars');
 app.get('/', (req, res) => {
   res.render('metamask');
 });
+
+app.post('/create', GarantChain.create);
+app.post('/sendB', GarantChain.sendB);
+app.post('/sendS', GarantChain.sendS);
+app.post('/cancel', GarantChain.cancel);
+app.post('/approve', GarantChain.approve);
+app.post('/disapprove', GarantChain.disapprove);
+app.post('/withdraw', GarantChain.withdraw);
 
 app.use((req, res) => {
   res.status(404);
