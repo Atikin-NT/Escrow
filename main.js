@@ -26,10 +26,10 @@ app.get('/', (req, res) => {
   res.render('metamask');
 });
 
-// app.use((req, res) => {
-//   res.status(404);
-//   res.render('404 - Error');
-// });
+app.use((req, res) => {
+  res.status(404);
+  res.render('404 - Error');
+});
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
