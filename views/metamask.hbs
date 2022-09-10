@@ -1,20 +1,93 @@
 <h1>Test Metamask</h1>
 
+{{!-- <form action="/login" method="post"> --}}
 <h3>Enter metamask wallet:</h3>
+{{!-- <input type="text" id="fieldEmail" name="account" style="block: hidden;"> --}}
 <button id="metamask-login">Enable Ethereum</button>
+{{!-- </form> --}}
 
 <h3>Account: <span id="show-account"></span></h3>
 <h3>Your balance: </h3>
 
+<h2>Create something</h2>
+<form action="/create" method="post">
+    <label for="create">Something</label> <br>
+    <input type="text" name="buyer" id="create" size="10">
+    <input type="text" name="seller" id="create" size="10">
+    <input type="text" name="value" id="create" size="10"> <br>
+    <button type="submit">Create</button>
+
+</form>
+
+
 <h2>Trade part</h2>
-<input type="text" name="" id="cash" size="10">
-<button>Send</button>
+<form action="/sendB" method="post">
+    <label for="sendB">Send for buyer</label>
+    <input type="text" name="seller" id="sendB" size="10">
+    <input type="submit" value="Send">
+    {{!-- <button>Send</button> --}}
+</form>
+
+<form action="/sendS" method="post">
+    <label for="sendS">Sens seller</label>
+    <input type="text" name="buyer" id="sendS" size="10">
+    <input type="submit" value="Seller">
+</form>
+
+<br>
+
+<h2>Cansel part</h2>
+<form action="/cancel" method="post">
+    <label for="cancel"></label>
+    <p>Buyer wallet:</p>
+    <input type="text" name="buyer" id="cancel" size="10">
+    <p>Seller wallet:</p>
+    <input type="text" name="seller" id="cancel" size="10">
+    <br>
+    <input type="submit" value="Cancel">
+</form>
+
+<h2>Approve / Disapprove</h2>
+<form action="/approve" method="post">
+    <label for="approve"></label>
+    <input type="text" name="seller" id="approve" size="10">
+    <input type="submit" value="Approve">
+</form>
+<form action="/disapprove" method="post">
+    <label for="disapprove"></label>
+    <input type="text" name="seller" id="disapprove" size="10">
+    <input type="submit" value="Disapprove">
+</form>
+
 
 <script>
-    const metamaskLogin = document.querySelector('#metamask-login');
+    const btnMetamaskLogin = document.querySelector('#metamask-login');
     const showAccount = document.querySelector('#show-account');
 
-    metamaskLogin.addEventListener('click', () => {
+    function sendRequest(data, rout) {
+        const XHR = new XMLHttpRequest();
+        const FD = new FormData();
+
+        for (const [name, value] of Object.entries(data)) {
+            console.log(name, value);
+            FD.append(name, value);
+            console.log(FD.getAll("account"));
+            console.log(FD);
+        }
+
+        XHR.addEventListener("load", (event) => {
+            console.log("Response loaded");
+        })
+
+        XHR.addEventListener("error", (event) => {
+            console.log("Something went wrong");
+        })
+
+        XHR.open("POST", rout);
+        XHR.send(FD);
+    }
+
+    btnMetamaskLogin.addEventListener('click', () => {
         if (typeof window.ethereum !== 'undefined') {
             getAccount();
             return;
@@ -24,7 +97,8 @@
 
     async function getAccount() {
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        const account = accounts[0];
-        showAccount.innerHTML = account;
+        const _account = accounts[0];
+        showAccount.innerHTML = _account;
+        sendRequest({ "account": _account }, "/login");
     }
 </script>
