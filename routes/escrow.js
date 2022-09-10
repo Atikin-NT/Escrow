@@ -1,15 +1,15 @@
 const { Router } = require("express");
-const GarantChain = require("../lib/GarantChain");
+const {login, create, sendB, sendS, cancel, approve, disapprove, withdraw} = require("../lib/GarantChain");
 
 const router = Router()
 
-router.post('/login', GarantChain.login);
-router.post('/create', GarantChain.create);
-router.post('/sendB', GarantChain.sendB);
-router.post('/sendS', GarantChain.sendS);
-router.post('/cancel', GarantChain.cancel);
-router.post('/approve', GarantChain.approve);
-router.post('/disapprove', GarantChain.disapprove);
-router.post('/withdraw', GarantChain.withdraw);
+router.post('/login', login);
+router.post('/create', create);
+router.post('/sendB', sendB);
+router.post('/sendS', sendS);
+router.post('/cancel', cancel);
+router.post('/approve', approve);
+router.post('/disapprove', disapprove);
+router.post('/withdraw', withdraw);
 
 module.exports = router
