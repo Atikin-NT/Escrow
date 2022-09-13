@@ -1,23 +1,28 @@
 <h1>Test Metamask</h1>
 
-{{!-- <form action="/login" method="post"> --}}
 <h3>Enter metamask wallet:</h3>
-{{!-- <input type="text" id="fieldEmail" name="account" style="block: hidden;"> --}}
 <button id="metamask-login">Enable Ethereum</button>
-{{!-- </form> --}}
+
+<button id="connectButton" disabled="">Connected</button>
+<button id="getAccounts">Get Accounts</button>
 
 <h3>Account: <span id="show-account"></span></h3>
 <h3>Your balance: </h3>
 
-<h2>Create something</h2>
-<form action="/create" method="post">
-    <label for="create">Something</label> <br>
-    <input type="text" name="buyer" id="create" size="10">
-    <input type="text" name="seller" id="create" size="10">
-    <input type="text" name="value" id="create" size="10"> <br>
-    <button type="submit">Create</button>
+<hr>
 
-</form>
+<h2>Request Premission</h2>
+<button id="requestPermissions">Request Permissions</button><br>
+<button id="getPermissions">Get Permissions</button><br>
+<h3>Avaliable Permissions: <span id="permissionsResult"></span></h3><br>
+
+<hr>
+
+<h2>Create something</h2>
+<input type="text" name="buyer" id="create-buyer" size="10">
+<input type="text" name="seller" id="create-seller" size="10">
+<input type="text" name="value" id="create-value" size="10"> <br>
+<button type="submit" id="create-btn">Create</button>
 
 
 <h2>Trade part</h2>
@@ -102,3 +107,5 @@
         sendRequest({ "account": _account }, "/login");
     }
 </script>
+
+<script src="/js/EscrowChain.js"></script>
