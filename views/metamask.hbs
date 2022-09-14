@@ -1,3 +1,8 @@
+<script
+      src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+      type="application/javascript"
+    ></script>
+
 <h1>Test Metamask</h1>
 
 <h3>Enter metamask wallet:</h3>
@@ -15,6 +20,14 @@
 <button id="requestPermissions">Request Permissions</button><br>
 <button id="getPermissions">Get Permissions</button><br>
 <h3>Avaliable Permissions: <span id="permissionsResult"></span></h3><br>
+
+<hr>
+
+<h2>Send transaction test</h2>
+<input type="text" name="buyer" id="transactionTest-to" size="10">
+<input type="text" name="seller" id="transactionTest-value" size="10">
+<button id="transactionTest-send">Send Transaction</button><br>
+<h3>Transaction Status: <span id="transactionTest-status"></span></h3><br>
 
 <hr>
 
