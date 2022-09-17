@@ -5,7 +5,7 @@ const forwarderOrigin = 'http://localhost:9010';
 
 //MetaMask connect
 const onboardButton = document.getElementById('connectButton');
-const getAccountsButton = document.getElementById('getAccounts');
+// const getAccountsButton = document.getElementById('getAccounts');
 const getAccountsResult = document.getElementById('show-account');
 
 // Permissions Actions Section
@@ -50,7 +50,7 @@ const disapproveTransactionSeller = document.getElementById('disapprove-seller')
 const disapproveTransactionButton = document.getElementById('disapprove-btn');
 const disapproveTransactionStatus = document.getElementById('disapprove-status');
 
-const initialize = () => {
+const initialize = async () => {
     //Created check function to see if the MetaMask extension is installed
     const isMetaMaskInstalled = () => {
         const { ethereum } = window;
@@ -65,22 +65,10 @@ const initialize = () => {
         }
     };
 
-    const MetaMaskClientCheck = () => {
-        //Now we check to see if MetaMask is installed
-        if (!isMetaMaskInstalled()) {
-            onboardButton.innerText = 'Click here to install MetaMask!';
-            onboardButton.disabled = true;
-        } else {
-            onboardButton.innerText = 'Connect';
-            onboardButton.onclick = onClickConnect;
-            onboardButton.disabled = false; // FIXME: не работает
-        }
-    };
-
-    getAccountsButton.addEventListener('click', async () => {
-        const accounts = await ethereum.request({ method: 'eth_accounts' });
-        getAccountsResult.innerHTML = accounts[0] || 'Not able to get accounts';
-    });
+    // getAccountsButton.addEventListener('click', async () => {
+    //     const newAccounts = await provider.listAccounts();
+    //     handleNewAccounts(newAccounts)
+    // });
 
     requestPermissionsButton.onclick = async () => {
         try { // TODO: разумно будет сначала запросить, какие разрешения уже предоставлены
@@ -109,9 +97,7 @@ const initialize = () => {
 
     transactionTestSendButton.onclick = async () => {
         try{
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.listAccounts();
-            const signer = provider.getSigner(accounts[0]);
+            const signer = provider.getSigner();
             tx = {
                 to: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
                 value: ethers.utils.parseEther('0.1', 'ether')
@@ -125,9 +111,7 @@ const initialize = () => {
     }
     createTransactionSendButton.onclick = async () => {
         try{
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.listAccounts();
-            const signer = provider.getSigner(accounts[0]);
+            const signer = provider.getSigner();
 
             const escrowProvider = new EscrowProvider(signer);
             const buyer = createTransactionBuyer.value;
@@ -142,9 +126,7 @@ const initialize = () => {
     }
     sendBButton.onclick = async () => {
         try{
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.listAccounts();
-            const signer = provider.getSigner(accounts[0]);
+            const signer = provider.getSigner();
 
             const escrowProvider = new EscrowProvider(signer);
             const seller = sendBSeller.value;
@@ -160,9 +142,7 @@ const initialize = () => {
     }
     sendSButton.onclick = async () => {
         try{
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.listAccounts();
-            const signer = provider.getSigner(accounts[0]);
+            const signer = provider.getSigner();
 
             const escrowProvider = new EscrowProvider(signer);
             const buyer = sendSBuyer.value;
@@ -175,9 +155,7 @@ const initialize = () => {
     }
     cancelTransactionButton.onclick = async () => {
         try{
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.listAccounts();
-            const signer = provider.getSigner(accounts[0]);
+            const signer = provider.getSigner();
 
             const escrowProvider = new EscrowProvider(signer);
             const buyer = cancelTransactionBuyer.value;
@@ -191,9 +169,7 @@ const initialize = () => {
     }
     approveTransactionButton.onclick = async () => {
         try{
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.listAccounts();
-            const signer = provider.getSigner(accounts[0]);
+            const signer = provider.getSigner();
 
             const escrowProvider = new EscrowProvider(signer);
             const seller = approveTransactionSeller.value;
@@ -206,9 +182,7 @@ const initialize = () => {
     }
     disapproveTransactionButton.onclick = async () => {
         try{
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.listAccounts();
-            const signer = provider.getSigner(accounts[0]);
+            const signer = provider.getSigner();
 
             const escrowProvider = new EscrowProvider(signer);
             const seller = disapproveTransactionSeller.value;
@@ -220,7 +194,35 @@ const initialize = () => {
         }
     }
 
-    MetaMaskClientCheck();
+    function handleNewAccounts (newAccounts) {
+        accounts = newAccounts
+        getAccountsResult.innerHTML = accounts || 'Not able to get accounts';
+        // if (isMetaMaskConnected()) {
+        //   initializeAccountButtons()
+        // }
+        // updateButtons()
+      }
+
+    // let provider;
+    if (isMetaMaskInstalled()) {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+
+        ethereum.autoRefreshOnNetworkChange = false
+        ethereum.on('accountsChanged', handleNewAccounts)
+        try {
+            const newAccounts = await provider.listAccounts();
+            handleNewAccounts(newAccounts)
+        } catch (err) {
+            console.error('Error on init when getting accounts', err)
+        }
+
+        onboardButton.innerText = 'Connect';
+        onboardButton.onclick = onClickConnect;
+        onboardButton.disabled = false;
+    } else {
+        onboardButton.innerText = 'Click here to install MetaMask!';
+        onboardButton.disabled = true;
+    }
 };
 window.addEventListener('DOMContentLoaded', initialize);
 
