@@ -27,7 +27,7 @@ contract Escrow {
     function sendB(address seller) external payable {
         require(msg.value != 0, "Value can't be zero");
         require(deals[msg.sender][seller].confBuyer == false, "Money was already sent");
-        require(msg.value == deals[msg.sender][seller].value, "Need more money");
+        require(msg.value == deals[msg.sender][seller].value, "Wrong money value");
         deals[msg.sender][seller].confBuyer = true;
     }
 
@@ -64,10 +64,11 @@ contract Escrow {
         delete deals[msg.sender][seller];
     }
 
-    function withdraw() external {
+    function withdraw(address target) external {
         require(msg.sender == owner, "Caller is not owner");
-        payable(owner).transfer(hold);
-        hold = 0;
+        uint rest = hold / 100 * 2;
+        payable(target).transfer(hold - rest);
+        hold = rest;
     }
     
     receive() external payable {
