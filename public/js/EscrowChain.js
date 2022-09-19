@@ -7,6 +7,7 @@ const forwarderOrigin = 'http://localhost:9010';
 const onboardButton = document.getElementById('connectButton');
 // const getAccountsButton = document.getElementById('getAccounts');
 const getAccountsResult = document.getElementById('show-account');
+const getBalanceResult = document.getElementById('show-balance');
 
 // Permissions Actions Section
 const requestPermissionsButton = document.getElementById('requestPermissions');
@@ -56,6 +57,11 @@ const approveTransactionStatus = document.getElementById('approve-status');
 const disapproveTransactionSeller = document.getElementById('disapprove-seller');
 const disapproveTransactionButton = document.getElementById('disapprove-btn');
 const disapproveTransactionStatus = document.getElementById('disapprove-status');
+
+// Withdraw 
+const withdrawTarget = document.getElementById('withdraw-target');
+const withdrawButton = document.getElementById('withdraw-btn');
+const withdrawStatus = document.getElementById('withdraw-status');
 
 const initialize = async () => {
     //Created check function to see if the MetaMask extension is installed
@@ -217,7 +223,7 @@ const initialize = async () => {
             sendSStatus.innerHTML = `Ok`;
         } catch (err){
             console.error(err)
-            sendBStatus.innerHTML = `Error: ${err.data.message}`
+            sendSStatus.innerHTML = `Error: ${err.data.message}`
         }
     }
     cancelTransactionButton.onclick = async () => {
@@ -252,10 +258,24 @@ const initialize = async () => {
         }
     }
 
-    function handleNewAccounts (newAccounts) {
+    withdrawButton.onclick = async () => {
+        const target = withdrawTarget.value;
+        try{
+            const transaction = await escrowProvider.withdraw(target);
+            withdrawStatus.innerHTML = `Ok`;
+        } catch (err){
+            console.error(err)
+            withdrawStatus.innerHTML = `Error: ${err.data.message}`
+        }
+    }
+
+    async function handleNewAccounts (newAccounts) {
         accounts = newAccounts
         getAccountsResult.innerHTML = accounts || 'Not able to get accounts';
-        escrowProvider = new EscrowProvider(provider.getSigner());
+        const signer = provider.getSigner();
+        const balance = await signer.getBalance();
+        getBalanceResult.innerHTML = String(balance) || '';
+        escrowProvider = new EscrowProvider(signer);
         // if (isMetaMaskConnected()) {
         //   initializeAccountButtons()
         // }
