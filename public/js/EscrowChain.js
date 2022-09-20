@@ -70,14 +70,6 @@ const initialize = async () => {
         return Boolean(ethereum && ethereum.isMetaMask);
     };
 
-    const onClickConnect = async () => {
-        try {
-            await ethereum.request({ method: 'eth_requestAccounts' });
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     const updateButtons = (check) => {
         const value = String(check.value);
         const confBuyer = check.confBuyer;
@@ -112,11 +104,6 @@ const initialize = async () => {
             disapproveTransactionButton.disabled = false;
         }
     }
-
-    // getAccountsButton.addEventListener('click', async () => {
-    //     const newAccounts = await provider.listAccounts();
-    //     handleNewAccounts(newAccounts)
-    // });
 
     requestPermissionsButton.onclick = async () => {
         try { // TODO: разумно будет сначала запросить, какие разрешения уже предоставлены
@@ -169,20 +156,8 @@ const initialize = async () => {
             console.error(err)
             createTransactionStatus.innerHTML = `Error: ${err.data.message}`
         } finally {
-            sendBValue.value = value;
-            sendBSeller.value = seller;
-
             checkDealBuyer.value = buyer;
             checkDealSeller.value = seller;
-
-            sendSBuyer.value = buyer;
-
-            cancelTransactionBuyer.value = buyer;
-            cancelTransactionSeller.value = seller;
-
-            approveTransactionSeller.value = seller;
-
-            disapproveTransactionSeller.value = seller;
         }
     }
 
@@ -194,11 +169,22 @@ const initialize = async () => {
                 (transaction) => {
                     updateButtons(transaction);
                     checkDealOutput.innerHTML = transaction;
+                    sendBValue.value = transaction.value;
                 }
             );
         } catch (err){
             console.error(err)
             checkDealOutput.innerHTML = `Error: ${err.data.message}`
+        } finally {
+            sendBSeller.value = seller;
+            sendSBuyer.value = buyer;
+
+            cancelTransactionBuyer.value = buyer;
+            cancelTransactionSeller.value = seller;
+
+            approveTransactionSeller.value = seller;
+
+            disapproveTransactionSeller.value = seller;
         }
     }
 
@@ -282,14 +268,22 @@ const initialize = async () => {
         // updateButtons()
       }
 
-    // let provider;
+    const onClickConnect = async () => {
+        try {
+            await ethereum.request({ method: 'eth_requestAccounts' });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     if (isMetaMaskInstalled()) {
         provider = new ethers.providers.Web3Provider(window.ethereum);
         ethereum.autoRefreshOnNetworkChange = false
         ethereum.on('accountsChanged', handleNewAccounts)
         try {
             const newAccounts = await provider.listAccounts();
-            handleNewAccounts(newAccounts)
+            if (newAccounts.length > 0)
+                handleNewAccounts(newAccounts)
         } catch (err) {
             console.error('Error on init when getting accounts', err)
         }
