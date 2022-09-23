@@ -1,104 +1,92 @@
+<script
+      src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+      type="application/javascript"
+    ></script>
+<script src="/js/EscrowProvider.js"></script>
+
 <h1>Test Metamask</h1>
 
-{{!-- <form action="/login" method="post"> --}}
 <h3>Enter metamask wallet:</h3>
-{{!-- <input type="text" id="fieldEmail" name="account" style="block: hidden;"> --}}
-<button id="metamask-login">Enable Ethereum</button>
-{{!-- </form> --}}
+<button id="connectButton" disabled="">Connected</button>
+{{!-- <button id="getAccounts">Get Accounts</button> --}}
 
 <h3>Account: <span id="show-account"></span></h3>
-<h3>Your balance: </h3>
+<h3>Your balance: <span id="show-balance"></span></h3>
 
-<h2>Create something</h2>
-<form action="/create" method="post">
-    <label for="create">Something</label> <br>
-    <input type="text" name="buyer" id="create" size="10">
-    <input type="text" name="seller" id="create" size="10">
-    <input type="text" name="value" id="create" size="10"> <br>
-    <button type="submit">Create</button>
+<hr>
 
-</form>
+<h2>Request Premission</h2>
+<button id="requestPermissions">Request Permissions</button><br>
+<button id="getPermissions">Get Permissions</button><br>
+<h3>Avaliable Permissions: <span id="permissionsResult"></span></h3><br>
 
+<hr>
 
-<h2>Trade part</h2>
-<form action="/sendB" method="post">
-    <label for="sendB">Send for buyer</label>
-    <input type="text" name="seller" id="sendB" size="10">
-    <input type="submit" value="Send">
-    {{!-- <button>Send</button> --}}
-</form>
+<h2>Send transaction test</h2>
+<button id="transactionTest-send">Send Transaction</button><br>
+<h3>Transaction Status: <span id="transactionTest-status"></span></h3><br>
 
-<form action="/sendS" method="post">
-    <label for="sendS">Sens seller</label>
-    <input type="text" name="buyer" id="sendS" size="10">
-    <input type="submit" value="Seller">
-</form>
+<hr>
 
-<br>
+<h2>Create transaction</h2>
+<input type="text" name="buyer" id="create-buyer" size="10" placeholder="buyer" value="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266">
+<input type="text" name="seller" id="create-seller" size="10" placeholder="seller" value="0x70997970C51812dc3A010C7d01b50e0d17dc79C8">
+<input type="text" name="value" id="create-value" size="10" placeholder="value" value="5000"> <br>
+<button type="submit" id="create-btn">Create</button>
+<h3>Transaction Create Status: <span id="create-status"></span></h3><br>
 
-<h2>Cansel part</h2>
-<form action="/cancel" method="post">
-    <label for="cancel"></label>
-    <p>Buyer wallet:</p>
-    <input type="text" name="buyer" id="cancel" size="10">
-    <p>Seller wallet:</p>
-    <input type="text" name="seller" id="cancel" size="10">
-    <br>
-    <input type="submit" value="Cancel">
-</form>
+<hr>
 
-<h2>Approve / Disapprove</h2>
-<form action="/approve" method="post">
-    <label for="approve"></label>
-    <input type="text" name="seller" id="approve" size="10">
-    <input type="submit" value="Approve">
-</form>
-<form action="/disapprove" method="post">
-    <label for="disapprove"></label>
-    <input type="text" name="seller" id="disapprove" size="10">
-    <input type="submit" value="Disapprove">
-</form>
+<h2>Check deal</h2>
+<input type="text" name="buyer" id="deals-buyer" size="10" placeholder="buyer" value="">
+<input type="text" name="seller" id="deals-seller" size="10" placeholder="seller" value=""> <br>
+<button type="submit" id="deals-btn">Check</button>
+<h3>Deal: <span id="deals-output"></span></h3><br>
 
+<hr>
 
-<script>
-    const btnMetamaskLogin = document.querySelector('#metamask-login');
-    const showAccount = document.querySelector('#show-account');
+<h2>Send Money For Subject</h2>
+<input type="text" name="seller" id="sendB-seller" size="10" placeholder="seller" value="">
+<input type="text" name="value" id="sendB-value" size="10" placeholder="value" value=""> <br>
+<button type="submit" id="sendB-btn">Send</button>
+<h3>Send Money For Subject Status: <span id="sendB-status"></span></h3><br>
 
-    function sendRequest(data, rout) {
-        const XHR = new XMLHttpRequest();
-        const FD = new FormData();
+<hr>
 
-        for (const [name, value] of Object.entries(data)) {
-            console.log(name, value);
-            FD.append(name, value);
-            console.log(FD.getAll("account"));
-            console.log(FD);
-        }
+<h2>Send Subject</h2>
+<input type="text" name="buyer" id="sendS-buyer" size="10" placeholder="buyer" value=""><br>
+<button type="submit" id="sendS-btn">Send</button>
+<h3>Send Subject Status: <span id="sendS-status"></span></h3><br>
 
-        XHR.addEventListener("load", (event) => {
-            console.log("Response loaded");
-        })
+<hr>
 
-        XHR.addEventListener("error", (event) => {
-            console.log("Something went wrong");
-        })
+<h2>Cancel transaction</h2>
+<input type="text" name="buyer" id="cancel-buyer" size="10" placeholder="buyer" value="">
+<input type="text" name="seller" id="cancel-seller" size="10" placeholder="seller" value=""><br>
+<button type="submit" id="cancel-btn">Cancel</button>
+<h3>Transaction cancel Status: <span id="cancel-status"></span></h3><br>
 
-        XHR.open("POST", rout);
-        XHR.send(FD);
-    }
+<hr>
 
-    btnMetamaskLogin.addEventListener('click', () => {
-        if (typeof window.ethereum !== 'undefined') {
-            getAccount();
-            return;
-        }
-        showAccount.innerHTML = "MetaMask isn`t installed!";
-    });
+<h2>Approve transaction</h2>
+<input type="text" name="seller" id="approve-seller" size="10" placeholder="seller" value=""><br>
+<button type="submit" id="approve-btn">Approve</button>
+<h3>Transaction Approve Status: <span id="approve-status"></span></h3><br>
 
-    async function getAccount() {
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        const _account = accounts[0];
-        showAccount.innerHTML = _account;
-        sendRequest({ "account": _account }, "/login");
-    }
-</script>
+<hr>
+
+<h2>Disapprove transaction</h2>
+<input type="text" name="seller" id="disapprove-seller" size="10" placeholder="seller" value=""><br>
+<button type="submit" id="disapprove-btn">Disapprove</button>
+<h3>Transaction Disapprove Status: <span id="disapprove-status"></span></h3><br>
+
+<hr>
+
+<h2>Withdraw</h2>
+<input type="text" name="target" id="withdraw-target" size="10" placeholder="target" value=""><br>
+<button type="submit" id="withdraw-btn">Withdraw</button>
+<h3>Withdraw Status: <span id="withdraw-status"></span></h3><br>
+
+<hr>
+
+<script src="/js/EscrowChain.js"></script>
