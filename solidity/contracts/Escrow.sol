@@ -13,6 +13,11 @@ contract Escrow {
     address public owner;
     uint public hold;
 
+    event Created(address buyer, address seller, uint value);
+    event BuyerConfim(address buyer, address seller);
+    event SellerConfim(address buyer, address seller);
+    event Finished(address buyer, address seller);
+
     constructor() {
         owner = msg.sender;
     }
@@ -22,6 +27,7 @@ contract Escrow {
         require(value != 0, "Can't provide deal with 0 value");
         require(deals[buyer][seller].value == 0, "Deal already exists");
         deals[buyer][seller].value = value;
+        emit Created(buyer, seller, value);
     }
 
     function sendB(address seller) external payable {
@@ -29,12 +35,14 @@ contract Escrow {
         require(deals[msg.sender][seller].confBuyer == false, "Money was already sent");
         require(msg.value == deals[msg.sender][seller].value, "Wrong money value");
         deals[msg.sender][seller].confBuyer = true;
+        emit BuyerConfim(msg.sender, seller);
     }
 
     function sendS(address buyer) external {
         require(deals[buyer][msg.sender].confBuyer == true, "Money was not sent");
         require(deals[buyer][msg.sender].confSeller == false, "Subject was already sent");
         deals[buyer][msg.sender].confSeller = true;
+        emit SellerConfim(buyer, msg.sender);
     }
 
     function cancel(address buyer, address seller) external {
@@ -48,6 +56,7 @@ contract Escrow {
             payable(buyer).transfer(deals[buyer][seller].value);
         }
         delete deals[buyer][seller];
+        emit Finished(buyer, seller);
     }
 
     function approve(address seller) external {
@@ -56,12 +65,14 @@ contract Escrow {
         hold += fee;
         payable(seller).transfer(deals[msg.sender][seller].value - fee);
         delete deals[msg.sender][seller];
+        emit Finished(msg.sender, seller);
     }
 
     function disapprove(address seller) external {
         require(deals[msg.sender][seller].confSeller == true, "Seller did not confirm the transaction");
         payable(msg.sender).transfer(deals[msg.sender][seller].value); //buyer отправлял и seller отправлял
         delete deals[msg.sender][seller];
+        emit Finished(msg.sender, seller);
     }
 
     function withdraw(address target) external {
