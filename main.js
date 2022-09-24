@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 // const sqlite3 = require('sqlite3').verbose();
 // const escrowRoutes = require("./routes/escrow.js")
 const { ethers } = require("ethers");
-const { dbTest } = require('./lib/sqlite.js');
+const { dbTest, dbInsertData, dbGetDealsByAccount } = require('./lib/sqlite.js');
 
 provider = new ethers.getDefaultProvider("http://localhost:8545");
 
@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 
 // app.use(escrowRoutes);
 
-dbTest();
+dbGetDealsByAccount("0x0");
 
 
 app.get('/', (req, res) => {
