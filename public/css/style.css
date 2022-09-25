@@ -1,0 +1,24 @@
+body h2 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+body h3 {
+  margin: 0;
+}
+
+#page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  border-bottom: 2px dotted black;
+}
+
+#reg-container {
+  background-color: rgb(83, 129, 255);
+  height: auto;
+  width: 450px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.4rem;
+}/*# sourceMappingURL=style.css.map */

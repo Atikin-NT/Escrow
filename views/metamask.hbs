@@ -1,92 +1,222 @@
 <script
-      src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-      type="application/javascript"
-    ></script>
+  src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+  type="application/javascript"
+></script>
 <script src="/js/EscrowProvider.js"></script>
 
-<h1>Test Metamask</h1>
+<div id="page">
+  <div id="reg-container">
+    <div class="mw-full">
+      <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+      <div
+        class="card"
+        style="display: flex; flex-direction: column; height: 40rem;"
+      >
+        <h2 class="card-title" style="font-size: 3rem;">
+          Registration
+        </h2>
+        <p>
+          Enter metamask wallet
+        </p>
+        <input type="text" class="form-control" placeholder="Text input" style="margin-bottom: 3rem;">
+        <p>Account: <span id="show-account"></span></p>
+        <p>Your balance: <span id="show-balance"></span></p>
+        <div class="text-right" style="margin-top: auto;">
+          <!-- text-right = text-align: right -->
+          <a href="#" id="connectButton" class="btn" disabled="">Connect</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h3>Enter metamask wallet:</h3>
-<button id="connectButton" disabled="">Connected</button>
-{{!-- <button id="getAccounts">Get Accounts</button> --}}
+</div>
+{{! <div id="reg-container">
+    <div
+      style="height: 15%; width: 100%; display: flex; background-color: rgb(36, 87, 255); border-bottom: 2px solid black"
+    >
+      <h2 style="margin: auto;">Test Matamask</h2>
+    </div>
+    <div style="width: 50%; margin: auto; margin-top: 30%">
+      <h3 style="margin-bottom: 10px;">Enter metamask wallet:</h3>
+      <button id="connectButton" disabled="">Connected</button>
+    </div>
+  </div> }}
 
-<h3>Account: <span id="show-account"></span></h3>
-<h3>Your balance: <span id="show-balance"></span></h3>
+{{! <h1>Test Metamask</h1> }}
 
-<hr>
+{{! <h3>Enter metamask wallet:</h3> }}
+{{! <button id="connectButton" disabled="">Connected</button> }}
+{{! <button id="getAccounts">Get Accounts</button> }}
+
+<hr />
 
 <h2>Request Premission</h2>
-<button id="requestPermissions">Request Permissions</button><br>
-<button id="getPermissions">Get Permissions</button><br>
-<h3>Avaliable Permissions: <span id="permissionsResult"></span></h3><br>
+<button id="requestPermissions">Request Permissions</button><br />
+<button id="getPermissions">Get Permissions</button><br />
+<h3>Avaliable Permissions: <span id="permissionsResult"></span></h3><br />
 
-<hr>
+<hr />
 
 <h2>Send transaction test</h2>
-<button id="transactionTest-send">Send Transaction</button><br>
-<h3>Transaction Status: <span id="transactionTest-status"></span></h3><br>
+<button id="transactionTest-send">Send Transaction</button><br />
+<h3>Transaction Status: <span id="transactionTest-status"></span></h3><br />
 
-<hr>
+<hr />
 
 <h2>Create transaction</h2>
-<input type="text" name="buyer" id="create-buyer" size="10" placeholder="buyer" value="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266">
-<input type="text" name="seller" id="create-seller" size="10" placeholder="seller" value="0x70997970C51812dc3A010C7d01b50e0d17dc79C8">
-<input type="text" name="value" id="create-value" size="10" placeholder="value" value="5000"> <br>
+<input
+  type="text"
+  name="buyer"
+  id="create-buyer"
+  size="10"
+  placeholder="buyer"
+  value="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+/>
+<input
+  type="text"
+  name="seller"
+  id="create-seller"
+  size="10"
+  placeholder="seller"
+  value="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+/>
+<input
+  type="text"
+  name="value"
+  id="create-value"
+  size="10"
+  placeholder="value"
+  value="5000"
+/>
+<br />
 <button type="submit" id="create-btn">Create</button>
-<h3>Transaction Create Status: <span id="create-status"></span></h3><br>
+<h3>Transaction Create Status: <span id="create-status"></span></h3><br />
 
-<hr>
+<hr />
 
 <h2>Check deal</h2>
-<input type="text" name="buyer" id="deals-buyer" size="10" placeholder="buyer" value="">
-<input type="text" name="seller" id="deals-seller" size="10" placeholder="seller" value=""> <br>
+<input
+  type="text"
+  name="buyer"
+  id="deals-buyer"
+  size="10"
+  placeholder="buyer"
+  value=""
+/>
+<input
+  type="text"
+  name="seller"
+  id="deals-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/>
+<br />
 <button type="submit" id="deals-btn">Check</button>
-<h3>Deal: <span id="deals-output"></span></h3><br>
+<h3>Deal: <span id="deals-output"></span></h3><br />
 
-<hr>
+<hr />
 
 <h2>Send Money For Subject</h2>
-<input type="text" name="seller" id="sendB-seller" size="10" placeholder="seller" value="">
-<input type="text" name="value" id="sendB-value" size="10" placeholder="value" value=""> <br>
+<input
+  type="text"
+  name="seller"
+  id="sendB-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/>
+<input
+  type="text"
+  name="value"
+  id="sendB-value"
+  size="10"
+  placeholder="value"
+  value=""
+/>
+<br />
 <button type="submit" id="sendB-btn">Send</button>
-<h3>Send Money For Subject Status: <span id="sendB-status"></span></h3><br>
+<h3>Send Money For Subject Status: <span id="sendB-status"></span></h3><br />
 
-<hr>
+<hr />
 
 <h2>Send Subject</h2>
-<input type="text" name="buyer" id="sendS-buyer" size="10" placeholder="buyer" value=""><br>
+<input
+  type="text"
+  name="buyer"
+  id="sendS-buyer"
+  size="10"
+  placeholder="buyer"
+  value=""
+/><br />
 <button type="submit" id="sendS-btn">Send</button>
-<h3>Send Subject Status: <span id="sendS-status"></span></h3><br>
+<h3>Send Subject Status: <span id="sendS-status"></span></h3><br />
 
-<hr>
+<hr />
 
 <h2>Cancel transaction</h2>
-<input type="text" name="buyer" id="cancel-buyer" size="10" placeholder="buyer" value="">
-<input type="text" name="seller" id="cancel-seller" size="10" placeholder="seller" value=""><br>
+<input
+  type="text"
+  name="buyer"
+  id="cancel-buyer"
+  size="10"
+  placeholder="buyer"
+  value=""
+/>
+<input
+  type="text"
+  name="seller"
+  id="cancel-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/><br />
 <button type="submit" id="cancel-btn">Cancel</button>
-<h3>Transaction cancel Status: <span id="cancel-status"></span></h3><br>
+<h3>Transaction cancel Status: <span id="cancel-status"></span></h3><br />
 
-<hr>
+<hr />
 
 <h2>Approve transaction</h2>
-<input type="text" name="seller" id="approve-seller" size="10" placeholder="seller" value=""><br>
+<input
+  type="text"
+  name="seller"
+  id="approve-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/><br />
 <button type="submit" id="approve-btn">Approve</button>
-<h3>Transaction Approve Status: <span id="approve-status"></span></h3><br>
+<h3>Transaction Approve Status: <span id="approve-status"></span></h3><br />
 
-<hr>
+<hr />
 
 <h2>Disapprove transaction</h2>
-<input type="text" name="seller" id="disapprove-seller" size="10" placeholder="seller" value=""><br>
+<input
+  type="text"
+  name="seller"
+  id="disapprove-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/><br />
 <button type="submit" id="disapprove-btn">Disapprove</button>
-<h3>Transaction Disapprove Status: <span id="disapprove-status"></span></h3><br>
+<h3>Transaction Disapprove Status: <span id="disapprove-status"></span></h3><br
+/>
 
-<hr>
+<hr />
 
 <h2>Withdraw</h2>
-<input type="text" name="target" id="withdraw-target" size="10" placeholder="target" value=""><br>
+<input
+  type="text"
+  name="target"
+  id="withdraw-target"
+  size="10"
+  placeholder="target"
+  value=""
+/><br />
 <button type="submit" id="withdraw-btn">Withdraw</button>
-<h3>Withdraw Status: <span id="withdraw-status"></span></h3><br>
+<h3>Withdraw Status: <span id="withdraw-status"></span></h3><br />
 
-<hr>
+<hr />
 
 <script src="/js/EscrowChain.js"></script>
