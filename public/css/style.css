@@ -16,7 +16,7 @@ body h3 {
 #reg-container {
   background-color: rgb(83, 129, 255);
   height: auto;
-  width: 450px;
+  width: auto;
   margin: auto;
   display: flex;
   flex-direction: column;
