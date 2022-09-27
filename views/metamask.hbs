@@ -18,9 +18,15 @@
         <p>
           Enter metamask wallet
         </p>
-        <input type="text" class="form-control" placeholder="Text input" style="margin-bottom: 3rem;">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Text input"
+          style="margin-bottom: 3rem;"
+        />
         <p>Account: <span id="show-account" style="font-size: 1rem;"></span></p>
-        <p>Your balance: <span id="show-balance" style="font-size: 1rem;"></span></p>
+        <p>Your balance:
+          <span id="show-balance" style="font-size: 1rem;"></span></p>
         <div class="text-right" style="margin-top: auto;">
           <!-- text-right = text-align: right -->
           <a href="#" id="connectButton" class="btn" disabled="">Connect</a>
@@ -30,6 +36,7 @@
   </div>
 
 </div>
+
 {{! <div id="reg-container">
     <div
       style="height: 15%; width: 100%; display: flex; background-color: rgb(36, 87, 255); border-bottom: 2px solid black"
@@ -48,9 +55,45 @@
 {{! <button id="connectButton" disabled="">Connected</button> }}
 {{! <button id="getAccounts">Get Accounts</button> }}
 
+<div id="page">
+  <div class="container-fluid" style="display: flex; flex-direction: column;">
+    <!-- First row -->
+    <div
+      class="row"
+      style="margin-top: auto; background-color: rgb(83, 129, 255)"
+    >
+      <div class="col-xl-8 head" style="display: flex; flex-direction:initial;">
+        <div class="row" style="width: 80%; margin: auto; color: white; display: flex;">
+          <div class="col-xl-6"><p>Account: </p></div>
+          <div class="col-xl-6"><p>Your balance: </p></div>
+        </div>
+      </div>
+      <div class="col-xl-4 head" style="display: flex;">
+        <button
+          class="btn"
+          type="button"
+          style="background-color: rgb(24, 24, 24); color: white; margin: auto 10% auto auto; width: 10rem"
+        >Exit</button>
+      </div>
+    </div>
+    <!-- Second row -->
+    <div class="row" style="margin: auto 0;">
+      <div class="col-md-8 body" style="background-color: grey;">
+        <div class="container-sm" style="background-color: orange;">
+          contract
+        </div>
+      </div>
+      <div class="col-md-4 body" style="background-color: blue;">
+        ...
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <hr />
 
-<h2>Request Premission</h2>
+<h2>Request Permission</h2>
 <button id="requestPermissions">Request Permissions</button><br />
 <button id="getPermissions">Get Permissions</button><br />
 <h3>Avaliable Permissions: <span id="permissionsResult"></span></h3><br />

@@ -20,4 +20,12 @@ body h3 {
   display: flex;
   flex-direction: column;
   border-radius: 0.4rem;
+}
+
+.head {
+  height: 5rem;
+}
+
+.body {
+  height: 60rem;
 }/*# sourceMappingURL=style.css.map */
