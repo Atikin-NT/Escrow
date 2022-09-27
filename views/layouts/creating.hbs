@@ -84,6 +84,10 @@
     <div class="row g-5">
       <div class="col-7">
         <h4 class="mb-3">Deal details</h4>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="switchRole">
+          <label class="form-check-label" for="switchRole">Buyer</label>
+        </div>
         <form class="needs-validation" novalidate>
           <div class="row g-3">
             <div class="col-12">
@@ -104,7 +108,7 @@
 
             <div class="col-9">
               <label for="value" class="form-label">Value</label>
-              <input type="text" class="form-control" id="value" placeholder="" value="" required>
+              <input type="number" class="form-control" id="value" placeholder="" value="" required>
               <div class="invalid-feedback">
                 Valid value is required.
               </div>
@@ -122,6 +126,45 @@
               </div>
             </div>
           </div>
+
+          <hr class="my-4">
+
+          <div id="feePlaceholder"></div>
+          <button type="button" class="btn btn-primary" id="feeBtn">Calculate fee</button>
+
+          <script>
+            const feePlaceholder = document.getElementById('feePlaceholder')
+
+            const alert = (message, type) => {
+              const wrapper = document.createElement('div')
+              wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+              ].join('')
+
+              feePlaceholder.append(wrapper)
+            }
+
+            const feeTrigger = document.getElementById('feeBtn')
+            if (feeTrigger) {
+              feeTrigger.addEventListener('click', () => {
+                alert('Fee will be 0.0070 ETH', 'success')
+              })
+            }
+          </script>
+
+          <h5 class="mb-3 mt-3">Fee payment</h4>
+
+          <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" checked>
+          <label class="btn btn-secondary" for="option1">50/50</label>          
+
+          <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off">
+          <label class="btn btn-secondary" for="option2">buyer</label>
+
+          <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off">
+          <label class="btn btn-secondary" for="option3">seller</label>
 
           <hr class="my-4">
 
