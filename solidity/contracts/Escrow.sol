@@ -4,30 +4,31 @@ pragma solidity >=0.8.9 <0.9.0;
 
 // Author: @avezorgen
 contract Escrow {
-    mapping(bytes32 => uint8) public deals;
-    //active| confBuyer | confSeller    = uint8
-    //  0   |      0    |       0       = 0  
-    //  1   |      0    |       0       = 4
-    //  1   |      1    |       0       = 6
-    //  1   |      1    |       1       = 7
+    //confBuyer | confSeller    = uint8
+    //     0    |       0       = 0  
+    //     1    |       0       = 2
+    //     1    |       1       = 3
+
+    mapping(bytes32 => details) public deals;
+    struct details {
+        address buyer;
+        address seller;
+        uint value;
+        uint8 status;
+    }
 
     address public owner;
     uint public hold;
 
-    event Created(address buyer, address seller, uint value);
-    event BuyerConfim(address buyer, address seller, uint value);
-    event SellerConfim(address buyer, address seller, uint value);
-    event Finished(address buyer, address seller, uint value);
+    event Created(address buyer, address seller,  bytes32 TxId);
+    event BuyerConfim(bytes32 TxId);
+    event SellerConfim(bytes32 TxId);
+    event Finished(bytes32 TxId);
 
-    function getTxId(address buyer, address seller, uint value) internal pure returns (bytes32 TxId) {
+    function getTxId(address buyer, address seller, uint timestamp) internal pure returns (bytes32 TxId) {
         TxId = keccak256(abi.encode(
-            buyer, seller, value
+            buyer, seller, timestamp
         ));
-    }
-
-    function getDeal(address buyer, address seller, uint value) external view returns (uint8 status) {
-        bytes32 TxId = getTxId(buyer, seller, value);
-        status = deals[TxId];
     }
 
     constructor() {
@@ -37,57 +38,59 @@ contract Escrow {
     function create(address buyer, address seller, uint value) external {
         require(msg.sender == buyer || msg.sender == seller, "Don't have permission");
         require(value != 0, "Can't provide deal with 0 value");
-        bytes32 TxId = getTxId(buyer, seller, value);
-        require(deals[TxId] == 0, "Deal already exists");
-        deals[TxId] = 4;
-        emit Created(buyer, seller, value);
+        bytes32 TxId = getTxId(buyer, seller, block.timestamp);
+        require(deals[TxId].value == 0, "Deal already exists");
+        deals[TxId].buyer = buyer;
+        deals[TxId].seller = seller;
+        deals[TxId].value = value;
+        emit Created(buyer, seller, TxId);
     }
 
-    function sendB(address seller) external payable {
-        bytes32 TxId = getTxId(msg.sender, seller, msg.value);
-        require(deals[TxId] == 4, "Deal does not exist or Money was already sent");
-        deals[TxId] = 6;
-        emit BuyerConfim(msg.sender, seller, msg.value);
+    function sendB(bytes32 TxId) external payable {
+        require(msg.sender == deals[TxId].buyer, "Don't have permission");
+        require(msg.value != 0, "Value can't be zero");
+        require(msg.value == deals[TxId].value, "Wrong money value");
+        require(deals[TxId].status == 0, "Money was already sent");
+        deals[TxId].status = 2;
+        emit BuyerConfim(TxId);
     }
 
-    function sendS(address buyer, uint value) external {
-        bytes32 TxId = getTxId(buyer, msg.sender, value);
-        require(deals[TxId] == 6, "Deal does not exist or Money was not sent or Subject was already sent");
-        deals[TxId] = 7;
-        emit SellerConfim(buyer, msg.sender, value);
+    function sendS(bytes32 TxId) external {
+        require(msg.sender == deals[TxId].seller, "Don't have permission");
+        require(deals[TxId].status == 2, "Money was not sent or Subject was already sent");
+        deals[TxId].status = 3;
+        emit SellerConfim(TxId);
     }
 
-    function cancel(address buyer, address seller, uint value) external {
-        require(msg.sender == buyer || msg.sender == seller, "Don't have permission");
-        bytes32 TxId = getTxId(buyer, seller, value);
-        require(deals[TxId] > 0, "Deal does not exist");
-        require(deals[TxId] < 7, "Seller already sent");
-        if (deals[TxId] == 6) {
-            if (msg.sender == seller) {
+    function cancel(bytes32 TxId) external {
+        require(msg.sender == deals[TxId].buyer || msg.sender == deals[TxId].seller, "Don't have permission");
+        require(deals[TxId].status != 3, "Can't cancel now");
+        if (deals[TxId].status == 2) {
+            if (msg.sender == deals[TxId].seller) {
                 //seller отменил сделку, когда buyer уже отправил деньги
             }
-            payable(buyer).transfer(value);
+            payable(deals[TxId].buyer).transfer(deals[TxId].value);
         }
         delete deals[TxId];
-        emit Finished(buyer, seller, value);
+        emit Finished(TxId);
     }
 
-    function approve(address seller, uint value) external {
-        bytes32 TxId = getTxId(msg.sender, seller, value);
-        require(deals[TxId] == 7, "Seller did not confirm the transaction");
-        uint fee = value / 1000 * 25;
+    function approve(bytes32 TxId) external {
+        require(msg.sender == deals[TxId].buyer, "Don't have permission");
+        require(deals[TxId].status == 3, "Seller did not confirm the transaction");
+        uint fee = deals[TxId].value / 1000 * 25;
         hold += fee;
-        payable(seller).transfer(value - fee);
+        payable(deals[TxId].seller).transfer(deals[TxId].value - fee);
         delete deals[TxId];
-        emit Finished(msg.sender, seller, value);
+        emit Finished(TxId);
     }
 
-    function disapprove(address seller, uint value) external {
-        bytes32 TxId = getTxId(msg.sender, seller, value);
-        require(deals[TxId] == 7, "Seller did not confirm the transaction");
-        payable(msg.sender).transfer(value); //buyer отправлял и seller отправлял
+    function disapprove(bytes32 TxId) external {
+        require(msg.sender == deals[TxId].buyer, "Don't have permission");
+        require(deals[TxId].status == 3, "Seller did not confirm the transaction");
+        payable(msg.sender).transfer(deals[TxId].value); //buyer отправлял и seller отправлял
         delete deals[TxId];
-        emit Finished(msg.sender, seller, value);
+        emit Finished(TxId);
     }
 
     function withdraw(address target) external {
