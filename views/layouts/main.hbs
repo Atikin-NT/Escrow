@@ -11,43 +11,6 @@
     <title>MetaMask Auth</title>
 </head>
 <body>
-    <button id="ajaxTest">Ajax</button>
-    <button id="fetchTest">Fetch</button>
-    <script>
-        $(document).ready(() => {
-            $("#ajaxTest").click(() => {
-                $.post("/request",
-                    {
-                        name: "viSion",
-                        designation: "Professional gamer"
-                    },
-                    (data, status) => {
-                        console.log(data);
-                    });
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(() => {
-            $("#fetchTest").click(async () => {
-                const body = JSON.stringify({
-                    name: "Atikin",
-                    id: 5,
-                });
-                const headers = { 'Content-Type': 'application/json' };     
-                
-                try {
-                    const resp = await fetch('/fetch', { method: 'post', body, headers });
-                    if (resp.status < 200 || resp.status >= 300)
-                        throw new Error('Запрос отклонен со статусом ${resp.status}');
-                    const json = await resp.json();
-                    console.log(json);
-                } catch (e) {
-                    console.log(e);
-                }
-            });
-        });
-    </script>
     {{{body}}}
 </body>
 </html>

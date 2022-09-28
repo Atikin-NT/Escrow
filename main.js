@@ -11,7 +11,7 @@ const port = 5000;
 
 const app = express();
 const hbs = exphbs.create({
-  defaultLayout: 'creating',
+  defaultLayout: 'main',
   extname: 'hbs'
 })
 
