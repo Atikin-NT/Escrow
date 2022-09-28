@@ -151,7 +151,10 @@ const initialize = async () => {
         const value = createTransactionValue.value;
         try{
             const transaction = await escrowProvider.create(buyer, seller, value);
-            createTransactionStatus.innerHTML = `Ok`;
+            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
+                createTransactionStatus.innerHTML = `Ok`;
+                Check();
+            })
         } catch (err){
             console.error(err)
             createTransactionStatus.innerHTML = `Error: ${err.data.message}`
@@ -161,7 +164,7 @@ const initialize = async () => {
         }
     }
 
-    checkDealCheckButton.onclick = async () => {
+    async function Check() {
         const buyer = checkDealBuyer.value;
         const seller = checkDealSeller.value;
         try{
@@ -188,6 +191,8 @@ const initialize = async () => {
         }
     }
 
+    checkDealCheckButton.onclick = Check;
+
     sendBButton.onclick = async () => {
         const seller = sendBSeller.value;
         const value = sendBValue.value;
@@ -196,7 +201,10 @@ const initialize = async () => {
                 value: value
             };
             const transaction = await escrowProvider.sendB(seller, tx=tx);
-            sendBStatus.innerHTML = `Ok`;
+            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
+                sendBStatus.innerHTML = `Ok`;
+                Check();
+            })
         } catch (err){
             console.error(err)
             sendBStatus.innerHTML = `Error: ${err.data.message}`
@@ -206,7 +214,10 @@ const initialize = async () => {
         const buyer = sendSBuyer.value;
         try{
             const transaction = await escrowProvider.sendS(buyer);
-            sendSStatus.innerHTML = `Ok`;
+            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
+                sendSStatus.innerHTML = `Ok`;
+                Check();
+            })
         } catch (err){
             console.error(err)
             sendSStatus.innerHTML = `Error: ${err.data.message}`
@@ -217,17 +228,23 @@ const initialize = async () => {
         const seller = cancelTransactionSeller.value;
         try{
             const transaction = await escrowProvider.cancel(buyer, seller);
-            cancelTransactionStatus.innerHTML = `Ok`;
+            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
+                // cancelTransactionStatus.innerHTML = `Ok`;
+                Check();
+            })
         } catch (err){
             console.error(err)
-            cancelTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            // cancelTransactionStatus.innerHTML = `Error: ${err.data.message}`
         }
     }
     approveTransactionButton.onclick = async () => {
         const seller = approveTransactionSeller.value;
         try{
             const transaction = await escrowProvider.approve(seller);
-            approveTransactionStatus.innerHTML = `Ok`;
+            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
+                approveTransactionStatus.innerHTML = `Ok`;
+                Check();
+            })
         } catch (err){
             console.error(err)
             approveTransactionStatus.innerHTML = `Error: ${err.data.message}`
@@ -237,7 +254,10 @@ const initialize = async () => {
         const seller = disapproveTransactionSeller.value;
         try{
             const transaction = await escrowProvider.disapprove(seller);
-            disapproveTransactionStatus.innerHTML = `Ok`;
+            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
+                disapproveTransactionStatus.innerHTML = `Ok`;
+                Check();
+            })
         } catch (err){
             console.error(err)
             disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`
@@ -248,7 +268,10 @@ const initialize = async () => {
         const target = withdrawTarget.value;
         try{
             const transaction = await escrowProvider.withdraw(target);
-            withdrawStatus.innerHTML = `Ok`;
+            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
+                withdrawStatus.innerHTML = `Ok`;
+                Check();
+            })
         } catch (err){
             console.error(err)
             withdrawStatus.innerHTML = `Error: ${err.data.message}`
@@ -278,6 +301,7 @@ const initialize = async () => {
 
     if (isMetaMaskInstalled()) {
         provider = new ethers.providers.Web3Provider(window.ethereum);
+
         ethereum.autoRefreshOnNetworkChange = false
         ethereum.on('accountsChanged', handleNewAccounts)
         try {
@@ -287,6 +311,20 @@ const initialize = async () => {
         } catch (err) {
             console.error('Error on init when getting accounts', err)
         }
+
+        filter = {
+            address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            topics: [
+                ethers.utils.id("Created(address,address,uint256)")
+            ]
+        }
+        provider.on(filter, (log, event) => {
+            console.log('uwu')
+            console.log(log)
+            console.log('buyer',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,0,32)))
+            console.log('seller',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,32,64)))
+            console.log('value',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,64,96)))
+        })
 
         onboardButton.innerText = 'Connect';
         onboardButton.onclick = onClickConnect;

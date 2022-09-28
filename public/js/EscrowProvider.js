@@ -19,32 +19,32 @@ class EscrowProvider{
         this.daiContract = new ethers.Contract(this.daiAddress, this.daiAbi, signer);
     }
 
-    async create(buyer, seller, value, tx={}){
-        await this.daiContract.create(buyer, seller, value, tx);
+    async create(buyer, seller, value, tx={}) {
+        return await this.daiContract.create(buyer, seller, value, tx);
     }
 
     async sendB(seller, tx={}){
-        await this.daiContract.sendB(seller, tx);
+        return await this.daiContract.sendB(seller, tx);
     }
 
     async sendS(buyer, tx={}){
-        await this.daiContract.sendS(buyer, tx);
+        return await this.daiContract.sendS(buyer, tx);
     }
 
     async cancel(buyer, seller, tx={}){
-        await this.daiContract.cancel(buyer, seller, tx);
+        return await this.daiContract.cancel(buyer, seller, tx);
     }
 
     async approve(seller, tx={}){
-        await this.daiContract.approve(seller, tx);
+        return await this.daiContract.approve(seller, tx);
     }
 
     async disapprove(seller, tx={}){
-        await this.daiContract.disapprove(seller, tx);
+        return await this.daiContract.disapprove(seller, tx);
     }
 
     async withdraw(target, tx={}){
-        await this.daiContract.withdraw(target, tx);
+        return await this.daiContract.withdraw(target, tx);
     }
 
     async hold() {
