@@ -1,15 +1,13 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
-// const sqlite3 = require('sqlite3').verbose();
-// const escrowRoutes = require("./routes/escrow.js")
 const { ethers } = require("ethers");
-const { dbTest, dbInsertData, dbGetDealsByAccount } = require('./lib/sqlite.js');
+const { dbInsertData, dbGetDealsByAccount, dbDeleteData, dbUpdateDealStatus } = require('./lib/sqlite.js');
 
 provider = new ethers.getDefaultProvider("http://localhost:8545");
 
 const hostname = '127.0.0.1';
-const port = 4000;
+const port = 5000;
 
 const app = express();
 const hbs = exphbs.create({
@@ -25,13 +23,9 @@ app.use(express.static(__dirname + '/public/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(escrowRoutes);
-
-dbGetDealsByAccount("0x0");
-
 
 app.get('/', (req, res) => {
-  res.render('metamask');
+  res.render('fetchTest');
 });
 
 app.post("/request", (req, res) => {
@@ -48,6 +42,26 @@ app.post("/fetch", (req, res) => {
  });
 });
 
+app.post("/fetch/createDeal", async (req, res) => {
+  answer = await dbInsertData(req.body.buyer, req.body.seller, req.body.value);
+  res.send(answer);
+});
+
+app.post("/fetch/deleteDeal", async (req, res) => {
+  answer = await dbDeleteData(req.body.id);
+  res.send(answer);
+});
+
+app.post("/fetch/getDeals", async (req, res) => {
+  answer = await dbGetDealsByAccount(req.body.account);
+  res.send(answer);
+});
+
+app.post("/fetch/updateDealStatus", async (req, res) => {
+  answer = await dbUpdateDealStatus(req.body.id, req.body.status);
+  res.send(answer);
+});
+
 // app.use((req, res) => {
 //   res.status(404);
 //   res.render('404 - Error');
@@ -56,15 +70,3 @@ app.post("/fetch", (req, res) => {
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
-
-// DB
-/*
-1) Пользователь Foreign Key
-2) Кому
-3) Какое количество
-4) Статус сделки
-
-
-
-
-*/
