@@ -30,10 +30,6 @@ contract Escrow {
         _;
     }
 
-    function getTxId(address buyer, address seller, uint timestamp) internal pure returns (bytes32 TxId) {
-        TxId = keccak256(abi.encode( buyer, seller, timestamp ));
-    }
-
     constructor() {
         owner = msg.sender;
     }
@@ -41,7 +37,7 @@ contract Escrow {
     function create(address buyer, address seller, uint value) external {
         require(msg.sender == buyer || msg.sender == seller, "Don't have permission");
         require(value != 0, "Can't provide deal with 0 value");
-        bytes32 TxId = getTxId(buyer, seller, block.timestamp);
+        bytes32 TxId = keccak256(abi.encode(buyer, seller, block.timestamp));
         require(deals[TxId].value == 0, "Deal already exists");
         deals[TxId].buyer = buyer;
         deals[TxId].seller = seller;
