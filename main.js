@@ -13,7 +13,7 @@ const port = 4000;
 
 const app = express();
 const hbs = exphbs.create({
-  defaultLayout: 'creating',
+  // defaultLayout: 'creating',
   extname: 'hbs'
 })
 
@@ -31,7 +31,7 @@ dbGetDealsByAccount("0x0");
 
 
 app.get('/', (req, res) => {
-  res.render('metamask');
+  res.render('land');
 });
 
 app.post("/request", (req, res) => {
