@@ -1,6 +1,3 @@
-// const EscrowProvider = require('./GarantProvider.js');
-// import {EscrowProvider} from './EscrowProvider.js';
-
 const forwarderOrigin = 'http://localhost:9010';
 
 //MetaMask connect
@@ -112,34 +109,16 @@ const initialize = async () => {
             disapproveTransactionButton.disabled = false;
         }
     }
-
-    // getAccountsButton.addEventListener('click', async () => {
-    //     const newAccounts = await provider.listAccounts();
-    //     handleNewAccounts(newAccounts)
-    // });
-
-    requestPermissionsButton.onclick = async () => {
-        try { // TODO: разумно будет сначала запросить, какие разрешения уже предоставлены
-            const permissionsArray = await ethereum.request({
-            method: 'wallet_requestPermissions',
-            params: [{ eth_accounts: {} }],
-            })
-            permissionsResult.innerHTML = getPermissionsDisplayString(permissionsArray)
-        } catch (err) {
-            console.error(err)
-            permissionsResult.innerHTML = `Error: ${err.data.message}`
-        }
-    }
   
     getPermissionsButton.onclick = async () => {
         try {
             const permissionsArray = await ethereum.request({
-            method: 'wallet_getPermissions',
-            })
-            permissionsResult.innerHTML = getPermissionsDisplayString(permissionsArray)
+                method: 'wallet_getPermissions',
+            });
+            permissionsResult.innerHTML = getPermissionsDisplayString(permissionsArray);
         } catch (err) {
-            console.error(err)
-            permissionsResult.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            permissionsResult.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
@@ -153,8 +132,8 @@ const initialize = async () => {
             const transaction = await signer.sendTransaction(tx);
             createTransactionStatus.innerHTML = ``;
         } catch (err){
-            console.error(err)
-            createTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
@@ -166,8 +145,8 @@ const initialize = async () => {
             const transaction = await escrowProvider.create(buyer, seller, value);
             createTransactionStatus.innerHTML = `Ok`;
         } catch (err){
-            console.error(err)
-            createTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         } finally {
             sendBValue.value = value;
             sendBSeller.value = seller;
@@ -197,8 +176,8 @@ const initialize = async () => {
                 }
             );
         } catch (err){
-            console.error(err)
-            checkDealOutput.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            checkDealOutput.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
@@ -212,8 +191,8 @@ const initialize = async () => {
             const transaction = await escrowProvider.sendB(seller, tx=tx);
             sendBStatus.innerHTML = `Ok`;
         } catch (err){
-            console.error(err)
-            sendBStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            sendBStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
     sendSButton.onclick = async () => {
@@ -222,8 +201,8 @@ const initialize = async () => {
             const transaction = await escrowProvider.sendS(buyer);
             sendSStatus.innerHTML = `Ok`;
         } catch (err){
-            console.error(err)
-            sendSStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            sendSStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
     cancelTransactionButton.onclick = async () => {
@@ -233,8 +212,8 @@ const initialize = async () => {
             const transaction = await escrowProvider.cancel(buyer, seller);
             cancelTransactionStatus.innerHTML = `Ok`;
         } catch (err){
-            console.error(err)
-            cancelTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            cancelTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
     approveTransactionButton.onclick = async () => {
@@ -243,8 +222,8 @@ const initialize = async () => {
             const transaction = await escrowProvider.approve(seller);
             approveTransactionStatus.innerHTML = `Ok`;
         } catch (err){
-            console.error(err)
-            approveTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            approveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
     disapproveTransactionButton.onclick = async () => {
@@ -253,8 +232,8 @@ const initialize = async () => {
             const transaction = await escrowProvider.disapprove(seller);
             disapproveTransactionStatus.innerHTML = `Ok`;
         } catch (err){
-            console.error(err)
-            disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
@@ -264,8 +243,8 @@ const initialize = async () => {
             const transaction = await escrowProvider.withdraw(target);
             withdrawStatus.innerHTML = `Ok`;
         } catch (err){
-            console.error(err)
-            withdrawStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            withdrawStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
@@ -276,22 +255,17 @@ const initialize = async () => {
         const balance = await signer.getBalance();
         getBalanceResult.innerHTML = String(balance) || '';
         escrowProvider = new EscrowProvider(signer);
-        // if (isMetaMaskConnected()) {
-        //   initializeAccountButtons()
-        // }
-        // updateButtons()
       }
 
-    // let provider;
     if (isMetaMaskInstalled()) {
         provider = new ethers.providers.Web3Provider(window.ethereum);
-        ethereum.autoRefreshOnNetworkChange = false
-        ethereum.on('accountsChanged', handleNewAccounts)
+        ethereum.autoRefreshOnNetworkChange = false;
+        ethereum.on('accountsChanged', handleNewAccounts);
         try {
             const newAccounts = await provider.listAccounts();
-            handleNewAccounts(newAccounts)
+            handleNewAccounts(newAccounts);
         } catch (err) {
-            console.error('Error on init when getting accounts', err)
+            console.error('Error on init when getting accounts', err);
         }
 
         onboardButton.innerText = 'Connect';
@@ -306,8 +280,8 @@ window.addEventListener('DOMContentLoaded', initialize);
 
 function getPermissionsDisplayString (permissionsArray) {
     if (permissionsArray.length == 0) {
-        return 'No permissions found.'
+        return 'No permissions found.';
     }
-    const permissionNames = permissionsArray.map((perm) => perm.parentCapability)
-    return permissionNames.reduce((acc, name) => `${acc}${name}, `, '').replace(/, $/u, '')
+    const permissionNames = permissionsArray.map((perm) => perm.parentCapability);
+    return permissionNames.reduce((acc, name) => `${acc}${name}, `, '').replace(/, $/u, '');
 }
