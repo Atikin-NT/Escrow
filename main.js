@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 
 
 app.get('/', (req, res) => {
-  res.render('fetchTest');
+  res.render('metamask');
 });
 
 app.post("/request", (req, res) => {

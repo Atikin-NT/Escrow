@@ -20,7 +20,7 @@ contract Escrow {
     address public owner;
     uint public hold;
 
-    event Created(address buyer, address seller,  bytes32 TxId);
+    event Created(address buyer, address seller, bytes32 TxId);
     event BuyerConfim(bytes32 TxId);
     event SellerConfim(bytes32 TxId);
     event Finished(bytes32 TxId);
