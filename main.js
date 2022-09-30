@@ -11,7 +11,7 @@ const port = 5000;
 
 const app = express();
 const hbs = exphbs.create({
-  defaultLayout: 'creating',
+  defaultLayout: 'main',
   extname: 'hbs'
 });
 
@@ -23,9 +23,8 @@ app.use(express.static(__dirname + '/public/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
 app.get('/', (req, res) => {
-  res.render('fetchTest');
+  res.render('land');
 });
 
 app.post("/request", (req, res) => {

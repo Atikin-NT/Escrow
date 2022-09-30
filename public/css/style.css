@@ -22,6 +22,10 @@ body h3 {
   border-radius: 0.4rem;
 }
 
+.base-container {
+  height: 100vh !important;
+}
+
 .head {
   height: 5rem;
 }
@@ -79,8 +83,4 @@ body h3 {
   text-align: center;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
-}
-
-#tmp {
-  margin: 0;
 }/*# sourceMappingURL=style.css.map */
