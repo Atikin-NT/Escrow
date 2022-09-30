@@ -20,25 +20,11 @@
       rel="stylesheet"
       crossorigin="anonymous"
     />
-    <meta name="theme-color" content="#712cf9" />
-
-    <style>
-      .bd-placeholder-img { font-size: 1.125rem; text-anchor: middle;
-      -webkit-user-select: none; -moz-user-select: none; user-select: none; }
-      @media (min-width: 768px) { .bd-placeholder-img-lg { font-size: 3.5rem; }
-      } .b-example-divider { height: 3rem; background-color: rgba(0, 0, 0, .1);
-      border: solid rgba(0, 0, 0, .15); border-width: 1px 0; box-shadow: inset 0
-      .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15); }
-      .b-example-vr { flex-shrink: 0; width: 1.5rem; height: 100vh; } .bi {
-      vertical-align: -.125em; fill: currentColor; } .nav-scroller { position:
-      relative; z-index: 2; height: 2.75rem; overflow-y: hidden; } .nav-scroller
-      .nav { display: flex; flex-wrap: nowrap; padding-bottom: 1rem; margin-top:
-      -1px; overflow-x: auto; text-align: center; white-space: nowrap;
-      -webkit-overflow-scrolling: touch; }
-    </style>
+    {{! <meta name="theme-color" content="#712cf9" /> }}
 
     <!-- Custom styles for this template -->
-    <link href="form-validation.css" rel="stylesheet" />
+    {{! <link href="form-validation.css" rel="stylesheet" /> }}
+
   </head>
   <body class="bg-light">
 
@@ -58,10 +44,11 @@
                   <label for="buyerAddress" class="form-label">Buyer address</label>
                   <input
                     type="text"
+                    name="buyer"
                     class="form-control"
-                    id="buyerAddress"
-                    placeholder=""
-                    value=""
+                    id="buyerAddress create-buyer"
+                    placeholder="Buyer address"
+                    value="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
                     required
                   />
                   <div class="invalid-feedback">
@@ -73,10 +60,11 @@
                   <label for="sellerAddress" class="form-label">Seller address</label>
                   <input
                     type="text"
+                    name="seller"
                     class="form-control"
-                    id="sellerAddress"
-                    placeholder=""
-                    value=""
+                    id="sellerAddress create-seller"
+                    placeholder="Seller address"
+                    value="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
                     required
                   />
                   <div class="invalid-feedback">
@@ -88,9 +76,10 @@
                   <label for="value" class="form-label">Value</label>
                   <input
                     type="text"
+                    name="value"
                     class="form-control"
-                    id="value"
-                    placeholder=""
+                    id="value create-value"
+                    placeholder="value"
                     value=""
                     required
                   />
@@ -115,6 +104,7 @@
               <hr class="my-4" />
 
               <button
+                id="create-btn"
                 class="w-100 btn btn-primary btn-lg"
                 type="submit"
               >Create</button>
@@ -151,12 +141,37 @@
               </li>
             </ul>
 
-            <form class="card p-2">
+            <form class="card p-2" id="tmp">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Address" />
                 <button type="submit" class="btn btn-secondary">Filter</button>
               </div>
             </form>
+
+            {{! <a
+              href="#"
+              id="connectButton"
+              class="btn"
+              disabled=""
+              style="margin: auto; margin-right: 10%"
+            >Connect</a> }}
+
+            <button
+              id="connectButton"
+              class="w-100 btn btn-primary btn-lg"
+              style="margin-top: 5%;"
+            >Connect</button>
+
+            <div class="col-xl-6"><p>Account:
+                <span
+                  id="show-account"
+                  style="font-size: 1rem"
+                ></span></p></div>
+            <div class="col-xl-6"><p>Your balance:
+                <span
+                  id="show-balance"
+                  style="font-size: 1rem;"
+                ></span></p></div>
           </div>
         </div>
       </main>
@@ -179,3 +194,176 @@
     {{! <script src="form-validation.js"></script> }}
   </body>
 </html>
+
+<hr />
+
+<h2>Request Permission</h2>
+<button id="requestPermissions">Request Permissions</button><br />
+<button id="getPermissions">Get Permissions</button><br />
+<h3>Avaliable Permissions: <span id="permissionsResult"></span></h3><br />
+
+<hr />
+
+<h2>Send transaction test</h2>
+<button id="transactionTest-send">Send Transaction</button><br />
+<h3>Transaction Status: <span id="transactionTest-status"></span></h3><br />
+
+<hr />
+
+<h2>Create transaction</h2>
+<input
+  type="text"
+  name="buyer"
+  id="create-buyer"
+  size="10"
+  placeholder="buyer"
+  value="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+/>
+<input
+  type="text"
+  name="seller"
+  id="create-seller"
+  size="10"
+  placeholder="seller"
+  value="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+/>
+<input
+  type="text"
+  name="value"
+  id="create-value"
+  size="10"
+  placeholder="value"
+  value="5000"
+/>
+<br />
+<button type="submit" id="create-btn">Create</button>
+<h3>Transaction Create Status: <span id="create-status"></span></h3><br />
+
+<hr />
+
+<h2>Check deal</h2>
+<input
+  type="text"
+  name="buyer"
+  id="deals-buyer"
+  size="10"
+  placeholder="buyer"
+  value=""
+/>
+<input
+  type="text"
+  name="seller"
+  id="deals-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/>
+<br />
+<button type="submit" id="deals-btn">Check</button>
+<h3>Deal: <span id="deals-output"></span></h3><br />
+
+<hr />
+
+<h2>Send Money For Subject</h2>
+<input
+  type="text"
+  name="seller"
+  id="sendB-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/>
+<input
+  type="text"
+  name="value"
+  id="sendB-value"
+  size="10"
+  placeholder="value"
+  value=""
+/>
+<br />
+<button type="submit" id="sendB-btn">Send</button>
+<h3>Send Money For Subject Status: <span id="sendB-status"></span></h3><br />
+
+<hr />
+
+<h2>Send Subject</h2>
+<input
+  type="text"
+  name="buyer"
+  id="sendS-buyer"
+  size="10"
+  placeholder="buyer"
+  value=""
+/><br />
+<button type="submit" id="sendS-btn">Send</button>
+<h3>Send Subject Status: <span id="sendS-status"></span></h3><br />
+
+<hr />
+
+<h2>Cancel transaction</h2>
+<input
+  type="text"
+  name="buyer"
+  id="cancel-buyer"
+  size="10"
+  placeholder="buyer"
+  value=""
+/>
+<input
+  type="text"
+  name="seller"
+  id="cancel-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/><br />
+<button type="submit" id="cancel-btn">Cancel</button>
+<h3>Transaction cancel Status: <span id="cancel-status"></span></h3><br />
+
+<hr />
+
+<h2>Approve transaction</h2>
+<input
+  type="text"
+  name="seller"
+  id="approve-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/><br />
+<button type="submit" id="approve-btn">Approve</button>
+<h3>Transaction Approve Status: <span id="approve-status"></span></h3><br />
+
+<hr />
+
+<h2>Disapprove transaction</h2>
+<input
+  type="text"
+  name="seller"
+  id="disapprove-seller"
+  size="10"
+  placeholder="seller"
+  value=""
+/><br />
+<button type="submit" id="disapprove-btn">Disapprove</button>
+<h3>Transaction Disapprove Status: <span id="disapprove-status"></span></h3><br
+/>
+
+<hr />
+
+<h2>Withdraw</h2>
+<input
+  type="text"
+  name="target"
+  id="withdraw-target"
+  size="10"
+  placeholder="target"
+  value=""
+/><br />
+<button type="submit" id="withdraw-btn">Withdraw</button>
+<h3>Withdraw Status: <span id="withdraw-status"></span></h3><br />
+
+<hr />
+
+<script src="/js/EscrowChain.js"></script>

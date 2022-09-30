@@ -31,7 +31,7 @@ dbGetDealsByAccount("0x0");
 
 
 app.get('/', (req, res) => {
-  res.render('land');
+  res.render('creating');
 });
 
 app.post("/request", (req, res) => {
