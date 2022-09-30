@@ -1,0 +1,27 @@
+<button id="create">Create</button><br>
+<h3>msg answer: <span id="answerCreate"></span></h3><br>
+<script>
+    document.getElementById('create')
+    .addEventListener('click', evt => {
+        const body = JSON.stringify({  // список всех параметров запроса
+            account: "0x001"
+        });
+        const headers = { 'Content-Type': 'application/json' };  // заголовок. Всегда оставляем таким
+        const answerContainer = document.getElementById('answerCreate');
+        fetch('/fetch/getDeals', { method: 'post', body, headers })  // и всегда отправляем методом POST
+        .then(resp => {
+            console.log(resp);
+            if(resp.status < 200 || resp.status >= 300)
+                throw new Error("connect error");
+            return resp.json();
+        })
+        .then(json => {
+            console.log(json);
+            answerContainer.innerHTML = json.msg;
+        })
+        .catch(err => {
+            console.log(err);
+            answerContainer.innerHTML = err;
+        });
+    });
+</script>
