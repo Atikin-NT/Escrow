@@ -1,16 +1,11 @@
-// const EscrowProvider = require('./GarantProvider.js');
-// import {EscrowProvider} from './EscrowProvider.js';
-
 const forwarderOrigin = 'http://localhost:9010';
 
 //MetaMask connect
 const onboardButton = document.getElementById('connectButton');
-// const getAccountsButton = document.getElementById('getAccounts');
 const getAccountsResult = document.getElementById('show-account');
 const getBalanceResult = document.getElementById('show-balance');
 
 // Permissions Actions Section
-const requestPermissionsButton = document.getElementById('requestPermissions');
 const getPermissionsButton = document.getElementById('getPermissions');
 const permissionsResult = document.getElementById('permissionsResult');
 
@@ -104,29 +99,16 @@ const initialize = async () => {
             disapproveTransactionButton.disabled = false;
         }
     }
-
-    requestPermissionsButton.onclick = async () => {
-        try { // TODO: разумно будет сначала запросить, какие разрешения уже предоставлены
-            const permissionsArray = await ethereum.request({
-            method: 'wallet_requestPermissions',
-            params: [{ eth_accounts: {} }],
-            })
-            permissionsResult.innerHTML = getPermissionsDisplayString(permissionsArray)
-        } catch (err) {
-            console.error(err)
-            permissionsResult.innerHTML = `Error: ${err.data.message}`
-        }
-    }
   
     getPermissionsButton.onclick = async () => {
         try {
             const permissionsArray = await ethereum.request({
-            method: 'wallet_getPermissions',
-            })
-            permissionsResult.innerHTML = getPermissionsDisplayString(permissionsArray)
+                method: 'wallet_getPermissions',
+            });
+            permissionsResult.innerHTML = getPermissionsDisplayString(permissionsArray);
         } catch (err) {
-            console.error(err)
-            permissionsResult.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            permissionsResult.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
@@ -140,8 +122,8 @@ const initialize = async () => {
             const transaction = await signer.sendTransaction(tx);
             createTransactionStatus.innerHTML = ``;
         } catch (err){
-            console.error(err)
-            createTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
@@ -156,8 +138,8 @@ const initialize = async () => {
                 Check();
             })
         } catch (err){
-            console.error(err)
-            createTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         } finally {
             checkDealBuyer.value = buyer;
             checkDealSeller.value = seller;
@@ -176,8 +158,8 @@ const initialize = async () => {
                 }
             );
         } catch (err){
-            console.error(err)
-            checkDealOutput.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            checkDealOutput.innerHTML = `Error: ${err.data.message}`;
         } finally {
             sendBSeller.value = seller;
             sendSBuyer.value = buyer;
@@ -206,8 +188,8 @@ const initialize = async () => {
                 Check();
             })
         } catch (err){
-            console.error(err)
-            sendBStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            sendBStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
     sendSButton.onclick = async () => {
@@ -219,8 +201,8 @@ const initialize = async () => {
                 Check();
             })
         } catch (err){
-            console.error(err)
-            sendSStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            sendSStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
     cancelTransactionButton.onclick = async () => {
@@ -229,12 +211,10 @@ const initialize = async () => {
         try{
             const transaction = await escrowProvider.cancel(buyer, seller);
             provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
-                // cancelTransactionStatus.innerHTML = `Ok`;
                 Check();
             })
         } catch (err){
-            console.error(err)
-            // cancelTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
         }
     }
     approveTransactionButton.onclick = async () => {
@@ -246,8 +226,8 @@ const initialize = async () => {
                 Check();
             })
         } catch (err){
-            console.error(err)
-            approveTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            approveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
     disapproveTransactionButton.onclick = async () => {
@@ -259,8 +239,8 @@ const initialize = async () => {
                 Check();
             })
         } catch (err){
-            console.error(err)
-            disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
@@ -273,22 +253,18 @@ const initialize = async () => {
                 Check();
             })
         } catch (err){
-            console.error(err)
-            withdrawStatus.innerHTML = `Error: ${err.data.message}`
+            console.error(err);
+            withdrawStatus.innerHTML = `Error: ${err.data.message}`;
         }
     }
 
     async function handleNewAccounts (newAccounts) {
-        accounts = newAccounts
+        accounts = newAccounts;
         getAccountsResult.innerHTML = accounts || 'Not able to get accounts';
         const signer = provider.getSigner();
         const balance = await signer.getBalance();
         getBalanceResult.innerHTML = String(balance) || '';
         escrowProvider = new EscrowProvider(signer);
-        // if (isMetaMaskConnected()) {
-        //   initializeAccountButtons()
-        // }
-        // updateButtons()
       }
 
     const onClickConnect = async () => {
@@ -302,14 +278,14 @@ const initialize = async () => {
     if (isMetaMaskInstalled()) {
         provider = new ethers.providers.Web3Provider(window.ethereum);
 
-        ethereum.autoRefreshOnNetworkChange = false
-        ethereum.on('accountsChanged', handleNewAccounts)
+        ethereum.autoRefreshOnNetworkChange = false;
+        ethereum.on('accountsChanged', handleNewAccounts);
         try {
             const newAccounts = await provider.listAccounts();
             if (newAccounts.length > 0)
-                handleNewAccounts(newAccounts)
+                handleNewAccounts(newAccounts);
         } catch (err) {
-            console.error('Error on init when getting accounts', err)
+            console.error('Error on init when getting accounts', err);
         }
 
         filter = {
@@ -317,14 +293,14 @@ const initialize = async () => {
             topics: [
                 ethers.utils.id("Created(address,address,uint256)")
             ]
-        }
+        };
         provider.on(filter, (log, event) => {
-            console.log('uwu')
-            console.log(log)
-            console.log('buyer',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,0,32)))
-            console.log('seller',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,32,64)))
-            console.log('value',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,64,96)))
-        })
+            console.log('uwu');
+            console.log(log);
+            console.log('buyer',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,0,32)));
+            console.log('seller',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,32,64)));
+            console.log('value',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,64,96)));
+        });
 
         onboardButton.innerText = 'Connect';
         onboardButton.onclick = onClickConnect;
@@ -338,8 +314,8 @@ window.addEventListener('DOMContentLoaded', initialize);
 
 function getPermissionsDisplayString (permissionsArray) {
     if (permissionsArray.length == 0) {
-        return 'No permissions found.'
+        return 'No permissions found.';
     }
-    const permissionNames = permissionsArray.map((perm) => perm.parentCapability)
-    return permissionNames.reduce((acc, name) => `${acc}${name}, `, '').replace(/, $/u, '')
+    const permissionNames = permissionsArray.map((perm) => perm.parentCapability);
+    return permissionNames.reduce((acc, name) => `${acc}${name}, `, '').replace(/, $/u, '');
 }
