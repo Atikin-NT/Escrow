@@ -1,3 +1,9 @@
+<script
+  src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+  type="application/javascript"
+></script>
+<script src="/js/EscrowProvider.js"></script>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -108,26 +114,29 @@
 
               <hr class="my-4" />
 
-              <div id="feePlaceholder"></div>
+              {{! feeBtn }}
+              {{! <div id="feePlaceholder"></div> }}
               <button
                 type="button"
                 class="btn btn-primary"
-                id="feeBtn"
+                id="liveToastBtn"
               >Calculate fee</button>
 
-              <script>
-                const feePlaceholder = document.getElementById('feePlaceholder');
-                const alert = (message, type) => { 
-                const wrapper = document.createElement('div'); 
-                wrapper.innerHTML = [ 
-                  `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-                  `<div>${message}</div>`, ' <button type="button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>', '</div>' ].join('');
-                  feePlaceholder.append(wrapper);
-                };
-                const feeTrigger = document.getElementById('feeBtn');
-                if (feeTrigger) {
-                feeTrigger.addEventListener('click', () => { alert('Fee will be0.0070 ETH', 'success') }) }
-              </script>
+              <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div
+                  id="liveToast"
+                  class="toast"
+                  role="alert"
+                  aria-live="assertive"
+                  aria-atomic="true"
+                >
+                  <div class="toast-body" style="padding: 0;">
+                    <div class="alert alert-success" role="alert" style="margin-bottom: 0;">
+                      Fee will be0.0070 ETH
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <h5 class="mb-3 mt-3">Fee payment</h5>
 
@@ -424,4 +433,5 @@
 
 <hr />
 
+<script src="/js/Toasts.js"></script>
 <script src="/js/EscrowChain.js"></script>
