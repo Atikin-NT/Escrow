@@ -10,8 +10,9 @@ const headers = { "Content-Type": "application/json" };
 
 // console.log(createDeal);
 
-createDeal.addEventListener("click", (evt) => {
-    console.log(buyerWallet.value);
+createDeal.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+  console.log(buyerWallet.value);
   const body = JSON.stringify({
     buyer: buyerWallet.value,
     seller: sellerWallet.value,
