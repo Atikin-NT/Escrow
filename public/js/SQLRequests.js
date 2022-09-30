@@ -20,7 +20,7 @@ createDeal.addEventListener("click", (evt) => {
 
   console.log("-------");
   const answerContainer = document.getElementById("answerCreate");
-//   console.log(answerContainer);
+  console.log(answerContainer);
 
   fetch("fetch/createDeal", { method: "post", body, headers })
     .then((resp) => {

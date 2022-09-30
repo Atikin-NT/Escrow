@@ -26,7 +26,7 @@
       rel="stylesheet"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css" />
 
   </head>
   <body class="bg-light">
@@ -186,7 +186,49 @@
             <h4 class="d-flex justify-content-between align-items-center mb-3">
               <span class="text-primary">History</span>
             </h4>
-            <ul class="list-group mb-3">
+
+            <div class="row">
+              <div class="col-4">
+                <div id="list-example" class="list-group">
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#list-item-1"
+                  >Item 1</a>
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#list-item-2"
+                  >Item 2</a>
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#list-item-3"
+                  >Item 3</a>
+                  <a
+                    class="list-group-item list-group-item-action"
+                    href="#list-item-4"
+                  >Item 4</a>
+                </div>
+              </div>
+              <div class="col-8">
+                <div
+                  data-bs-spy="scroll"
+                  data-bs-target="#list-example"
+                  data-bs-smooth-scroll="true"
+                  class="scrollspy-example"
+                  tabindex="0"
+                >
+                  <h4 id="list-item-1">Item 1</h4>
+                  <p>...</p>
+                  <h4 id="list-item-2">Item 2</h4>
+                  <p>...</p>
+                  <h4 id="list-item-3">Item 3</h4>
+                  <p>...</p>
+                  <h4 id="list-item-4">Item 4</h4>
+                  <p>...</p>
+                </div>
+              </div>
+            </div>
+
+            {{! <ul class="list-group mb-3">
               <li class="list-group-item d-flex justify-content-between lh-sm">
                 <div>
                   <h6
@@ -211,7 +253,7 @@
                 <span>Total (ETH)</span>
                 <strong>0.105 ETH</strong>
               </li>
-            </ul>
+            </ul> }}
 
             <form class="card p-2" id="tmp">
               <div class="input-group">
@@ -240,22 +282,26 @@
                   style="font-size: 1rem"
                 ></span></p></div>
             <div class="col-xl-6"><p>Your balance:
-                <span
-                  id="show-balance"
-                  style="font-size: 1rem;"
-                ></span></p></div>
+                <span id="" style="font-size: 1rem;"></span></p></div>
+            <button
+              id="answerCreate-btn"
+              class="w-100 btn btn-primary btn-lg"
+            >Update history</button>
+            <div class="col-xl-6">
+              <p>Massage answer: <span id="answerCreate"></span></p><br />
+            </div>
           </div>
         </div>
       </main>
 
-      {{!-- <footer class="my-5 pt-5 text-muted text-center text-small">
+      {{! <footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">&copy; 2017–2022 Company Name</p>
         <ul class="list-inline">
           <li class="list-inline-item"><a href="#">Privacy</a></li>
           <li class="list-inline-item"><a href="#">Terms</a></li>
           <li class="list-inline-item"><a href="#">Support</a></li>
         </ul>
-      </footer> --}}
+      </footer> }}
     </div>
 
     <script
@@ -437,9 +483,6 @@
 
     <hr />
   </body>
-
-  <button id="answerCreate-btn">Create</button><br>
-  <h3>msg answer: <span id="answerCreate"></span></h3><br>
 
   <script src="/js/SQLRequests.js"></script>
   <script src="/js/Toasts.js"></script>
