@@ -8,7 +8,7 @@ const transactionAmount = document.getElementById("transactionAmount");
 // Для общения с БД нужен headers
 const headers = { "Content-Type": "application/json" };
 
-console.log(createDeal);
+// console.log(createDeal);
 
 createDeal.addEventListener("click", (evt) => {
     console.log(buyerWallet.value);
@@ -22,7 +22,7 @@ createDeal.addEventListener("click", (evt) => {
   const answerContainer = document.getElementById("answerCreate");
   console.log(answerContainer);
 
-  fetch("fetch/createDeal", { method: "post", body, headers })
+  fetch("/fetch/createDeal", { method: "post", body, headers })
     .then((resp) => {
       console.log(resp);
       if (resp.status < 200 || resp.status >= 300)

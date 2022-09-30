@@ -92,7 +92,7 @@
                     class="form-control"
                     id="transactionAmount"
                     placeholder="value"
-                    value=""
+                    value="10"
                     required
                   />
                   <div class="invalid-feedback">
@@ -187,48 +187,58 @@
               <span class="text-primary">History</span>
             </h4>
 
-            <div class="row">
-              <div class="col-4">
-                <div id="list-example" class="list-group">
-                  <a
-                    class="list-group-item list-group-item-action"
-                    href="#list-item-1"
-                  >Item 1</a>
-                  <a
-                    class="list-group-item list-group-item-action"
-                    href="#list-item-2"
-                  >Item 2</a>
-                  <a
-                    class="list-group-item list-group-item-action"
-                    href="#list-item-3"
-                  >Item 3</a>
-                  <a
-                    class="list-group-item list-group-item-action"
-                    href="#list-item-4"
-                  >Item 4</a>
-                </div>
+            {{!-- <div>
+              <nav id="navbar-example2" class="navbar bg-light px-3 mb-3">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#scrollspyHeading1">First</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#scrollspyHeading2">Second</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a
+                      class="nav-link dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      href="#"
+                      role="button"
+                      aria-expanded="false"
+                    >Dropdown</a>
+                    <ul class="dropdown-menu">
+                      <li><a
+                          class="dropdown-item"
+                          href="#scrollspyHeading3"
+                        >Third</a></li>
+                      <li><a
+                          class="dropdown-item"
+                          href="#scrollspyHeading4"
+                        >Fourth</a></li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li><a
+                          class="dropdown-item"
+                          href="#scrollspyHeading5"
+                        >Fifth</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+              <div
+                data-bs-spy="scroll"
+                data-bs-target="#navbar-example2"
+                data-bs-root-margin="0px 0px -40%"
+                data-bs-smooth-scroll="true"
+                class="scrollspy-example bg-light p-3 rounded-2"
+                tabindex="0"
+              >
+                <h4 id="scrollspyHeading1">First heading</h4>
+                <p>...</p>
+                <h4 id="scrollspyHeading2">Second heading</h4>
+                <p>...</p>
               </div>
-              <div class="col-8">
-                <div
-                  data-bs-spy="scroll"
-                  data-bs-target="#list-example"
-                  data-bs-smooth-scroll="true"
-                  class="scrollspy-example"
-                  tabindex="0"
-                >
-                  <h4 id="list-item-1">Item 1</h4>
-                  <p>...</p>
-                  <h4 id="list-item-2">Item 2</h4>
-                  <p>...</p>
-                  <h4 id="list-item-3">Item 3</h4>
-                  <p>...</p>
-                  <h4 id="list-item-4">Item 4</h4>
-                  <p>...</p>
-                </div>
-              </div>
-            </div>
+            </div> --}}
 
-            {{! <ul class="list-group mb-3">
+            <ul class="list-group mb-3">
               <li class="list-group-item d-flex justify-content-between lh-sm">
                 <div>
                   <h6
@@ -253,7 +263,7 @@
                 <span>Total (ETH)</span>
                 <strong>0.105 ETH</strong>
               </li>
-            </ul> }}
+            </ul>
 
             <form class="card p-2" id="tmp">
               <div class="input-group">
@@ -486,5 +496,5 @@
 
   <script src="/js/SQLRequests.js"></script>
   <script src="/js/Toasts.js"></script>
-  <script src="/js/EscrowChain.js"></script>
+  {{! <script src="/js/EscrowChain.js"></script> }}
 </html>
