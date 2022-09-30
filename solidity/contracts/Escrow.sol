@@ -4,64 +4,93 @@ pragma solidity >=0.8.9 <0.9.0;
 
 // Author: @avezorgen
 contract Escrow {
-    struct props {
+    //confBuyer | confSeller    = uint8
+    //     0    |       0       = 0  
+    //     1    |       0       = 2
+    //     1    |       1       = 3
+
+    mapping(bytes32 => details) public deals;
+    struct details {
+        address buyer;
+        address seller;
         uint value;
-        bool confBuyer;
-        bool confSeller;
+        uint8 status;
     }
-    mapping(address => mapping(address => props)) public deals;
+
     address public owner;
     uint public hold;
+
+    event Created(address buyer, address seller,  bytes32 TxId);
+    event BuyerConfim(bytes32 TxId);
+    event SellerConfim(bytes32 TxId);
+    event Finished(bytes32 TxId);
+
+    function getTxId(address buyer, address seller, uint timestamp) internal pure returns (bytes32 TxId) {
+        TxId = keccak256(abi.encode(
+            buyer, seller, timestamp
+        ));
+    }
 
     constructor() {
         owner = msg.sender;
     }
 
     function create(address buyer, address seller, uint value) external {
-        require(msg.sender == buyer || msg.sender == seller, "Don't have permission ");
-        require(value != 0, "Can't provide deal with 0 value");
-        require(deals[buyer][seller].value == 0, "Deal already exists");
-        deals[buyer][seller].value = value;
-    }
-
-    function sendB(address seller) external payable {
-        require(msg.value != 0, "Value can't be zero");
-        require(deals[msg.sender][seller].confBuyer == false, "Money was already sent");
-        require(msg.value == deals[msg.sender][seller].value, "Wrong money value");
-        deals[msg.sender][seller].confBuyer = true;
-    }
-
-    function sendS(address buyer) external {
-        require(deals[buyer][msg.sender].confBuyer == true, "Money was not sent");
-        require(deals[buyer][msg.sender].confSeller == false, "Subject was already sent");
-        deals[buyer][msg.sender].confSeller = true;
-    }
-
-    function cancel(address buyer, address seller) external {
         require(msg.sender == buyer || msg.sender == seller, "Don't have permission");
-        require(deals[buyer][seller].value != 0, "Deal does not exist");
-        require(deals[buyer][seller].confSeller == false, "Seller already sent");
-        if (deals[buyer][seller].confBuyer) {
-            if (msg.sender == seller) {
+        require(value != 0, "Can't provide deal with 0 value");
+        bytes32 TxId = getTxId(buyer, seller, block.timestamp);
+        require(deals[TxId].value == 0, "Deal already exists");
+        deals[TxId].buyer = buyer;
+        deals[TxId].seller = seller;
+        deals[TxId].value = value;
+        emit Created(buyer, seller, TxId);
+    }
+
+    function sendB(bytes32 TxId) external payable {
+        require(msg.sender == deals[TxId].buyer, "Don't have permission");
+        require(msg.value != 0, "Value can't be zero");
+        require(msg.value == deals[TxId].value, "Wrong money value");
+        require(deals[TxId].status == 0, "Money was already sent");
+        deals[TxId].status = 2;
+        emit BuyerConfim(TxId);
+    }
+
+    function sendS(bytes32 TxId) external {
+        require(msg.sender == deals[TxId].seller, "Don't have permission");
+        require(deals[TxId].status == 2, "Money was not sent or Subject was already sent");
+        deals[TxId].status = 3;
+        emit SellerConfim(TxId);
+    }
+
+    function cancel(bytes32 TxId) external {
+        require(msg.sender == deals[TxId].buyer || msg.sender == deals[TxId].seller, "Don't have permission");
+        require(deals[TxId].status != 3, "Can't cancel now");
+        if (deals[TxId].status == 2) {
+            if (msg.sender == deals[TxId].seller) {
                 //seller отменил сделку, когда buyer уже отправил деньги
             }
-            payable(buyer).transfer(deals[buyer][seller].value);
+            payable(deals[TxId].buyer).transfer(deals[TxId].value);
         }
-        delete deals[buyer][seller];
+        delete deals[TxId];
+        emit Finished(TxId);
     }
 
-    function approve(address seller) external {
-        require(deals[msg.sender][seller].confSeller == true, "Seller did not confirm the transaction");
-        uint fee = deals[msg.sender][seller].value / 1000 * 25;
+    function approve(bytes32 TxId) external {
+        require(msg.sender == deals[TxId].buyer, "Don't have permission");
+        require(deals[TxId].status == 3, "Seller did not confirm the transaction");
+        uint fee = deals[TxId].value / 1000 * 25;
         hold += fee;
-        payable(seller).transfer(deals[msg.sender][seller].value - fee);
-        delete deals[msg.sender][seller];
+        payable(deals[TxId].seller).transfer(deals[TxId].value - fee);
+        delete deals[TxId];
+        emit Finished(TxId);
     }
 
-    function disapprove(address seller) external {
-        require(deals[msg.sender][seller].confSeller == true, "Seller did not confirm the transaction");
-        payable(msg.sender).transfer(deals[msg.sender][seller].value); //buyer отправлял и seller отправлял
-        delete deals[msg.sender][seller];
+    function disapprove(bytes32 TxId) external {
+        require(msg.sender == deals[TxId].buyer, "Don't have permission");
+        require(deals[TxId].status == 3, "Seller did not confirm the transaction");
+        payable(msg.sender).transfer(deals[TxId].value); //buyer отправлял и seller отправлял
+        delete deals[TxId];
+        emit Finished(TxId);
     }
 
     function withdraw(address target) external {

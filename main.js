@@ -62,11 +62,6 @@ app.post("/fetch/updateDealStatus", async (req, res) => {
   res.send(answer);
 });
 
-// app.use((req, res) => {
-//   res.status(404);
-//   res.render('404 - Error');
-// });
-
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });

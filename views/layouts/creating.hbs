@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.101.0">
+    <title>Checkout example · Bootstrap v5.2</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/checkout/">
+    
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <meta name="theme-color" content="#712cf9">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="form-validation.css" rel="stylesheet">
+  </head>
+  <body class="bg-light">
+    
+<div class="container">
+  <main>
+    <div class="py-5 text-center">
+      <h2>Deal creating form</h2>
+      <p class="lead">Hey Yo!</p>
+    </div>
+
+    <div class="row g-5">
+      <div class="col-7">
+        <h4 class="mb-3">Deal details</h4>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="switchRole">
+          <label class="form-check-label" for="switchRole">Buyer</label>
+        </div>
+        <form class="needs-validation" novalidate>
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="buyerAddress" class="form-label">Buyer address</label>
+              <input type="text" class="form-control" id="buyerAddress" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Valid buyer address is required.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="sellerAddress" class="form-label">Seller address</label>
+              <input type="text" class="form-control" id="sellerAddress" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Valid seller address is required.
+              </div>
+            </div>
+
+            <div class="col-9">
+              <label for="value" class="form-label">Value</label>
+              <input type="number" class="form-control" id="value" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Valid value is required.
+              </div>
+            </div>            
+
+            <div class="col-3">
+              <label for="unit" class="form-label">Unit</label>
+              <select class="form-select" id="unit" required>
+                <option value="">Wei</option>
+                <option>Gwei</option>
+                <option>Ether</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid unit.
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <div id="feePlaceholder"></div>
+          <button type="button" class="btn btn-primary" id="feeBtn">Calculate fee</button>
+
+          <script>
+            const feePlaceholder = document.getElementById('feePlaceholder')
+
+            const alert = (message, type) => {
+              const wrapper = document.createElement('div')
+              wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+              ].join('')
+
+              feePlaceholder.append(wrapper)
+            }
+
+            const feeTrigger = document.getElementById('feeBtn')
+            if (feeTrigger) {
+              feeTrigger.addEventListener('click', () => {
+                alert('Fee will be 0.0070 ETH', 'success')
+              })
+            }
+          </script>
+
+          <h5 class="mb-3 mt-3">Fee payment</h4>
+
+          <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" checked>
+          <label class="btn btn-secondary" for="option1">50/50</label>          
+
+          <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off">
+          <label class="btn btn-secondary" for="option2">buyer</label>
+
+          <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off">
+          <label class="btn btn-secondary" for="option3">seller</label>
+
+          <hr class="my-4">
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Create</button>
+        </form>
+      </div>
+      <div class="col-5">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">History</span>
+        </h4>
+        <ul class="list-group mb-3">
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</h6>
+              <small class="text-muted">pending</small>
+            </div>
+            <span class="text-muted">0.1 ETH</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between bg-light">
+            <div class="text-success">
+              <h6 class="my-0">0x70997970C51812dc3A010C7d01b50e0d17dc79C8</h6>
+              <small class="text-muted">1 day ago</small>
+            </div>
+            <span class="text-success">0.005 ETH</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Total (ETH)</span>
+            <strong>0.105 ETH</strong>
+          </li>
+        </ul>
+
+        <form class="card p-2">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Address">
+            <button type="submit" class="btn btn-secondary">Filter</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2017–2022 Company Name</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </footer>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    {{!-- <script src="form-validation.js"></script> --}}
+  </body>
+</html>
