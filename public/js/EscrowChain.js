@@ -90,27 +90,32 @@ const initialize = async () => {
         }
     }
 
-    createTransactionSendButton.onclick = async () => {
-        const buyer = createTransactionBuyer.value;
-        const seller = createTransactionSeller.value;
-        const value = createTransactionValue.value;
-        try{
-            const gas = await escrowProvider.daiContract.estimateGas.create(buyer, seller, value);
-            console.log(String(gas));
-            const transaction = await escrowProvider.create(buyer, seller, value);
-            const tx = await transaction.wait();
-            console.log(tx);
-            TxId = tx.events[0].args.TxId;
-            createTransactionStatus.innerHTML = `Ok`;
-            await Check();
-        } catch (err){
-            console.error(err);
-            createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
-        } finally {
-            checkDealBuyer.value = buyer;
-            checkDealSeller.value = seller;
+    try{
+        createTransactionSendButton.onclick = async () => {
+            const buyer = createTransactionBuyer.value;
+            const seller = createTransactionSeller.value;
+            const value = createTransactionValue.value;
+            try{
+                const gas = await escrowProvider.daiContract.estimateGas.create(buyer, seller, value);
+                console.log(String(gas));
+                const transaction = await escrowProvider.create(buyer, seller, value);
+                const tx = await transaction.wait();
+                console.log(tx);
+                TxId = tx.events[0].args.TxId;
+                createTransactionStatus.innerHTML = `Ok`;
+                await Check();
+            } catch (err){
+                console.error(err);
+                createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
+            } finally {
+                checkDealBuyer.value = buyer;
+                checkDealSeller.value = seller;
+            }
         }
+    } catch {
+        console.log("Create button not found")
     }
+    
 
     async function Check() {
         const buyer = checkDealBuyer.value;
@@ -137,88 +142,122 @@ const initialize = async () => {
         }
     }
 
-    checkDealCheckButton.onclick = Check;
-
-    sendBButton.onclick = async () => {
-        const seller = sendBSeller.value;
-        const value = sendBValue.value;
-        try{
-            tx = {
-                value: value
-            };
-            // const TxId = await getTxId();
-            const transaction = await escrowProvider.sendB(TxId, tx=tx);
-            const tx = await transaction.wait();
-            sendBStatus.innerHTML = `Ok`;
-            await Check();
-        } catch (err){
-            console.error(err);
-            sendBStatus.innerHTML = `Error: ${err.data.message}`;
-        }
+    try {
+        checkDealCheckButton.onclick = Check;
+    } catch {
+        console.log("Check deal button not found");
     }
-    sendSButton.onclick = async () => {
-        const buyer = sendSBuyer.value;
-        try{
-            // const TxId = await getTxId();
-            const transaction = await escrowProvider.sendS(TxId);
-            const tx = await transaction.wait();
-            sendSStatus.innerHTML = `Ok`;
-            await Check();
-        } catch (err){
-            console.error(err);
-            sendSStatus.innerHTML = `Error: ${err.data.message}`;
+    
+    try {
+        sendBButton.onclick = async () => {
+            const seller = sendBSeller.value;
+            const value = sendBValue.value;
+            try{
+                tx = {
+                    value: value
+                };
+                // const TxId = await getTxId();
+                const transaction = await escrowProvider.sendB(TxId, tx=tx);
+                const tx = await transaction.wait();
+                sendBStatus.innerHTML = `Ok`;
+                await Check();
+            } catch (err){
+                console.error(err);
+                sendBStatus.innerHTML = `Error: ${err.data.message}`;
+            }
         }
+    } catch {
+        console.log("sendBBotton not found");
     }
-    cancelTransactionButton.onclick = async () => {
-        const buyer = cancelTransactionBuyer.value;
-        const seller = cancelTransactionSeller.value;
-        try{
-            // const TxId = await getTxId();
-            const transaction = await escrowProvider.cancel(TxId);
-            const tx = await transaction.wait();
-            await Check();
-        } catch (err){
-            console.error(err);
+    
+    try {
+        sendSButton.onclick = async () => {
+            const buyer = sendSBuyer.value;
+            try{
+                // const TxId = await getTxId();
+                const transaction = await escrowProvider.sendS(TxId);
+                const tx = await transaction.wait();
+                sendSStatus.innerHTML = `Ok`;
+                await Check();
+            } catch (err){
+                console.error(err);
+                sendSStatus.innerHTML = `Error: ${err.data.message}`;
+            }
         }
-    }
-    approveTransactionButton.onclick = async () => {
-        const seller = approveTransactionSeller.value;
-        try{
-            // const TxId = await getTxId();
-            const transaction = await escrowProvider.approve(TxId);
-            const tx = await transaction.wait();
-            approveTransactionStatus.innerHTML = `Ok`;
-            await Check();
-        } catch (err){
-            console.error(err);
-            approveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
-        }
-    }
-    disapproveTransactionButton.onclick = async () => {
-        const seller = disapproveTransactionSeller.value;
-        try{
-            // const TxId = await getTxId();
-            const transaction = await escrowProvider.disapprove(TxId);
-            const tx = await transaction.wait();
-            disapproveTransactionStatus.innerHTML = `Ok`;
-            await Check();
-        } catch (err){
-            console.error(err);
-            disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
-        }
+    } catch {
+        console.log("sendSButton not found");
     }
 
-    withdrawButton.onclick = async () => {
-        const target = withdrawTarget.value;
-        try{
-            const transaction = await escrowProvider.withdraw(target);
-            const tx = await transaction.wait();
-            withdrawStatus.innerHTML = `Ok`;
-        } catch (err){
-            console.error(err);
-            withdrawStatus.innerHTML = `Error: ${err.data.message}`;
+    try {
+        cancelTransactionButton.onclick = async () => {
+            const buyer = cancelTransactionBuyer.value;
+            const seller = cancelTransactionSeller.value;
+            try{
+                // const TxId = await getTxId();
+                const transaction = await escrowProvider.cancel(TxId);
+                const tx = await transaction.wait();
+                await Check();
+            } catch (err){
+                console.error(err);
+            }
         }
+    } catch {
+        console.log("Cancel transaction button not found");
     }
+
+
+    try {
+        approveTransactionButton.onclick = async () => {
+            const seller = approveTransactionSeller.value;
+            try{
+                // const TxId = await getTxId();
+                const transaction = await escrowProvider.approve(TxId);
+                const tx = await transaction.wait();
+                approveTransactionStatus.innerHTML = `Ok`;
+                await Check();
+            } catch (err){
+                console.error(err);
+                approveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
+            }
+        }
+    } catch {
+        console.log("Approve transaction button not found");
+    }
+    
+    try {
+        disapproveTransactionButton.onclick = async () => {
+            const seller = disapproveTransactionSeller.value;
+            try{
+                // const TxId = await getTxId();
+                const transaction = await escrowProvider.disapprove(TxId);
+                const tx = await transaction.wait();
+                disapproveTransactionStatus.innerHTML = `Ok`;
+                await Check();
+            } catch (err){
+                console.error(err);
+                disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
+            }
+        }
+    } catch {
+        console.log("Disapprove transaction button not found");
+    }
+
+    try {
+        withdrawButton.onclick = async () => {
+            const target = withdrawTarget.value;
+            try{
+                const transaction = await escrowProvider.withdraw(target);
+                const tx = await transaction.wait();
+                withdrawStatus.innerHTML = `Ok`;
+            } catch (err){
+                console.error(err);
+                withdrawStatus.innerHTML = `Error: ${err.data.message}`;
+            }
+        }
+    } catch {
+        console.log("Withdraw button not found");
+    }
+    
 
     async function handleNewAccounts (newAccounts) {
         accounts = newAccounts;
