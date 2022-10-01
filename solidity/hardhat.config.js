@@ -1,5 +1,4 @@
 require("@nomicfoundation/hardhat-toolbox");
-require("hardhat-tracer");
 
 task("balance", "Prints an account's balance")
   .addParam("account", "The account's address")
