@@ -32,13 +32,13 @@
   <body class="bg-light">
 
     <div class="base-container container" style="display: flex;">
-      <main>
+      <main style="height: 100vh;">
         <div class="py-5 text-center" style="padding-top: 5rem!important">
           <h2>Deal creating form</h2>
           <p class="lead">Hey Yo!</p>
         </div>
 
-        <div class="row g-5">
+        <div class="row g-5" style="height: auto;">
           <div class="col-7">
             <h4 class="mb-3">Deal details</h4>
             <div class="form-check form-switch">
@@ -320,47 +320,8 @@
 
     {{! <script src="form-validation.js"></script> }}
 
-    <hr />
+    {{!-- <hr />
 
-    <h2>Request Permission</h2>
-    <button id="requestPermissions">Request Permissions</button><br />
-    <button id="getPermissions">Get Permissions</button><br />
-    <h3>Avaliable Permissions: <span id="permissionsResult"></span></h3><br />
-
-    <hr />
-
-    <h2>Send transaction test</h2>
-    <button id="transactionTest-send">Send Transaction</button><br />
-    <h3>Transaction Status: <span id="transactionTest-status"></span></h3><br />
-
-    <hr />
-
-    <h2>Create transaction</h2>
-    <input
-      type="text"
-      name="buyer"
-      id="create-buyer"
-      size="10"
-      placeholder="buyer"
-      value="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-    />
-    <input
-      type="text"
-      name="seller"
-      id="create-seller"
-      size="10"
-      placeholder="seller"
-      value="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
-    />
-    <input
-      type="text"
-      name="value"
-      id="create-value"
-      size="10"
-      placeholder="value"
-      value="5000"
-    />
-    <br />
     <button type="submit" id="create-btn">Create</button>
     <h3>Transaction Create Status: <span id="create-status"></span></h3><br />
 
@@ -490,7 +451,7 @@
     <button type="submit" id="withdraw-btn">Withdraw</button>
     <h3>Withdraw Status: <span id="withdraw-status"></span></h3><br />
 
-    <hr />
+    <hr /> --}}
   </body>
 
   <script src="/js/SQLRequests.js"></script>

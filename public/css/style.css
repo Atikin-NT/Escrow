@@ -23,7 +23,7 @@ body h3 {
 }
 
 .base-container {
-  height: 100vh !important;
+  height: auto !important;
 }
 
 .head {
