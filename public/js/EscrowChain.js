@@ -1,9 +1,50 @@
-let MetaMaskWallet = null;
-
 //MetaMask connect
-const onboardButton = document.getElementById('connectButton');
-const getAccountsResult = document.getElementById('show-account');
-const getBalanceResult = document.getElementById('show-balance');
+
+function switchToBtn(divAddress) {
+    try {
+        document.getElementById("show-account").remove();
+    } catch {};
+    
+    const btn = document.createElement("button");
+    btn.id = "connectButton";
+    btn.className = "btn btn-primary btn-lg";
+    btn.style = "margin-left: 1rem";
+    btn.innerText = "Connect Metamask";
+    divAddress.appendChild(btn);
+}
+
+function switchToAcc(divAddress) {
+    try {
+        document.getElementById("connectButton").remove();
+    } catch {};
+
+    const span = document.createElement("span");
+    span.id = "show-account";
+    span.style = "font-size: 1rem";
+    divAddress.appendChild(span);
+}
+
+function connect(account, divAddress) {
+    if(account === null) {
+        switchToBtn(divAddress);
+        return document.getElementById('connectButton');
+    }   else {
+        switchToAcc(divAddress);
+        // handleNewAccounts(account);
+        return document.getElementById('show-account');
+    }
+}
+
+
+let MetaMaskWallet = null;
+const divAddress = document.getElementById("address");
+const btnOrAcc = connect(MetaMaskWallet, divAddress);
+console.log(MetaMaskWallet);
+
+// const getAccountsResult = ;
+// const onboardButton = ;
+
+// const getBalanceResult = document.getElementById('show-balance');
 
 // Create Tarnsaction
 const createTransactionBuyer = document.getElementById('create-buyer');
@@ -220,11 +261,12 @@ const initialize = async () => {
     }
 
     async function handleNewAccounts (newAccounts) {
-        accounts = newAccounts;
-        getAccountsResult.innerHTML = accounts || 'Not able to get accounts';
+        // accounts = newAccounts;
+        MetaMaskWallet = newAccounts;
+        btnOrAcc.innerHTML = MetaMaskWallet || 'Not able to get accounts';
         const signer = provider.getSigner();
         const balance = await signer.getBalance();
-        getBalanceResult.innerHTML = String(balance) || '';
+        // getBalanceResult.innerHTML = String(balance) || '';
         escrowProvider = new EscrowProvider(signer);
       }
 
@@ -242,17 +284,19 @@ const initialize = async () => {
         ethereum.on('accountsChanged', handleNewAccounts);
         try {
             const newAccounts = await provider.listAccounts();
-            if (newAccounts.length > 0)
+            if (newAccounts.length > 0) {
+                switchToAcc(divAddress);
                 handleNewAccounts(newAccounts);
+            }
         } catch (err) {
             console.error('Error on init when getting accounts', err);
         }
 
-        onboardButton.onclick = onClickConnect;
-        onboardButton.disabled = false;
+        btnOrAcc.onclick = onClickConnect;
+        btnOrAcc.disabled = false;
     } else {
-        onboardButton.innerText = 'Please install MetaMask';
-        onboardButton.disabled = true;
+        btnOrAcc.innerText = 'Please install MetaMask';
+        btnOrAcc.disabled = true;
     }
 };
 
