@@ -3,16 +3,20 @@ class EscrowProvider{
     daiAbi = [
         "constructor()",
         "function create(address buyer, address seller, uint value) external",
-        "function sendB(address seller) external payable",
-        "function sendS(address buyer) external",
-        "function cancel(address buyer, address seller) external",
-        "function approve(address seller) external",
-        "function disapprove(address seller) external",
+        "function sendB(bytes32 TxId) external payable",
+        "function sendS(bytes32 TxId) external",
+        "function cancel(bytes32 TxId) external",
+        "function approve(bytes32 TxId) external",
+        "function disapprove(bytes32 TxId) external",
         "function withdraw(address target) external",
         "function hold() external view returns(uint256)",
         "function owner() external view returns(address)",
-        "function deals(address, address) external view returns(uint256 value, bool confBuyer, bool confSeller)"
-        ];
+        "function deals(bytes32) external view returns(address buyer, address seller, uint256 value, uint8 status)",
+        "event Created(address buyer, address seller, bytes32 TxId)",
+        "event BuyerConfim(bytes32 TxId)",
+        "event SellerConfim(bytes32 TxId)",
+        "event Finished(bytes32 TxId)"
+    ];
     daiContract;
     
     constructor(signer){
@@ -23,24 +27,24 @@ class EscrowProvider{
         return await this.daiContract.create(buyer, seller, value, tx);
     }
 
-    async sendB(seller, tx={}){
-        return await this.daiContract.sendB(seller, tx);
+    async sendB(TxId, tx={}){
+        return await this.daiContract.sendB(TxId, tx);
     }
 
-    async sendS(buyer, tx={}){
-        return await this.daiContract.sendS(buyer, tx);
+    async sendS(TxId, tx={}){
+        return await this.daiContract.sendS(TxId, tx);
     }
 
-    async cancel(buyer, seller, tx={}){
-        return await this.daiContract.cancel(buyer, seller, tx);
+    async cancel(TxId, tx={}){
+        return await this.daiContract.cancel(TxId, tx);
     }
 
-    async approve(seller, tx={}){
-        return await this.daiContract.approve(seller, tx);
+    async approve(TxId, tx={}){
+        return await this.daiContract.approve(TxId, tx);
     }
 
-    async disapprove(seller, tx={}){
-        return await this.daiContract.disapprove(seller, tx);
+    async disapprove(TxId, tx={}){
+        return await this.daiContract.disapprove(TxId, tx);
     }
 
     async withdraw(target, tx={}){
@@ -51,7 +55,11 @@ class EscrowProvider{
         return await this.daiContract.hold();
     }
 
-    async deals(buyer, seller) {
-        return await this.daiContract.deals(buyer, seller);
+    async owner() {
+        return await this.daiContract.owner();
+    }
+
+    async deals(TxId) {
+        return await this.daiContract.deals(TxId);
     }
 }   

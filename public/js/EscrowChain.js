@@ -1,62 +1,54 @@
-const forwarderOrigin = 'http://localhost:9010';
-
 //MetaMask connect
 const onboardButton = document.getElementById('connectButton');
 const getAccountsResult = document.getElementById('show-account');
 const getBalanceResult = document.getElementById('show-balance');
 
-// Permissions Actions Section
-const getPermissionsButton = document.getElementById('getPermissions');
-const permissionsResult = document.getElementById('permissionsResult');
-
-// Tarnsaction Test Send
-const transactionTestSendButton = document.getElementById('transactionTest-send');
-const transactionTestStatus = document.getElementById('transactionTest-status');
+const toastBodyAllertSucces = document.getElementsByClassName('alert alert-success');
 
 // Create Tarnsaction
-const createTransactionBuyer = document.getElementById('create-buyer');
-const createTransactionSeller = document.getElementById('create-seller');
-const createTransactionValue = document.getElementById('create-value');
-const createTransactionSendButton = document.getElementById('create-btn');
-const createTransactionStatus = document.getElementById('create-status');
+// const createTransactionBuyer = document.getElementById('create-buyer');
+// const createTransactionSeller = document.getElementById('create-seller');
+// const createTransactionValue = document.getElementById('create-value');
+// const createTransactionSendButton = document.getElementById('create-btn');
+// const createTransactionStatus = document.getElementById('create-status');
 
 // Check Deal
-const checkDealBuyer = document.getElementById('deals-buyer');
-const checkDealSeller = document.getElementById('deals-seller');
-const checkDealCheckButton = document.getElementById('deals-btn');
-const checkDealOutput = document.getElementById('deals-output');
+// const checkDealBuyer = document.getElementById('deals-buyer');
+// const checkDealSeller = document.getElementById('deals-seller');
+// const checkDealCheckButton = document.getElementById('deals-btn');
+// const checkDealOutput = document.getElementById('deals-output');
 
 // Send Money For Subject
-const sendBSeller = document.getElementById('sendB-seller');
-const sendBValue = document.getElementById('sendB-value');
-const sendBButton = document.getElementById('sendB-btn');
-const sendBStatus = document.getElementById('sendB-status');
+// const sendBSeller = document.getElementById('sendB-seller');
+// const sendBValue = document.getElementById('sendB-value');
+// const sendBButton = document.getElementById('sendB-btn');
+// const sendBStatus = document.getElementById('sendB-status');
 
 // Send Subject
-const sendSBuyer = document.getElementById('sendS-buyer');
-const sendSButton = document.getElementById('sendS-btn');
-const sendSStatus = document.getElementById('sendS-status');
+// const sendSBuyer = document.getElementById('sendS-buyer');
+// const sendSButton = document.getElementById('sendS-btn');
+// const sendSStatus = document.getElementById('sendS-status');
 
 // Cancel Tarnsaction
-const cancelTransactionBuyer = document.getElementById('cancel-buyer');
-const cancelTransactionSeller = document.getElementById('cancel-seller');
-const cancelTransactionButton = document.getElementById('cancel-btn');
-const cancelTransactionStatus = document.getElementById('cancels-status');
+// const cancelTransactionBuyer = document.getElementById('cancel-buyer');
+// const cancelTransactionSeller = document.getElementById('cancel-seller');
+// const cancelTransactionButton = document.getElementById('cancel-btn');
+// const cancelTransactionStatus = document.getElementById('cancels-status');
 
 // Approve Tarnsaction
-const approveTransactionSeller = document.getElementById('approve-seller');
-const approveTransactionButton = document.getElementById('approve-btn');
-const approveTransactionStatus = document.getElementById('approve-status');
+// const approveTransactionSeller = document.getElementById('approve-seller');
+// const approveTransactionButton = document.getElementById('approve-btn');
+// const approveTransactionStatus = document.getElementById('approve-status');
 
 // Disapprove Tarnsaction
-const disapproveTransactionSeller = document.getElementById('disapprove-seller');
-const disapproveTransactionButton = document.getElementById('disapprove-btn');
-const disapproveTransactionStatus = document.getElementById('disapprove-status');
+// const disapproveTransactionSeller = document.getElementById('disapprove-seller');
+// const disapproveTransactionButton = document.getElementById('disapprove-btn');
+// const disapproveTransactionStatus = document.getElementById('disapprove-status');
 
 // Withdraw 
-const withdrawTarget = document.getElementById('withdraw-target');
-const withdrawButton = document.getElementById('withdraw-btn');
-const withdrawStatus = document.getElementById('withdraw-status');
+// const withdrawTarget = document.getElementById('withdraw-target');
+// const withdrawButton = document.getElementById('withdraw-btn');
+// const withdrawStatus = document.getElementById('withdraw-status');
 
 const initialize = async () => {
     //Created check function to see if the MetaMask extension is installed
@@ -65,198 +57,144 @@ const initialize = async () => {
         return Boolean(ethereum && ethereum.isMetaMask);
     };
 
-    const updateButtons = (check) => {
-        const value = String(check.value);
-        const confBuyer = check.confBuyer;
-        const confSeller = check.confSeller;
-        if (value === '0' && confBuyer === false && confSeller === false) {
-            createTransactionSendButton.disabled = false;
-            sendBButton.disabled = true;
-            sendSButton.disabled = true;
-            cancelTransactionButton.disabled = true;
-            approveTransactionButton.disabled = true;
-            disapproveTransactionButton.disabled = true;
-        } else if (value !== '0' && confBuyer === false && confSeller === false) {
-            createTransactionSendButton.disabled = true;
-            sendBButton.disabled = false;
-            sendSButton.disabled = true;
-            cancelTransactionButton.disabled = false;
-            approveTransactionButton.disabled = true;
-            disapproveTransactionButton.disabled = true;
-        } else if (value !== '0' && confBuyer === true&& confSeller === false) {
-            createTransactionSendButton.disabled = true;
-            sendBButton.disabled = true;
-            sendSButton.disabled = false;
-            cancelTransactionButton.disabled = false;
-            approveTransactionButton.disabled = true;
-            disapproveTransactionButton.disabled = true;
-        } else if (value !== '0' && confBuyer === true && confSeller === true) {
-            createTransactionSendButton.disabled = true;
-            sendBButton.disabled = true;
-            sendSButton.disabled = false;
-            cancelTransactionButton.disabled = true;
-            approveTransactionButton.disabled = false;
-            disapproveTransactionButton.disabled = false;
-        }
-    }
-  
-    getPermissionsButton.onclick = async () => {
-        try {
-            const permissionsArray = await ethereum.request({
-                method: 'wallet_getPermissions',
-            });
-            permissionsResult.innerHTML = getPermissionsDisplayString(permissionsArray);
-        } catch (err) {
-            console.error(err);
-            permissionsResult.innerHTML = `Error: ${err.data.message}`;
-        }
-    }
+    // createTransactionSendButton.onclick = async () => {
+    //     const buyer = createTransactionBuyer.value;
+    //     const seller = createTransactionSeller.value;
+    //     const value = createTransactionValue.value;
+    //     try{
+    //         const gas = await escrowProvider.daiContract.estimateGas.create(buyer, seller, value);
+    //         console.log(String(gas));
+    //         const transaction = await escrowProvider.create(buyer, seller, value);
+    //         const tx = await transaction.wait();
+    //         console.log(tx);
+    //         TxId = tx.events[0].args.TxId;
+    //         createTransactionStatus.innerHTML = `Ok`;
+    //         await Check();
+    //     } catch (err){
+    //         console.error(err);
+    //         createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
+    //     } finally {
+    //         checkDealBuyer.value = buyer;
+    //         checkDealSeller.value = seller;
+    //     }
+    // }
+    
 
-    transactionTestSendButton.onclick = async () => {
-        try{
-            const signer = provider.getSigner();
-            tx = {
-                to: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-                value: ethers.utils.parseEther('0.1', 'ether')
-            };
-            const transaction = await signer.sendTransaction(tx);
-            createTransactionStatus.innerHTML = ``;
-        } catch (err){
-            console.error(err);
-            createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
-        }
-    }
+    // async function Check() {
+    //     const buyer = checkDealBuyer.value;
+    //     const seller = checkDealSeller.value;
+    //     try{
+    //         // const TxId = await getTxId();
+    //         const deal = await escrowProvider.deals(TxId);
+    //         checkDealOutput.innerHTML = deal;
+    //         sendBValue.value = deal.value;
+    //     } catch (err){
+    //         console.error(err);
+    //         checkDealOutput.innerHTML = `Error: ${err.data.message}`;
+    //     } finally {
+    //         sendBSeller.value = seller;
+    //         sendSBuyer.value = buyer;
 
-    createTransactionSendButton.onclick = async () => {
-        const buyer = createTransactionBuyer.value;
-        const seller = createTransactionSeller.value;
-        const value = createTransactionValue.value;
-        try{
-            const transaction = await escrowProvider.create(buyer, seller, value);
-            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
-                createTransactionStatus.innerHTML = `Ok`;
-                Check();
-            })
-        } catch (err){
-            console.error(err);
-            createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
-        } finally {
-            checkDealBuyer.value = buyer;
-            checkDealSeller.value = seller;
-        }
-    }
+    //         cancelTransactionBuyer.value = buyer;
+    //         cancelTransactionSeller.value = seller;
 
-    async function Check() {
-        const buyer = checkDealBuyer.value;
-        const seller = checkDealSeller.value;
-        try{
-            await escrowProvider.deals(buyer, seller).then(
-                (transaction) => {
-                    updateButtons(transaction);
-                    checkDealOutput.innerHTML = transaction;
-                    sendBValue.value = transaction.value;
-                }
-            );
-        } catch (err){
-            console.error(err);
-            checkDealOutput.innerHTML = `Error: ${err.data.message}`;
-        } finally {
-            sendBSeller.value = seller;
-            sendSBuyer.value = buyer;
+    //         approveTransactionSeller.value = seller;
 
-            cancelTransactionBuyer.value = buyer;
-            cancelTransactionSeller.value = seller;
+    //         disapproveTransactionSeller.value = seller;
+    //     }
+    // }
 
-            approveTransactionSeller.value = seller;
+    // checkDealCheckButton.onclick = Check;
+    
+    // sendBButton.onclick = async () => {
+    //     const seller = sendBSeller.value;
+    //     const value = sendBValue.value;
+    //     try{
+    //         tx = {
+    //             value: value
+    //         };
+    //         // const TxId = await getTxId();
+    //         const transaction = await escrowProvider.sendB(TxId, tx=tx);
+    //         const tx = await transaction.wait();
+    //         sendBStatus.innerHTML = `Ok`;
+    //         await Check();
+    //     } catch (err){
+    //         console.error(err);
+    //         sendBStatus.innerHTML = `Error: ${err.data.message}`;
+    //     }
+    // }
+    
 
-            disapproveTransactionSeller.value = seller;
-        }
-    }
+    // sendSButton.onclick = async () => {
+    //     const buyer = sendSBuyer.value;
+    //     try{
+    //         // const TxId = await getTxId();
+    //         const transaction = await escrowProvider.sendS(TxId);
+    //         const tx = await transaction.wait();
+    //         sendSStatus.innerHTML = `Ok`;
+    //         await Check();
+    //     } catch (err){
+    //         console.error(err);
+    //         sendSStatus.innerHTML = `Error: ${err.data.message}`;
+    //     }
+    // }
 
-    checkDealCheckButton.onclick = Check;
 
-    sendBButton.onclick = async () => {
-        const seller = sendBSeller.value;
-        const value = sendBValue.value;
-        try{
-            tx = {
-                value: value
-            };
-            const transaction = await escrowProvider.sendB(seller, tx=tx);
-            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
-                sendBStatus.innerHTML = `Ok`;
-                Check();
-            })
-        } catch (err){
-            console.error(err);
-            sendBStatus.innerHTML = `Error: ${err.data.message}`;
-        }
-    }
-    sendSButton.onclick = async () => {
-        const buyer = sendSBuyer.value;
-        try{
-            const transaction = await escrowProvider.sendS(buyer);
-            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
-                sendSStatus.innerHTML = `Ok`;
-                Check();
-            })
-        } catch (err){
-            console.error(err);
-            sendSStatus.innerHTML = `Error: ${err.data.message}`;
-        }
-    }
-    cancelTransactionButton.onclick = async () => {
-        const buyer = cancelTransactionBuyer.value;
-        const seller = cancelTransactionSeller.value;
-        try{
-            const transaction = await escrowProvider.cancel(buyer, seller);
-            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
-                Check();
-            })
-        } catch (err){
-            console.error(err);
-        }
-    }
-    approveTransactionButton.onclick = async () => {
-        const seller = approveTransactionSeller.value;
-        try{
-            const transaction = await escrowProvider.approve(seller);
-            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
-                approveTransactionStatus.innerHTML = `Ok`;
-                Check();
-            })
-        } catch (err){
-            console.error(err);
-            approveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
-        }
-    }
-    disapproveTransactionButton.onclick = async () => {
-        const seller = disapproveTransactionSeller.value;
-        try{
-            const transaction = await escrowProvider.disapprove(seller);
-            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
-                disapproveTransactionStatus.innerHTML = `Ok`;
-                Check();
-            })
-        } catch (err){
-            console.error(err);
-            disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
-        }
-    }
+    // cancelTransactionButton.onclick = async () => {
+    //     const buyer = cancelTransactionBuyer.value;
+    //     const seller = cancelTransactionSeller.value;
+    //     try{
+    //         // const TxId = await getTxId();
+    //         const transaction = await escrowProvider.cancel(TxId);
+    //         const tx = await transaction.wait();
+    //         await Check();
+    //     } catch (err){
+    //         console.error(err);
+    //     }
+    // }
 
-    withdrawButton.onclick = async () => {
-        const target = withdrawTarget.value;
-        try{
-            const transaction = await escrowProvider.withdraw(target);
-            provider.once(transaction.hash, (_transaction) => { //вызывается только когда транзакция завершена
-                withdrawStatus.innerHTML = `Ok`;
-                Check();
-            })
-        } catch (err){
-            console.error(err);
-            withdrawStatus.innerHTML = `Error: ${err.data.message}`;
-        }
-    }
+
+    // approveTransactionButton.onclick = async () => {
+    //     const seller = approveTransactionSeller.value;
+    //     try{
+    //         // const TxId = await getTxId();
+    //         const transaction = await escrowProvider.approve(TxId);
+    //         const tx = await transaction.wait();
+    //         approveTransactionStatus.innerHTML = `Ok`;
+    //         await Check();
+    //     } catch (err){
+    //         console.error(err);
+    //         approveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
+    //     }
+    // }
+    
+    // disapproveTransactionButton.onclick = async () => {
+    //     const seller = disapproveTransactionSeller.value;
+    //     try{
+    //         // const TxId = await getTxId();
+    //         const transaction = await escrowProvider.disapprove(TxId);
+    //         const tx = await transaction.wait();
+    //         disapproveTransactionStatus.innerHTML = `Ok`;
+    //         await Check();
+    //     } catch (err){
+    //         console.error(err);
+    //         disapproveTransactionStatus.innerHTML = `Error: ${err.data.message}`;
+    //     }
+    // }
+
+
+    // withdrawButton.onclick = async () => {
+    //     const target = withdrawTarget.value;
+    //     try{
+    //         const transaction = await escrowProvider.withdraw(target);
+    //         const tx = await transaction.wait();
+    //         withdrawStatus.innerHTML = `Ok`;
+    //     } catch (err){
+    //         console.error(err);
+    //         withdrawStatus.innerHTML = `Error: ${err.data.message}`;
+    //     }
+    // }
+    
 
     async function handleNewAccounts (newAccounts) {
         accounts = newAccounts;
@@ -265,6 +203,10 @@ const initialize = async () => {
         const balance = await signer.getBalance();
         getBalanceResult.innerHTML = String(balance) || '';
         escrowProvider = new EscrowProvider(signer);
+        const gas = await escrowProvider.daiContract.estimateGas.create(
+            buyerWallet.value, sellerWallet.value, transactionAmount.value
+            );
+        toastBodyAllertSucces[0].innerText = `Fee will be ${gas} Wei`;
       }
     const onClickConnect = async () => {
         try {
@@ -286,34 +228,22 @@ const initialize = async () => {
             console.error('Error on init when getting accounts', err);
         }
 
-        filter = {
-            address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-            topics: [
-                ethers.utils.id("Created(address,address,uint256)")
-            ]
-        };
-        provider.on(filter, (log, event) => {
-            console.log('uwu');
-            console.log(log);
-            console.log('buyer',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,0,32)));
-            console.log('seller',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,32,64)));
-            console.log('value',ethers.utils.hexStripZeros(ethers.utils.hexDataSlice(log.data,64,96)));
-        });
-
         onboardButton.innerText = 'Connect';
         onboardButton.onclick = onClickConnect;
         onboardButton.disabled = false;
     } else {
-        onboardButton.innerText = 'Click here to install MetaMask!';
+        onboardButton.innerText = 'Please install MetaMask';
         onboardButton.disabled = true;
     }
 };
+
 window.addEventListener('DOMContentLoaded', initialize);
 
-function getPermissionsDisplayString (permissionsArray) {
-    if (permissionsArray.length == 0) {
-        return 'No permissions found.';
-    }
-    const permissionNames = permissionsArray.map((perm) => perm.parentCapability);
-    return permissionNames.reduce((acc, name) => `${acc}${name}, `, '').replace(/, $/u, '');
+const getTxId = () => {
+    return new Promise( (res , rej) => {
+        setTimeout( () => {
+            const TxId = "0x177a73f8f29cb1d4dddb2fd58ae343b12393f256400cfb69167ab5151fc59d73";
+            res(TxId);
+        }, 2000);
+    })
 }
