@@ -32,23 +32,58 @@
   <body class="bg-light">
 
     <div class="base-container container" style="display: flex;">
-      <main style="height: 100vh;">
-        <div class="py-5 text-center" style="padding-top: 5rem!important">
+      <main style="height: 100vh; display: flex; flex-direction: column;">
+        <div
+          class="py-5 text-center"
+          style="padding-top: 0!important; margin-top:auto"
+        >
           <h2>Deal creating form</h2>
           <p class="lead">Hey Yo!</p>
         </div>
 
-        <div class="row g-5" style="height: auto;">
+        <div class="row g-5" style="height: auto; margin-bottom:auto;">
           <div class="col-7">
             <h4 class="mb-3">Deal details</h4>
-            <div class="form-check form-switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="switchRole"
-              />
-              <label class="form-check-label" for="switchRole">Buyer</label>
+            <div class="form-check" style="padding-left: 0;">
+              <label class="form-check-label" for="switchRole">My Role: </label>
+              <div class="container-sm" style="padding-left: 0; margin: 1rem 0">
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="options-outlined"
+                  id="success-outlined"
+                  autocomplete="off"
+                  checked
+                />
+                <label
+                  class="btn btn-outline-secondary"
+                  for="success-outlined"
+                >Buyer</label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="options-outlined"
+                  id="danger-outlined"
+                  autocomplete="off"
+                />
+                <label
+                  class="btn btn-outline-secondary"
+                  for="danger-outlined"
+                >Seller</label>
+              </div>
+
+              <div class="col-xl-6"><p style="margin-bottom: 0;">My Address:
+                  <button
+                    id="connectButton"
+                    class="btn btn-primary btn-lg"
+                    style="margin-left: 1rem"
+                  >Connect Metamask</button>
+                  <span
+                    id="show-account"
+                    style="font-size: 1rem;"
+                  ></span></p></div>
+
             </div>
             <form class="needs-validation" novalidate id="create-deal-btn">
               <div class="row g-3">
@@ -60,27 +95,11 @@
                     class="form-control"
                     id="create-buyer"
                     placeholder="Buyer address"
-                    value="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+                    value=""
                     required
                   />
                   <div class="invalid-feedback">
                     Valid buyer address is required.
-                  </div>
-                </div>
-
-                <div class="col-12">
-                  <label for="sellerAddress" class="form-label">Seller address</label>
-                  <input
-                    type="text"
-                    name="seller"
-                    class="form-control"
-                    id="create-seller"
-                    placeholder="Seller address"
-                    value="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
-                    required
-                  />
-                  <div class="invalid-feedback">
-                    Valid seller address is required.
                   </div>
                 </div>
 
@@ -92,7 +111,7 @@
                     class="form-control"
                     id="transactionAmount"
                     placeholder="value"
-                    value="10"
+                    value=""
                     required
                   />
                   <div class="invalid-feedback">
@@ -156,24 +175,6 @@
               />
               <label class="btn btn-secondary" for="option1">50/50</label>
 
-              <input
-                type="radio"
-                class="btn-check"
-                name="options"
-                id="option2"
-                autocomplete="off"
-              />
-              <label class="btn btn-secondary" for="option2">buyer</label>
-
-              <input
-                type="radio"
-                class="btn-check"
-                name="options"
-                id="option3"
-                autocomplete="off"
-              />
-              <label class="btn btn-secondary" for="option3">seller</label>
-
               <hr class="my-4" />
 
               <button
@@ -187,7 +188,7 @@
               <span class="text-primary">History</span>
             </h4>
 
-            {{!-- <div>
+            {{! <div>
               <nav id="navbar-example2" class="navbar bg-light px-3 mb-3">
                 <a class="navbar-brand" href="#">Navbar</a>
                 <ul class="nav nav-pills">
@@ -236,7 +237,7 @@
                 <h4 id="scrollspyHeading2">Second heading</h4>
                 <p>...</p>
               </div>
-            </div> --}}
+            </div> }}
 
             <ul class="list-group mb-3">
               <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -281,19 +282,6 @@
             >Connect</a> }}
 
             <button
-              id="connectButton"
-              class="w-100 btn btn-primary btn-lg"
-              style="margin-top: 5%;"
-            >Connect</button>
-
-            <div class="col-xl-6"><p>Account:
-                <span
-                  id="show-account"
-                  style="font-size: 1rem"
-                ></span></p></div>
-            <div class="col-xl-6"><p>Your balance:
-                <span id="show-balance" style="font-size: 1rem;"></span></p></div>
-            <button
               id="answerCreate-btn"
               class="w-100 btn btn-primary btn-lg"
             >Update history</button>
@@ -321,7 +309,7 @@
 
     <script src="js/form-validation.js"></script>
 
-    {{!-- <hr />
+    {{! <hr />
 
     <button type="submit" id="create-btn">Create</button>
     <h3>Transaction Create Status: <span id="create-status"></span></h3><br />
@@ -452,10 +440,11 @@
     <button type="submit" id="withdraw-btn">Withdraw</button>
     <h3>Withdraw Status: <span id="withdraw-status"></span></h3><br />
 
-    <hr /> --}}
+    <hr /> }}
   </body>
 
   <script src="/js/SQLRequests.js"></script>
   <script src="/js/Toasts.js"></script>
+  <script src="/js/AdditionalLogic.js"></script>
   <script src="/js/EscrowChain.js"></script>
 </html>

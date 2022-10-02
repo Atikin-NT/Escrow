@@ -1,3 +1,5 @@
+let MetaMaskWallet = null;
+
 //MetaMask connect
 const onboardButton = document.getElementById('connectButton');
 const getAccountsResult = document.getElementById('show-account');
@@ -246,7 +248,6 @@ const initialize = async () => {
             console.error('Error on init when getting accounts', err);
         }
 
-        onboardButton.innerText = 'Connect';
         onboardButton.onclick = onClickConnect;
         onboardButton.disabled = false;
     } else {
