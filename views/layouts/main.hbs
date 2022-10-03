@@ -31,22 +31,19 @@
   </head>
   <body class="bg-light">
 
-    <div class="base-container container" style="display: flex;">
-      <main style="height: 100vh; display: flex; flex-direction: column;">
-        <div
-          class="py-5 text-center"
-          style="padding-top: 0!important; margin-top:auto"
-        >
+    <div class="base-container container">
+      <main>
+        <div class="py-5 text-center deal-form">
           <h2>Deal creating form</h2>
           <p class="lead">Hey Yo!</p>
         </div>
 
-        <div class="row g-5" style="height: auto; margin-bottom:auto;">
+        <div class="row g-5 deal-details">
           <div class="col-7">
             <h4 class="mb-3">Deal details</h4>
-            <div class="form-check" style="padding-left: 0;">
+            <div class="form-check">
               <label class="form-check-label" for="switchRole">My Role: </label>
-              <div class="container-sm" style="padding-left: 0; margin: 1rem 0">
+              <div class="container-sm">
                 <input
                   type="radio"
                   class="btn-check"
@@ -73,16 +70,13 @@
                 >Seller</label>
               </div>
 
-              <div class="col-xl-6"><p id="address" style="margin-bottom: 0;">My Address:
-                  {{!-- <button
+              <div class="col-xl-6"><p id="address">My Address:
+                  {{! <button
                     id="connectButton"
                     class="btn btn-primary btn-lg"
                     style="margin-left: 1rem"
-                  >Connect Metamask</button> --}}
-                  <span
-                    id="show-account"
-                    style="font-size: 1rem;"
-                  ></span></p></div>
+                  >Connect Metamask</button> }}
+                  <span id="show-account"></span></p></div>
 
             </div>
             <form class="needs-validation" novalidate id="create-deal-btn">
@@ -153,9 +147,8 @@
                 >
                   <div class="toast-body" style="padding: 0;">
                     <div
-                      class="alert alert-success"
+                      class="alert alert-success toast-body-div"
                       role="alert"
-                      style="margin-bottom: 0;"
                     >
                       Fee will be0.0070 ETH
                     </div>
