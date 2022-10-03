@@ -113,9 +113,11 @@ const body = JSON.stringify({
 ## Возможные ошибки БД
 
 1. **600** - connection error
-2. **601** - create deal error 
-3. **602** - delete deal error
-4. **603** - get deals by account error
-5. **604** - status update error
+2. **610** - create deal error 
+   1. **611** - address invalid
+   2. **612** - value error
+3. **620** - delete deal error
+4. **630** - get deals by account error
+5. **640** - status update error
 
 

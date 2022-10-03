@@ -2,7 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const { ethers } = require("ethers");
-const fetchRouter = require("./routes/fetch")
+const {router} = require('./routes/main.js');
 
 provider = new ethers.getDefaultProvider("http://localhost:8545");
 
@@ -22,7 +22,7 @@ app.set('views', 'views');
 app.use(express.static(__dirname + '/public/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(fetchRouter);
+app.use('/', router);
 
 app.get('/', (req, res) => {
   res.render('land');
