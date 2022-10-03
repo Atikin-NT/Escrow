@@ -46,6 +46,8 @@ console.log(MetaMaskWallet);
 
 // const getBalanceResult = document.getElementById('show-balance');
 
+const toastBodyAllertSucces = document.getElementsByClassName('alert alert-success');
+
 // Create Tarnsaction
 const createTransactionBuyer = document.getElementById('create-buyer');
 const createTransactionSeller = document.getElementById('create-seller');
@@ -268,6 +270,10 @@ const initialize = async () => {
         const balance = await signer.getBalance();
         // getBalanceResult.innerHTML = String(balance) || '';
         escrowProvider = new EscrowProvider(signer);
+        const gas = await escrowProvider.daiContract.estimateGas.create(
+            buyerWallet.value, sellerWallet.value, transactionAmount.value
+            );
+        toastBodyAllertSucces[0].innerText = `Fee will be ${gas} Wei`;
       }
 
     const onClickConnect = async () => {
