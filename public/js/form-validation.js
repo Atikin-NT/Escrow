@@ -10,7 +10,7 @@
       form.addEventListener('submit', event => {
         if (!form.checkValidity()) {
           event.preventDefault()
-          event.stopPropagation()
+          event.stopImmediatePropagation()
         }
   
         form.classList.add('was-validated')
