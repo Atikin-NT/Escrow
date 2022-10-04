@@ -275,7 +275,6 @@ const initialize = async () => {
             );
         toastBodyAllertSucces[0].innerText = `Fee will be ${gas} Wei`;
       }
-
     const onClickConnect = async () => {
         try {
             await ethereum.request({ method: 'eth_requestAccounts' });
