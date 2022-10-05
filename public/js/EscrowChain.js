@@ -37,14 +37,13 @@ function connect(account, divAddress) {
 
 
 let MetaMaskWallet = null;
+let provider = null;
+let escrowProvider = null;
+let buyerWallet = null;
+let sellerWallet = null;
 const divAddress = document.getElementById("address");
 const btnOrAcc = connect(MetaMaskWallet, divAddress);
 console.log(MetaMaskWallet);
-
-// const getAccountsResult = ;
-// const onboardButton = ;
-
-// const getBalanceResult = document.getElementById('show-balance');
 
 const toastBodyAllertSucces = document.getElementsByClassName('alert alert-success');
 
@@ -92,6 +91,10 @@ const disapproveTransactionStatus = document.getElementById('disapprove-status')
 const withdrawTarget = document.getElementById('withdraw-target');
 const withdrawButton = document.getElementById('withdraw-btn');
 const withdrawStatus = document.getElementById('withdraw-status');
+
+//Get History
+import { updateHistory } from "./SQLRequests.js";
+const updateHistoryBtn = document.getElementById("answerCreate-btn");
 
 const initialize = async () => {
     //Created check function to see if the MetaMask extension is installed
@@ -303,6 +306,11 @@ const initialize = async () => {
         btnOrAcc.innerText = 'Please install MetaMask';
         btnOrAcc.disabled = true;
     }
+
+    updateHistoryBtn.addEventListener('click', (evt) => {
+        if(MetaMaskWallet == null) return;
+        updateHistory(MetaMaskWallet[0]);
+    });
 };
 
 window.addEventListener('DOMContentLoaded', initialize);
