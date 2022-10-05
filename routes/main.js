@@ -7,7 +7,7 @@ router.post("/fetch/createDeal", createDeal);
 
 router.post("/fetch/deleteDeal", deleteDeal);
 
-router.post("/fetch/getDeals", getDeals);
+router.get("/fetch/getDeals", getDeals);
 
 router.post("/fetch/updateDealStatus", updateDealStatus);
 

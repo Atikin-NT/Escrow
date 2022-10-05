@@ -11,7 +11,7 @@ async function deleteDeal(req, res){
 }
 
 async function getDeals(req, res){
-    answer = await dbGetDealsByAccount(req.body.account);
+    answer = await dbGetDealsByAccount(req.query.account);
     res.send(answer);
 }
 
