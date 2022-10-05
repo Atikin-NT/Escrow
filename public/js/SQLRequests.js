@@ -1,14 +1,13 @@
-const createTest = document.getElementById("answerCreate-btn");
+const updateHistoryBtn = document.getElementById("answerCreate-btn");
 
 const createDeal = document.getElementById("create-deal-btn");
 const buyerWallet = document.getElementById("create-buyer");
 const sellerWallet = document.getElementById("create-seller");
 const transactionAmount = document.getElementById("transactionAmount");
+const historyList = document.getElementById("history-list");
 
-// Для общения с БД нужен headers
+
 const headers = { "Content-Type": "application/json" };
-
-// console.log(createDeal);
 
 createDeal.addEventListener("submit", (evt) => {
   evt.preventDefault();
@@ -40,13 +39,13 @@ createDeal.addEventListener("submit", (evt) => {
     });
 });
 
-createTest.addEventListener("click", (evt) => {
+function updateHistory(account){
   const body = JSON.stringify({
-    // список всех параметров запроса
-    account: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    account: account,
   });
 
-  //   const headers = { "Content-Type": "application/json" }; // заголовок. Всегда оставляем таким
+  console.log(body);
+
   const answerContainer = document.getElementById("answerCreate");
 
   fetch("/fetch/getDeals", { method: "post", body, headers }) // и всегда отправляем методом POST
@@ -57,11 +56,37 @@ createTest.addEventListener("click", (evt) => {
       return resp.json();
     })
     .then((json) => {
-      console.log(json);
+      console.log(json.list);
+      while (historyList.firstChild) {
+        historyList.removeChild(historyList.firstChild);
+      }
+      for(let element of json.list){
+        console.log(element)
+        console.log(element.seller)
+        var li = document.createElement("li");
+        li.classList.add('list-group-item', 'd-flex', 'justify-content-between');
+
+        var div = document.createElement("div");
+        if(element.status != 0) div.className = 'text-success';
+        var h6 = document.createElement("h6");
+        h6.className = 'my-0';
+        h6.innerHTML = element.seller; //TODO: фильтрация с тем у кого сделка
+        div.appendChild(h6);
+
+        var small = document.createElement("small");
+        small.className = 'text-muted';
+        small.innerHTML = "pending";
+
+        li.appendChild(div);
+        li.appendChild(small);
+        historyList.appendChild(li);
+      }
       answerContainer.innerHTML = json.msg;
     })
     .catch((err) => {
       console.log(err);
       answerContainer.innerHTML = err;
     });
-});
+}
+
+export {updateHistory};
