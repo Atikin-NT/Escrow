@@ -14,10 +14,16 @@ body {
   // display: flex;
 }
 
+.container {
+  max-width: 960px;
+}
+
+
+
 main {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
 
   .deal-form {
     padding-top: 0 !important;
