@@ -92,9 +92,19 @@ const withdrawTarget = document.getElementById('withdraw-target');
 const withdrawButton = document.getElementById('withdraw-btn');
 const withdrawStatus = document.getElementById('withdraw-status');
 
+
+import { updateHistory, createDeal } from "./SQLRequests.js";
+//Create Deal
+const createDealFormClick = document.getElementById("create-deal-btn");
 //Get History
-import { updateHistory } from "./SQLRequests.js";
 const updateHistoryBtn = document.getElementById("answerCreate-btn");
+
+//Frontend DOM
+import { BuyerSellerSwitch } from "./FrontendDOM.js";
+const buyerSwitch = document.getElementById("buyer-role");
+const sellerSwitch = document.getElementById("seller-role");
+
+import { CreateToast } from "./Toasts.js";
 
 const initialize = async () => {
     //Created check function to see if the MetaMask extension is installed
@@ -310,6 +320,31 @@ const initialize = async () => {
     updateHistoryBtn.addEventListener('click', (evt) => {
         if(MetaMaskWallet == null) return;
         updateHistory(MetaMaskWallet[0]);
+    });
+
+    createDealFormClick.addEventListener('submit', (evt) => {
+        evt.preventDefault();
+        if(MetaMaskWallet == null){ // TODO: проверка на логин по метамаску
+            CreateToast(true, "Login error");
+            return;
+        }
+        try {
+            createDeal(MetaMaskWallet[0]);
+        } catch (error) {
+            CreateToast(true, error);
+        }
+    });
+
+    buyerSwitch.addEventListener('click', (evt) => {
+        BuyerSellerSwitch(0);
+        sellerSwitch.value = false;
+        evt.target.value = true;
+    });
+
+    sellerSwitch.addEventListener('click', (evt) => {
+        BuyerSellerSwitch(1);
+        buyerSwitch.value = false;
+        evt.target.value = true;
     });
 };
 

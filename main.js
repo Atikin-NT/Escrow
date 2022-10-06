@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use('/', router);
 
 app.get('/', (req, res) => {
-  res.render('land');
+  res.render('layouts/main');
 });
 
 app.post("/request", (req, res) => {

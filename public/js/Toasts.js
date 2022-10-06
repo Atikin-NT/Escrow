@@ -1,29 +1,26 @@
 const toastTrigger = document.getElementById("liveToastBtn");
-const toastLiveExample = document.getElementById("liveToast");
+const toastAlert = document.getElementById("liveToast");
 if (toastTrigger) {
   toastTrigger.addEventListener("click", () => {
-    const toast = new bootstrap.Toast(toastLiveExample);
+    const toast = new bootstrap.Toast(toastAlert);
 
     toast.show();
   });
 }
 
-// const feePlaceholder = document.getElementById("feePlaceholder");
-// const alert = (message, type) => {
-//   const wrapper = document.createElement("div");
+function CreateToast(danger, msg){
+  const toastMsg = document.getElementById("toast-msg");
+  if(danger){
+    toastMsg.classList.add("alert-danger");
+    toastMsg.classList.remove("alert-success");  
+  }
+  else{
+    toastMsg.classList.remove("alert-danger");
+    toastMsg.classList.add("alert-success"); 
+  }
+  toastMsg.innerHTML = msg;
+  const toast = new bootstrap.Toast(toastAlert);
+  toast.show();
+}
 
-//   wrapper.innerHTML = [
-//     `<div class="alert alert-${type} alert-dismissible"
-//   role="alert">`,
-//     `<div>${message}</div>`,
-//     ' <button type="button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>',
-//     "</div>",
-//   ].join("");
-//   feePlaceholder.append(wrapper);
-// };
-// const feeTrigger = document.getElementById("feeBtn");
-// if (feeTrigger) {
-//   feeTrigger.addEventListener("click", () => {
-//     alert("Fee will be0.0070 ETH", "success");
-//   });
-// }
+export { CreateToast };

@@ -1,26 +1,42 @@
-const updateHistoryBtn = document.getElementById("answerCreate-btn");
+import { CreateToast } from "./Toasts.js";
 
-const createDeal = document.getElementById("create-deal-btn");
-const buyerWallet = document.getElementById("create-buyer");
-const sellerWallet = document.getElementById("create-seller");
-const transactionAmount = document.getElementById("transactionAmount");
+const buyerSwitch = document.getElementById("buyer-role");
+const partnerWallet = document.getElementById("deal-parner");
+const transactionAmount = document.getElementById("transaction-amount");
+const etherUnit = document.getElementById("ether-unit");
 const historyList = document.getElementById("history-list");
 
 
 const headers = { "Content-Type": "application/json" };
 
-createDeal.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  console.log(buyerWallet.value);
-  const body = JSON.stringify({
-    buyer: buyerWallet.value,
-    seller: sellerWallet.value,
-    value: transactionAmount.value,
-  });
+function createDeal(account){
+  console.log("create");
+  if(!ethers.utils.isAddress(partnerWallet.value))
+    throw "invalid partner address";
+  if(transactionAmount.value <= 0)
+    throw "invalid value";
 
-  console.log("-------");
-  const answerContainer = document.getElementById("answerCreate");
-  console.log(answerContainer);
+  let pow = -1;
+  const ethUnit = etherUnit.options[etherUnit.selectedIndex].value;
+  if(ethUnit == "Wei")
+    pow = 1;
+  if(ethUnit == "Gwei")
+    pow = 1000000000;
+  if(ethUnit == "Ether")
+    pow = 1000000000000000000n; // TODO: иногда не проходит с bigint
+  
+  let buyer = partnerWallet.value;
+  let seller = account;
+  if(buyerSwitch.value == true){
+    buyer = account;
+    seller = partnerWallet.value;
+  }
+
+  const body = JSON.stringify({
+    buyer: buyer,
+    seller: seller,
+    value: transactionAmount.value * pow,
+  });
 
   fetch("/fetch/createDeal", { method: "post", body, headers })
     .then((resp) => {
@@ -31,20 +47,21 @@ createDeal.addEventListener("submit", (evt) => {
     })
     .then((json) => {
       console.log(json);
-      answerContainer.innerHTML = json.msg;
+      if(json.code != 0)
+        CreateToast(true, json.msg);
+      else
+        CreateToast(false, json.msg);
     })
     .catch((err) => {
       console.log(err);
-      answerContainer.innerHTML = err;
+      CreateToast(true, err);
     });
-});
+}
 
 function updateHistory(account){
   const body = JSON.stringify({
     account: account,
   });
-
-  console.log(body);
 
   const answerContainer = document.getElementById("answerCreate");
 
@@ -56,7 +73,6 @@ function updateHistory(account){
       return resp.json();
     })
     .then((json) => {
-      console.log(json.list);
       while (historyList.firstChild) {
         historyList.removeChild(historyList.firstChild);
       }
@@ -89,4 +105,4 @@ function updateHistory(account){
     });
 }
 
-export {updateHistory};
+export { updateHistory, createDeal };
