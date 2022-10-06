@@ -48,7 +48,7 @@ function updateHistory(account){
 
   const answerContainer = document.getElementById("answerCreate");
 
-  fetch("/fetch/getDeals", { method: "post", body, headers }) // и всегда отправляем методом POST
+  fetch(`/fetch/getDeals?account=${account}`, { headers }) // и всегда отправляем методом POST
     .then((resp) => {
       console.log(resp);
       if (resp.status < 200 || resp.status >= 300)
