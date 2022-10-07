@@ -6,7 +6,7 @@ async function createDeal(req, res){
 }
 
 async function deleteDeal(req, res){
-    answer = await dbDeleteData(req.body.id);
+    answer = await dbDeleteData(parseInt(req.query.id));
     res.send(answer);
 }
 

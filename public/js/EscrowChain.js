@@ -283,10 +283,8 @@ const initialize = async () => {
         const balance = await signer.getBalance();
         // getBalanceResult.innerHTML = String(balance) || '';
         escrowProvider = new EscrowProvider(signer);
-        const gas = await escrowProvider.daiContract.estimateGas.create(
-            buyerWallet.value, sellerWallet.value, transactionAmount.value
-            );
-        toastBodyAllertSucces[0].innerText = `Fee will be ${gas} Wei`;
+        buyerWallet = MetaMaskWallet[0];
+        sellerWallet = partnerWallet.value;
       }
     const onClickConnect = async () => {
         try {
@@ -322,6 +320,17 @@ const initialize = async () => {
         updateHistory(MetaMaskWallet[0]);
     });
 
+    const partnerWallet = document.getElementById("deal-parner");
+    const toastTrigger = document.getElementById("liveToastBtn");
+    const transactionAmount = document.getElementById("transaction-amount");
+    toastTrigger.addEventListener("click", async () => {
+        const gas = await escrowProvider.daiContract.estimateGas.create(
+            MetaMaskWallet[0], partnerWallet.value, transactionAmount.value
+            );
+        const gasPrice = await provider.getGasPrice();
+        CreateToast(false, `Fee will be ${gasPrice.mul(ethers.BigNumber.from(gas))} wei`)
+  });
+
     createDealFormClick.addEventListener('submit', (evt) => {
         evt.preventDefault();
         if(MetaMaskWallet == null){ // TODO: проверка на логин по метамаску
@@ -335,13 +344,13 @@ const initialize = async () => {
         }
     });
 
-    buyerSwitch.addEventListener('click', (evt) => {
+    buyerSwitch.addEventListener('click', (evt) => { //we are buyer
         BuyerSellerSwitch(0);
         sellerSwitch.value = false;
         evt.target.value = true;
     });
 
-    sellerSwitch.addEventListener('click', (evt) => {
+    sellerSwitch.addEventListener('click', (evt) => { //we are seller
         BuyerSellerSwitch(1);
         buyerSwitch.value = false;
         evt.target.value = true;

@@ -5,7 +5,7 @@ const router = Router();
 
 router.post("/fetch/createDeal", createDeal);
 
-router.post("/fetch/deleteDeal", deleteDeal);
+router.delete("/fetch/deleteDeal", deleteDeal);
 
 router.get("/fetch/getDeals", getDeals);
 

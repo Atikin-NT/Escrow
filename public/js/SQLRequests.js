@@ -11,11 +11,10 @@ const headers = { "Content-Type": "application/json" };
 
 function createDeal(account){
   console.log("create");
-  if(!ethers.utils.isAddress(partnerWallet.value))
+  if(!ethers.utils.isAddress(partnerWallet.value) || partnerWallet.value == account)
     throw "invalid partner address";
   if(transactionAmount.value <= 0)
     throw "invalid value";
-
   let pow = -1;
   const ethUnit = etherUnit.options[etherUnit.selectedIndex].value;
   if(ethUnit == "Wei")
@@ -27,7 +26,7 @@ function createDeal(account){
   
   let buyer = partnerWallet.value;
   let seller = account;
-  if(buyerSwitch.value == true){
+  if(buyerSwitch.value == 'on'){
     buyer = account;
     seller = partnerWallet.value;
   }
