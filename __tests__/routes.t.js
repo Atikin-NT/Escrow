@@ -8,6 +8,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('/', router);
 
+const jsonSerialize = data => JSON.stringify(data, (key, value) =>
+  typeof value === "bigint" ? `BIGINT::${value}` : value
+);
+
 describe('Create deal', function () {
 
   test('Without errors', async () => {
@@ -73,7 +77,7 @@ describe('Create deal', function () {
     });
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.text).code).toEqual(614);
+    expect(JSON.parse(res.text).code).toEqual(613);
   });
 
   test('Value is undefinde', async () => {
@@ -84,6 +88,17 @@ describe('Create deal', function () {
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text).code).toEqual(614);
+  });
+
+  test('Value is bigint', async () => {
+    const body = jsonSerialize({
+        buyer: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
+        seller: "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
+        value: 12n,
+    });
+    const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
+    expect(res.statusCode).toBe(200);
+    expect(JSON.parse(res.text).code).toEqual(0);
   });
 });
 
@@ -131,7 +146,7 @@ describe('Get deals by account', function () {
     const body = JSON.stringify({
         account: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
     });
-    const res = await request(app).post('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
+    const res = await request(app).get('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text).code).toEqual(0);
   });
@@ -140,7 +155,7 @@ describe('Get deals by account', function () {
     const body = JSON.stringify({
         account: "0x001",
     });
-    const res = await request(app).post('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
+    const res = await request(app).get('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text).code).toEqual(631);
   });
@@ -148,7 +163,7 @@ describe('Get deals by account', function () {
   test('account undefined', async () => {
     const body = JSON.stringify({
     });
-    const res = await request(app).post('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
+    const res = await request(app).get('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text).code).toEqual(634);
   });
@@ -157,7 +172,7 @@ describe('Get deals by account', function () {
     const body = JSON.stringify({
         account: null,
     });
-    const res = await request(app).post('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
+    const res = await request(app).get('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text).code).toEqual(634);
   });

@@ -9,6 +9,10 @@ const historyList = document.getElementById("history-list");
 
 const headers = { "Content-Type": "application/json" };
 
+const jsonSerialize = data => JSON.stringify(data, (key, value) =>
+  typeof value === "bigint" ? `BIGINT::${value}` : value
+);
+
 function createDeal(account){
   console.log("create");
   if(!ethers.utils.isAddress(partnerWallet.value))
@@ -23,7 +27,9 @@ function createDeal(account){
   if(ethUnit == "Gwei")
     pow = 1000000000;
   if(ethUnit == "Ether")
-    pow = 1000000000000000000n; // TODO: иногда не проходит с bigint
+    pow = 1000000000000000000n;
+
+  //TODO: больше этого числа бд не сохраняет 1000000000000000000000 :(
   
   let buyer = partnerWallet.value;
   let seller = account;
@@ -32,10 +38,10 @@ function createDeal(account){
     seller = partnerWallet.value;
   }
 
-  const body = JSON.stringify({
+  const body = jsonSerialize({
     buyer: buyer,
     seller: seller,
-    value: transactionAmount.value * pow,
+    value: BigInt(transactionAmount.value) * pow,
   });
 
   fetch("/fetch/createDeal", { method: "post", body, headers })
