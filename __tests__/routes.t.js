@@ -143,38 +143,31 @@ describe('Delete deal', function () {
 describe('Get deals by account', function () {
 
   test('Without errors', async () => {
-    const body = JSON.stringify({
-        account: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
-    });
-    const res = await request(app).get('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
+    const account = "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec";
+    const res = await request(app).get(`/fetch/getDeals?account=${account}`).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text).code).toEqual(0);
   });
 
   test('Account isn`t valid', async () => {
-    const body = JSON.stringify({
-        account: "0x001",
-    });
-    const res = await request(app).get('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
+    const account = "0x001";
+    const res = await request(app).get(`/fetch/getDeals?account=${account}`).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text).code).toEqual(631);
   });
 
-  test('account undefined', async () => {
-    const body = JSON.stringify({
-    });
-    const res = await request(app).get('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
+  test('account is number', async () => {
+    const account = 5;
+    const res = await request(app).get(`/fetch/getDeals?account=${account}`).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.text).code).toEqual(634);
+    expect(JSON.parse(res.text).code).toEqual(631);
   });
 
   test('account == null', async () => {
-    const body = JSON.stringify({
-        account: null,
-    });
-    const res = await request(app).get('/fetch/getDeals').send(body).set('Content-Type', 'application/json');
+    const account = null;
+    const res = await request(app).get(`/fetch/getDeals?account=${account}`).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.text).code).toEqual(634);
+    expect(JSON.parse(res.text).code).toEqual(631);
   });
 });
 
