@@ -32,7 +32,7 @@
   <body class="bg-light">
 
     <div class="base-container container">
-      <main>
+      <main id="main">
         <div class="py-5 text-center deal-form">
           <h2>Deal creating form</h2>
           <p class="lead">Hey Yo!</p>
@@ -70,7 +70,7 @@
                 >Seller</label>
               </div>
 
-              <div class="col-xl-6"><p id="address">My Address:
+              <div class="col-xl-6 div-address"><p id="address">My Address:
                   {{! <button
                     id="connectButton"
                     class="btn btn-primary btn-lg"
@@ -86,7 +86,7 @@
                   <input
                     type="text"
                     name="buyer"
-                    class="form-control"
+                    class="form-control text-container"
                     id="create-buyer"
                     placeholder="Buyer address"
                     value=""
@@ -102,7 +102,7 @@
                   <input
                     type="text"
                     name="value"
-                    class="form-control"
+                    class="form-control text-container"
                     id="transactionAmount"
                     placeholder="value"
                     value=""
@@ -234,9 +234,9 @@
 
             <ul class="list-group mb-3" id="history-list">
               <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
+                <div class="history-div">
                   <h6
-                    class="my-0"
+                    class="text-container my-0"
                   >0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</h6>
                   <small class="text-muted">pending</small>
                 </div>
@@ -245,9 +245,9 @@
               <li
                 class="list-group-item d-flex justify-content-between bg-light"
               >
-                <div class="text-success">
+                <div class="history-div text-success">
                   <h6
-                    class="my-0"
+                    class="text-container my-0"
                   >0x70997970C51812dc3A010C7d01b50e0d17dc79C8</h6>
                   <small class="text-muted">1 day ago</small>
                 </div>

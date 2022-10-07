@@ -14,33 +14,52 @@ body h3 {
   max-width: 960px;
 }
 
-main {
+#main {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-main .deal-form {
+#main .deal-form {
   padding-top: 0 !important;
   margin-top: auto;
 }
-main .deal-details {
+@media (max-width: 768px) {
+  #main .deal-form {
+    padding-top: 3rem !important;
+  }
+}
+#main .deal-details {
   height: auto;
   margin-bottom: auto;
 }
-main .deal-details .form-check {
+#main .deal-details .form-check {
   padding-left: 0;
 }
-main .deal-details .form-check .container-sm {
+#main .deal-details .form-check .container-sm {
   padding-left: 0;
   margin: 1rem 0;
 }
-main .deal-details .form-check #address {
+#main .deal-details .form-check .div-address {
+  width: auto;
+}
+#main .deal-details .form-check #address {
   margin-bottom: 0;
 }
-main .deal-details .form-check #address span {
+#main .deal-details .form-check #address span {
   font-size: 1rem;
 }
-main .deal-details #create-deal-btn .toast-body {
+#main .deal-details #create-deal-btn .toast-body {
   padding: 0;
 }
-main .deal-details #create-deal-btn .toast-body .toast-body-div {
+#main .deal-details #create-deal-btn .toast-body .toast-body-div {
   margin-bottom: 0;
+}
+
+.history-div {
+  width: 70%;
+}
+
+.text-container {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }/*# sourceMappingURL=style.css.map */
