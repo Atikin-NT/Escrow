@@ -48,28 +48,27 @@
                   type="radio"
                   class="btn-check"
                   name="options-outlined"
-                  id="success-outlined"
+                  id="buyer-role"
                   autocomplete="off"
                   checked
                 />
                 <label
                   class="btn btn-outline-secondary"
-                  for="success-outlined"
+                  for="buyer-role"
                 >Buyer</label>
 
                 <input
                   type="radio"
                   class="btn-check"
                   name="options-outlined"
-                  id="danger-outlined"
+                  id="seller-role"
                   autocomplete="off"
                 />
                 <label
                   class="btn btn-outline-secondary"
-                  for="danger-outlined"
+                  for="seller-role"
                 >Seller</label>
               </div>
-
               <div class="col-xl-6 div-address"><p id="address">My Address:
                   <span id="show-account"></span></p></div>
 
@@ -77,12 +76,12 @@
             <form class="needs-validation" novalidate id="create-deal-btn">
               <div class="row g-3">
                 <div class="col-12">
-                  <label for="buyerAddress" class="form-label">Buyer address</label>
+                  <label for="deal-parner" class="form-label" id="deal-parner-label">Seller address</label>
                   <input
                     type="text"
                     name="buyer"
                     class="form-control text-container"
-                    id="create-buyer"
+                    id="deal-parner"
                     placeholder="Buyer address"
                     value=""
                     required
@@ -98,7 +97,7 @@
                     type="text"
                     name="value"
                     class="form-control text-container"
-                    id="transactionAmount"
+                    id="transaction-amount"
                     placeholder="value"
                     value=""
                     required
@@ -110,8 +109,7 @@
 
                 <div class="col-3">
                   <label for="unit" class="form-label">Unit</label>
-                  <select class="form-select" id="unit" required>
-                    <option value="">Unit</option>
+                  <select class="form-select" id="ether-unit" required>
                     <option>Wei</option>
                     <option>Gwei</option>
                     <option>Ether</option>
@@ -124,33 +122,11 @@
 
               <hr class="my-4" />
 
-              {{! feeBtn }}
-              {{! <div id="feePlaceholder"></div> }}
               <button
                 type="button"
                 class="btn btn-primary"
                 id="liveToastBtn"
               >Calculate fee</button>
-
-              <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                <div
-                  id="liveToast"
-                  class="toast"
-                  role="alert"
-                  aria-live="assertive"
-                  aria-atomic="true"
-                >
-                  <div class="toast-body">
-                    <div
-                      class="alert alert-success toast-body-div"
-                      role="alert"
-                    >
-                      Fee will be0.0070 ETH
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <h5 class="mb-3 mt-3">Fee payment</h5>
 
               <input
@@ -175,57 +151,6 @@
             <h4 class="d-flex justify-content-between align-items-center mb-3">
               <span class="text-primary">History</span>
             </h4>
-
-            {{! <div>
-              <nav id="navbar-example2" class="navbar bg-light px-3 mb-3">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <ul class="nav nav-pills">
-                  <li class="nav-item">
-                    <a class="nav-link" href="#scrollspyHeading1">First</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#scrollspyHeading2">Second</a>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a
-                      class="nav-link dropdown-toggle"
-                      data-bs-toggle="dropdown"
-                      href="#"
-                      role="button"
-                      aria-expanded="false"
-                    >Dropdown</a>
-                    <ul class="dropdown-menu">
-                      <li><a
-                          class="dropdown-item"
-                          href="#scrollspyHeading3"
-                        >Third</a></li>
-                      <li><a
-                          class="dropdown-item"
-                          href="#scrollspyHeading4"
-                        >Fourth</a></li>
-                      <li><hr class="dropdown-divider" /></li>
-                      <li><a
-                          class="dropdown-item"
-                          href="#scrollspyHeading5"
-                        >Fifth</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </nav>
-              <div
-                data-bs-spy="scroll"
-                data-bs-target="#navbar-example2"
-                data-bs-root-margin="0px 0px -40%"
-                data-bs-smooth-scroll="true"
-                class="scrollspy-example bg-light p-3 rounded-2"
-                tabindex="0"
-              >
-                <h4 id="scrollspyHeading1">First heading</h4>
-                <p>...</p>
-                <h4 id="scrollspyHeading2">Second heading</h4>
-                <p>...</p>
-              </div>
-            </div> }}
 
             <ul class="list-group mb-3" id="history-list">
               <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -269,6 +194,25 @@
               <p>Massage answer: <span id="answerCreate"></span></p><br />
             </div>
           </div>
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+              <div
+                id="liveToast"
+                class="toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="toast-body">
+                  <div
+                    class="alert alert-success toast-body-div"
+                    role="alert"
+                    id="toast-msg"
+                  >
+                    Fee will be0.0070 ETH
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
       </main>
     </div>
@@ -279,143 +223,10 @@
     ></script>
 
     <script src="js/form-validation.js"></script>
-
-    {{! <hr />
-
-    <button type="submit" id="create-btn">Create</button>
-    <h3>Transaction Create Status: <span id="create-status"></span></h3><br />
-
-    <hr />
-
-    <h2>Check deal</h2>
-    <input
-      type="text"
-      name="buyer"
-      id="deals-buyer"
-      size="10"
-      placeholder="buyer"
-      value=""
-    />
-    <input
-      type="text"
-      name="seller"
-      id="deals-seller"
-      size="10"
-      placeholder="seller"
-      value=""
-    />
-    <br />
-    <button type="submit" id="deals-btn">Check</button>
-    <h3>Deal: <span id="deals-output"></span></h3><br />
-
-    <hr />
-
-    <h2>Send Money For Subject</h2>
-    <input
-      type="text"
-      name="seller"
-      id="sendB-seller"
-      size="10"
-      placeholder="seller"
-      value=""
-    />
-    <input
-      type="text"
-      name="value"
-      id="sendB-value"
-      size="10"
-      placeholder="value"
-      value=""
-    />
-    <br />
-    <button type="submit" id="sendB-btn">Send</button>
-    <h3>Send Money For Subject Status: <span id="sendB-status"></span></h3><br
-    />
-
-    <hr />
-
-    <h2>Send Subject</h2>
-    <input
-      type="text"
-      name="buyer"
-      id="sendS-buyer"
-      size="10"
-      placeholder="buyer"
-      value=""
-    /><br />
-    <button type="submit" id="sendS-btn">Send</button>
-    <h3>Send Subject Status: <span id="sendS-status"></span></h3><br />
-
-    <hr />
-
-    <h2>Cancel transaction</h2>
-    <input
-      type="text"
-      name="buyer"
-      id="cancel-buyer"
-      size="10"
-      placeholder="buyer"
-      value=""
-    />
-    <input
-      type="text"
-      name="seller"
-      id="cancel-seller"
-      size="10"
-      placeholder="seller"
-      value=""
-    /><br />
-    <button type="submit" id="cancel-btn">Cancel</button>
-    <h3>Transaction cancel Status: <span id="cancel-status"></span></h3><br />
-
-    <hr />
-
-    <h2>Approve transaction</h2>
-    <input
-      type="text"
-      name="seller"
-      id="approve-seller"
-      size="10"
-      placeholder="seller"
-      value=""
-    /><br />
-    <button type="submit" id="approve-btn">Approve</button>
-    <h3>Transaction Approve Status: <span id="approve-status"></span></h3><br />
-
-    <hr />
-
-    <h2>Disapprove transaction</h2>
-    <input
-      type="text"
-      name="seller"
-      id="disapprove-seller"
-      size="10"
-      placeholder="seller"
-      value=""
-    /><br />
-    <button type="submit" id="disapprove-btn">Disapprove</button>
-    <h3>Transaction Disapprove Status:
-      <span id="disapprove-status"></span></h3><br />
-
-    <hr />
-
-    <h2>Withdraw</h2>
-    <input
-      type="text"
-      name="target"
-      id="withdraw-target"
-      size="10"
-      placeholder="target"
-      value=""
-    /><br />
-    <button type="submit" id="withdraw-btn">Withdraw</button>
-    <h3>Withdraw Status: <span id="withdraw-status"></span></h3><br />
-
-    <hr /> }}
   </body>
 
   <script src="/js/SQLRequests.js" type="module"></script>
-  <script src="/js/Toasts.js"></script>
+  <script src="/js/Toasts.js" type="module"></script>
   <script src="/js/AdditionalLogic.js"></script>
   <script src="/js/EscrowChain.js" type="module"></script>
 </html>
