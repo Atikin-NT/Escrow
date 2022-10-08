@@ -1,10 +1,7 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
-const { ethers } = require("ethers");
 const {router} = require('./routes/main.js');
-
-provider = new ethers.getDefaultProvider("http://localhost:8545");
 
 const hostname = '127.0.0.1';
 const port = 5000;
@@ -25,7 +22,11 @@ app.use(bodyParser.json());
 app.use('/', router);
 
 app.get('/', (req, res) => {
-  res.render('layouts/main');
+  res.render('land');
+});
+
+app.get('/profile', (req, res) => {
+  res.render('land', {layout : 'profile'});
 });
 
 app.post("/request", (req, res) => {

@@ -67,10 +67,8 @@ function updateHistory(account){
   const body = JSON.stringify({
     account: account,
   });
-
   const answerContainer = document.getElementById("answerCreate");
-
-  fetch(`/fetch/getDeals?account=${account}`, { headers }) // и всегда отправляем методом POST
+  fetch(`/fetch/getDeals?account=${account}`, { headers })
     .then((resp) => {
       console.log(resp);
       if (resp.status < 200 || resp.status >= 300)
@@ -78,6 +76,7 @@ function updateHistory(account){
       return resp.json();
     })
     .then((json) => {
+      console.log(json)
       while (historyList.firstChild) {
         historyList.removeChild(historyList.firstChild);
       }
