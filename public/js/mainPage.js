@@ -7,10 +7,10 @@ const updateHistoryBtn = document.getElementById("answerCreate-btn");
 //Role Switch
 const buyerSwitch = document.getElementById("buyer-role");
 const sellerSwitch = document.getElementById("seller-role");
-const dealPartnerLabel = document.getElementById("deal-parner-label");
+const dealPartnerLabel = document.getElementById("deal-partner-label");
 
 //Deal Properties
-const partnerWallet = document.getElementById("deal-parner");
+const partnerWallet = document.getElementById("deal-partner");
 const transactionAmount = document.getElementById("transaction-amount");
 
 import { CreateToast } from "./Toasts.js";
