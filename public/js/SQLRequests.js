@@ -1,7 +1,7 @@
 import { CreateToast } from "./Toasts.js";
 
 const buyerSwitch = document.getElementById("buyer-role");
-const partnerWallet = document.getElementById("deal-parner");
+const partnerWallet = document.getElementById("deal-partner");
 const transactionAmount = document.getElementById("transaction-amount");
 const etherUnit = document.getElementById("ether-unit");
 const historyList = document.getElementById("history-list");
