@@ -32,7 +32,7 @@ function createDeal(account){
   
   let buyer = partnerWallet.value;
   let seller = account;
-  if(buyerSwitch.value == 'on'){
+  if(buyerSwitch.checked == true){
     buyer = account;
     seller = partnerWallet.value;
   }
@@ -64,10 +64,6 @@ function createDeal(account){
 }
 
 function updateHistory(account){
-  const body = JSON.stringify({
-    account: account,
-  });
-  const answerContainer = document.getElementById("answerCreate");
   fetch(`/fetch/getDeals?account=${account}`, { headers })
     .then((resp) => {
       console.log(resp);
@@ -101,11 +97,14 @@ function updateHistory(account){
         li.appendChild(small);
         historyList.appendChild(li);
       }
-      answerContainer.innerHTML = json.msg;
+      if(json.code != 0)
+        CreateToast(true, json.msg);
+      else
+        CreateToast(false, json.msg);
     })
     .catch((err) => {
       console.log(err);
-      answerContainer.innerHTML = err;
+      CreateToast(true, err);
     });
 }
 

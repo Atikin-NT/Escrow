@@ -94,10 +94,25 @@
               id="answerCreate-btn"
               class="w-100 btn btn-primary btn-lg"
             >Update history</button>
-            <div class="col-xl-6">
-              <p>Massage answer: <span id="answerCreate"></span></p><br />
-            </div>
           </div>
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+              <div
+                id="liveToast"
+                class="toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="toast-body">
+                  <div
+                    class="alert alert-success toast-body-div"
+                    role="alert"
+                    id="toast-msg"
+                  >
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
       </main>
     </div>
