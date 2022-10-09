@@ -1,7 +1,7 @@
 import { CreateToast } from "./Toasts.js";
 
 const buyerSwitch = document.getElementById("buyer-role");
-const partnerWallet = document.getElementById("deal-parner");
+const partnerWallet = document.getElementById("deal-partner");
 const transactionAmount = document.getElementById("transaction-amount");
 const etherUnit = document.getElementById("ether-unit");
 const historyList = document.getElementById("history-list");
@@ -32,7 +32,7 @@ function createDeal(account){
   
   let buyer = partnerWallet.value;
   let seller = account;
-  if(buyerSwitch.value == 'on'){
+  if(buyerSwitch.checked == true){
     buyer = account;
     seller = partnerWallet.value;
   }
@@ -64,13 +64,7 @@ function createDeal(account){
 }
 
 function updateHistory(account){
-  const body = JSON.stringify({
-    account: account,
-  });
-
-  const answerContainer = document.getElementById("answerCreate");
-
-  fetch(`/fetch/getDeals?account=${account}`, { headers }) // и всегда отправляем методом POST
+  fetch(`/fetch/getDeals?account=${account}`, { headers })
     .then((resp) => {
       console.log(resp);
       if (resp.status < 200 || resp.status >= 300)
@@ -78,6 +72,7 @@ function updateHistory(account){
       return resp.json();
     })
     .then((json) => {
+      console.log(json)
       while (historyList.firstChild) {
         historyList.removeChild(historyList.firstChild);
       }
@@ -102,11 +97,14 @@ function updateHistory(account){
         li.appendChild(small);
         historyList.appendChild(li);
       }
-      answerContainer.innerHTML = json.msg;
+      if(json.code != 0)
+        CreateToast(true, json.msg);
+      else
+        CreateToast(false, json.msg);
     })
     .catch((err) => {
       console.log(err);
-      answerContainer.innerHTML = err;
+      CreateToast(true, err);
     });
 }
 

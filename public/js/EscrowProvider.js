@@ -18,9 +18,15 @@ class EscrowProvider{
         "event Finished(bytes32 TxId)"
     ];
     daiContract;
-    
+    estimateGas;
+
     constructor(signer){
         this.daiContract = new ethers.Contract(this.daiAddress, this.daiAbi, signer);
+        this.estimateGas = this.daiContract.estimateGas;
+    }
+
+    connect(signer) {
+        this.daiContract = this.daiContract.connect(signer)
     }
 
     async create(buyer, seller, value, tx={}) {
