@@ -46,9 +46,13 @@ sellerSwitch.addEventListener('click', (evt) => { //we are seller
 });
 
 toastTrigger.addEventListener("click", async () => {
-    const gas = await escrowProvider.estimateGas.create(
-        MetaMaskWallet[0], partnerWallet.value, transactionAmount.value
-        );
-    const gasPrice = await provider.getGasPrice();
-    CreateToast(false, `Fee will be ${gasPrice.mul(ethers.BigNumber.from(gas))} wei`)
+    try {
+        const gas = await escrowProvider.estimateGas.create(
+            MetaMaskWallet[0], partnerWallet.value, transactionAmount.value
+            );
+        const gasPrice = await provider.getGasPrice();
+        CreateToast(false, `Fee will be ${gasPrice.mul(ethers.BigNumber.from(gas))} wei`)
+    } catch (err) {
+        CreateToast(true, err);
+    }
 });
