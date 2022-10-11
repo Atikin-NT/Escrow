@@ -22,11 +22,11 @@ app.use(bodyParser.json());
 app.use('/', router);
 
 app.get('/', (req, res) => {
-  res.render('land');
+  res.render('./layouts/main');
 });
 
 app.get('/profile', (req, res) => {
-  res.render('land', {layout : 'profile'});
+  res.render('main', {layout : 'profile'});
 });
 
 app.post("/request", (req, res) => {

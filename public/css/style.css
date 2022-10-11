@@ -62,4 +62,11 @@ body h3 {
 .text-container {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.toast-body {
+  padding: 0;
+}
+.toast-body #toast-msg {
+  margin-bottom: 0;
 }/*# sourceMappingURL=style.css.map */

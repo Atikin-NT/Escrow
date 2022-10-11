@@ -77,3 +77,11 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.toast-body {
+  padding: 0;
+
+  #toast-msg {
+    margin-bottom: 0;
+  }
+}
