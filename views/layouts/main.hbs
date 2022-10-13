@@ -1,7 +1,4 @@
-<script
-  src="js/ethers-5.2.umd.min.js"
-  type="application/javascript"
-></script>
+<script src="js/ethers-5.2.umd.min.js" type="application/javascript"></script>
 <script src="/js/EscrowProvider.js"></script>
 
 <html lang="en">
@@ -69,21 +66,24 @@
                   for="seller-role"
                 >Seller</label>
               </div>
-              <button
-               id="connectButton" 
-               type="button" 
-               class="btn btn-primary" 
-               disabled
-               >Connected</button>
 
               <div class="col-xl-6 div-address"><p id="address">My Address:
-                  <span id="show-account"></span></p></div>
+                  <span id="show-account"><button
+                      id="connectButton"
+                      type="button"
+                      class="btn btn-primary"
+                      disabled
+                    >Connect</button></span></p></div>
 
             </div>
             <form class="needs-validation" novalidate id="create-deal-btn">
               <div class="row g-3">
                 <div class="col-12">
-                  <label for="deal-partner" class="form-label" id="deal-partner-label">Seller address</label>
+                  <label
+                    for="deal-partner"
+                    class="form-label"
+                    id="deal-partner-label"
+                  >Seller address</label>
                   <input
                     type="text"
                     name="buyer"
@@ -199,34 +199,32 @@
             >Update history</button>
           </div>
           <div class="toast-container position-fixed bottom-0 end-0 p-3">
-              <div
-                id="liveToast"
-                class="toast"
-                role="alert"
-                aria-live="assertive"
-                aria-atomic="true"
-              >
-                <div class="toast-body">
-                  <div
-                    class="alert alert-success toast-body-div"
-                    role="alert"
-                    id="toast-msg"
-                  >
-                  </div>
+            <div
+              id="liveToast"
+              class="toast"
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+            >
+              <div class="toast-body">
+                <div
+                  class="alert alert-success toast-body-div"
+                  role="alert"
+                  id="toast-msg"
+                >
                 </div>
               </div>
             </div>
+          </div>
         </div>
       </main>
     </div>
 
-    <script
-      src="js/bootstrap.bundle.min.js"
-      crossorigin="anonymous"
-    ></script>
-
-    <script src="js/form-validation.js"></script>
   </body>
+
+  <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+  <script src="js/form-validation.js"></script>
 
   <script src="js/mainPage.js" type="module"></script>
 </html>

@@ -1,5 +1,5 @@
 // import { EscrowProvider } from "./EscrowProvider.js";
-const onboardButton = document.getElementById('connectButton');
+const onboardButton = document.getElementById("connectButton");
 
 let MetaMaskWallet;
 let escrowProvider;
@@ -26,28 +26,32 @@ const initialize = async () => {
     return Boolean(ethereum && ethereum.isMetaMask);
   };
 
-  const isMetaMaskConnected = () => MetaMaskWallet && MetaMaskWallet.length > 0
+  const isMetaMaskConnected = () => MetaMaskWallet && MetaMaskWallet.length > 0;
 
-  const updateConnectionBtn = () => {
+  const updateConnectionBtn = (wallet) => {
     if (!isMetaMaskInstalled()) {
-        onboardButton.innerText = 'Please install MetaMask'
-        onboardButton.disabled = false
-      } else if (isMetaMaskConnected()) {
-        onboardButton.innerText = 'Connected'
-        onboardButton.disabled = true
-      } else {
-        onboardButton.innerText = 'Connect'
-        onboardButton.onclick = onClickConnect
-        onboardButton.disabled = false
+      onboardButton.innerText = "Please install MetaMask";
+      onboardButton.disabled = false;
+    } else if (isMetaMaskConnected()) {
+      if (document.getElementById("connectButton") !== null) {
+        document.getElementById("connectButton").remove();
+      } 
+      if (wallet != null) {
+        document.getElementById("show-account").innerText = wallet;
       }
-  }
+    } else {
+      onboardButton.innerText = "Connect";
+      onboardButton.onclick = onClickConnect;
+      onboardButton.disabled = false;
+    }
+  };
 
   const handleNewAccounts = async (newAccounts) => {
     MetaMaskWallet = newAccounts;
     const signer = provider.getSigner();
     escrowProvider.connect(signer);
-    updateConnectionBtn();
-  }
+    updateConnectionBtn(MetaMaskWallet);
+  };
 
   const onClickConnect = async () => {
     try {
@@ -61,19 +65,19 @@ const initialize = async () => {
     provider = new ethers.providers.Web3Provider(window.ethereum);
     ethereum.autoRefreshOnNetworkChange = false;
     try {
-        const newAccounts = await provider.listAccounts();
-        const signer = provider.getSigner();
-        escrowProvider = new EscrowProvider(signer);
-        handleNewAccounts(newAccounts);
+      const newAccounts = await provider.listAccounts();
+      const signer = provider.getSigner();
+      escrowProvider = new EscrowProvider(signer);
+      handleNewAccounts(newAccounts);
     } catch (err) {
-        console.error("Error on init when getting accounts", err);
+      console.error("Error on init when getting accounts", err);
     }
     ethereum.on("accountsChanged", handleNewAccounts);
   }
-  
+
   updateConnectionBtn();
 };
 
 window.addEventListener("DOMContentLoaded", initialize);
 
-export {MetaMaskWallet, escrowProvider, provider}
+export { MetaMaskWallet, escrowProvider, provider };
