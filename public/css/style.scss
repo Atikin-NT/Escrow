@@ -76,6 +76,10 @@ body {
 .text-container {
   overflow: hidden;
   text-overflow: ellipsis;
+
+  @media(max-width: 425px) {
+    font-size: 15px!important;
+  }
 }
 
 .toast-body {

@@ -13,10 +13,14 @@ const dealPartnerLabel = document.getElementById("deal-partner-label");
 const partnerWallet = document.getElementById("deal-partner");
 const transactionAmount = document.getElementById("transaction-amount");
 
-import { CreateToast } from "./Toasts.js";
 //Toast Element
+import { CreateToast } from "./Toasts.js";
 const toastTrigger = document.getElementById("liveToastBtn");
 
+//Fee payment
+const discountTrigger = document.getElementById("discount");
+
+//Main logic
 import { MetaMaskWallet, escrowProvider, provider } from "./Web3Layer.js";
 
 createDealFormClick.addEventListener('submit', (evt) => {
@@ -56,3 +60,7 @@ toastTrigger.addEventListener("click", async () => {
         CreateToast(true, err);
     }
 });
+
+discountTrigger.addEventListener("click", (evt) => {
+    console.log(discountTrigger.checked);
+})
