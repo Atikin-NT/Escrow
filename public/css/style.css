@@ -74,4 +74,12 @@ body h3 {
 }
 .toast-body #toast-msg {
   margin-bottom: 0;
+}
+
+#fee-container {
+  display: flex;
+  flex-direction: row;
+}
+#fee-container .primary-btn {
+  margin-left: 0.5rem;
 }/*# sourceMappingURL=style.css.map */

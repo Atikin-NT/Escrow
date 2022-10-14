@@ -89,3 +89,15 @@ body {
     margin-bottom: 0;
   }
 }
+
+#fee-container {
+  display: flex;
+  flex-direction: row;
+
+  // #discount-label {
+  //   margin-right: 0.5rem;
+  // }
+  .primary-btn {
+    margin-left: 0.5rem;
+  }
+}
