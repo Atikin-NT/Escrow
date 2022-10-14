@@ -62,4 +62,16 @@ body h3 {
 .text-container {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+@media (max-width: 425px) {
+  .text-container {
+    font-size: 15px !important;
+  }
+}
+
+.toast-body {
+  padding: 0;
+}
+.toast-body #toast-msg {
+  margin-bottom: 0;
 }/*# sourceMappingURL=style.css.map */
