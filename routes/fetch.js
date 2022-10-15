@@ -1,7 +1,12 @@
-const { dbInsertData, dbGetDealsByAccount, dbDeleteData, dbUpdateDealStatus } = require('../lib/sqlite.js');
+const { dbInsertData, dbGetDealsByAccount, dbDeleteData, dbUpdateDealStatus, dbUpdateData } = require('../lib/sqlite.js');
 
 async function createDeal(req, res){
-    answer = await dbInsertData(req.body.buyer, req.body.seller, req.body.value);
+    answer = await dbInsertData(req.body.buyer, req.body.seller, req.body.value, req.body.unit);
+    res.send(answer);
+}
+
+async function updateDeal(req, res){
+    answer = await dbUpdateData(req.body.buyer, req.body.seller, req.body.value, req.body.unit, req.body.id);
     res.send(answer);
 }
 
@@ -20,4 +25,4 @@ async function updateDealStatus(req, res){
     res.send(answer);
 }
 
-module.exports = {createDeal, deleteDeal, getDeals, updateDealStatus};
+module.exports = {createDeal, deleteDeal, getDeals, updateDealStatus, updateDeal};

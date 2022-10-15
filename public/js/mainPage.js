@@ -13,6 +13,9 @@ const dealPartnerLabel = document.getElementById("deal-partner-label");
 const partnerWallet = document.getElementById("deal-partner");
 const transactionAmount = document.getElementById("transaction-amount");
 
+//Deals steps
+const nextStepBtn = document.getElementById("next-deal-step");
+
 //Toast Element
 import { CreateToast } from "./Toasts.js";
 const toastTrigger = document.getElementById("liveToastBtn");
@@ -23,19 +26,25 @@ const discountTrigger = document.getElementById("discount");
 
 //Main logic
 import { MetaMaskWallet, escrowProvider, provider } from "./Web3Layer.js";
+import { approveByPartner, changeDeal } from "./changeView.js";
 
 createDealFormClick.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    if(MetaMaskWallet == null){ // TODO: проверка на логин по метамаску
+    if(MetaMaskWallet == null){
         CreateToast(true, "Login error");
         evt.stopImmediatePropagation();
     }
     try {
-        createDeal(MetaMaskWallet[0]);
+        // const createID = createDeal(MetaMaskWallet[0]); // TODO: при создании надо возращать текущую сделку
+        approveByPartner(74, MetaMaskWallet[0]);
     } catch (error) {
         CreateToast(true, error);
     }
 });
+
+// cahngeBtn.addEventListener('click', (evt) => {
+//     changeDeal(99);
+// });
 
 updateHistoryBtn.addEventListener('click', (evt) => {
     if(MetaMaskWallet == null) evt.stopImmediatePropagation();
