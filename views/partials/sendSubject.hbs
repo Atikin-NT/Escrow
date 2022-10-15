@@ -1,8 +1,7 @@
 <div class="base-container container" id="send-subject-container" style="display: none;">
-    {{!-- {{#each partials.createContent}} --}}
     <main id="main">
     <div class="py-5 text-center deal-form">
-        <h2>Send subject</h2>
+        <h2>Send Subject</h2>
     </div>
 
     <div class="row g-5 deal-details">
@@ -13,82 +12,94 @@
             <div class="container-sm">
             <input
                 type="radio"
-                class="btn-check"
+                class="btn-check buyer-role"
                 name="options-outlined"
-                id="buyer-role"
+                id="buyer-role-send-sub"
                 autocomplete="off"
-                checked
-                readonly
+                disabled
             />
             <label
                 class="btn btn-outline-secondary"
-                for="buyer-role"
+                for="buyer-role-send-sub"
             >Buyer</label>
 
             <input
                 type="radio"
-                class="btn-check"
+                class="btn-check seller-role"
                 name="options-outlined"
-                id="seller-role"
+                id="seller-role-send-sub"
                 autocomplete="off"
-                readonly
+                disabled
             />
             <label
                 class="btn btn-outline-secondary"
-                for="seller-role"
+                for="seller-role-send-sub"
             >Seller</label>
         </div>
             <div class="row g-3">
             <div class="col-12">
-                <label for="deal-partner" class="form-label" id="deal-partner-label">Seller address</label>
+                <label for="deal-seller-send-sub" class="form-label" id="deal-seller-label">Seller address</label>
                 <input
                 type="text"
                 name="buyer"
-                class="form-control text-container"
-                id="deal-partner"
+                class="form-control text-container seller-address"
+                id="deal-seller-send-sub"
+                placeholder="Seller address"
+                value=""
+                readonly
+                />
+            </div>
+
+             <div class="col-12">
+                <label for="deal-buyer-send-sub" class="form-label" id="deal-buyer-label">Buyer address</label>
+                <input
+                type="text"
+                name="buyer"
+                class="form-control text-container buyer-address"
+                id="deal-buyer-send-sub"
                 placeholder="Buyer address"
                 value=""
-                required
                 readonly
                 />
             </div>
 
             <div class="col-9">
-                <label for="value" class="form-label">Value</label>
+                <label for="transaction-amount-send-sub" class="form-label">Value</label>
                 <input
                 type="text"
                 name="value"
-                class="form-control text-container"
-                id="transaction-amount"
+                class="form-control text-container transaction-value"
+                id="transaction-amount-send-sub"
                 placeholder="value"
                 value=""
-                required
                 readonly
                 />
-                <div class="invalid-feedback">
-                Valid value is required.
-                </div>
             </div>
 
             <div class="col-3">
-                <label for="unit" class="form-label">Unit</label>
-                <select class="form-select" id="ether-unit" required>
-                <option>Wei</option>
-                </select>
-                <div class="invalid-feedback">
-                Please select a valid unit.
-                </div>
+                <label for="unit-send-sub" class="form-label">Unit</label>
+                <input
+                type="text"
+                name="value"
+                class="form-control text-container ether-unit"
+                id="unit-send-sub"
+                placeholder="Unit"
+                value=""
+                readonly
+                />
             </div>
             </div>
 
             <hr class="my-4" />
-            <h5 class="mb-3 mt-3">Fee payment: </h5>
+            <h5 class="mb-3 mt-3">Fee payment: <span  class="fee"></span></h5>
             <hr class="my-4" />
             <button
             class="w-100 btn btn-primary btn-lg"
+            id="send-sub-next"
             >Next</button>
             <button
             class="w-100 btn btn-primary btn-lg"
+            id="send-sub-previous"
             >Previous</button>
         </div>
         </div>
@@ -156,5 +167,4 @@
         </div>
     </div>
     </main>
-    {{!-- {{/each}} --}}
 </div>
