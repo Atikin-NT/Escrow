@@ -1,42 +1,41 @@
 <div class="base-container container" id="create-container">
-  {{!-- {{#each partials.createContent}} --}}
-  <main id="main">
+    <main id="main">
     <div class="py-5 text-center deal-form">
-      <h2>Deal creating form</h2>
-      <p class="lead">Hey Yo!</p>
+        <h2>{{title}}</h2>
     </div>
 
     <div class="row g-5 deal-details">
       <div class="col-md-7">
         <h4 class="mb-3">Deal details</h4>
         <div class="form-check">
-          <label class="form-check-label" for="switchRole">My Role: </label>
-          <div class="container-sm">
-            <input
-              type="radio"
-              class="btn-check"
-              name="options-outlined"
-              id="buyer-role"
-              autocomplete="off"
-              checked
-            />
-            <label
-              class="btn btn-outline-primary"
-              for="buyer-role"
-            >Buyer</label>
+            <label class="form-check-label" for="switchRole">My Role: </label>
+            <div class="container-sm">
+                <input
+                    type="radio"
+                    class="btn-check"
+                    name="options-outlined"
+                    id="buyer-role"
+                    autocomplete="off"
+                    {{buyerCheck}}
+                />
+                <label
+                    class="btn btn-outline-primary"
+                    for="buyer-role"
+                >Buyer</label>
 
-            <input
-              type="radio"
-              class="btn-check"
-              name="options-outlined"
-              id="seller-role"
-              autocomplete="off"
-            />
-            <label
-              class="btn btn-outline-primary"
-              for="seller-role"
-            >Seller</label>
-          </div>
+                <input
+                    type="radio"
+                    class="btn-check"
+                    name="options-outlined"
+                    id="seller-role"
+                    autocomplete="off"
+                    {{sellerCheck}}
+                />
+                <label
+                    class="btn btn-outline-primary"
+                    for="seller-role"
+                >Seller</label>
+            </div>
 
           <div class="col-xl-6 div-address"><p id="address">My Address:
               <span id="show-account"><button
@@ -61,7 +60,7 @@
                 class="form-control text-container"
                 id="deal-partner"
                 placeholder="Buyer address"
-                value=""
+                value="{{partner}}"
                 required
               />
               <div class="invalid-feedback">
@@ -77,7 +76,7 @@
                 class="form-control text-container"
                 id="transaction-amount"
                 placeholder="value"
-                value=""
+                value="{{value}}"
                 required
               />
               <div class="invalid-feedback">
@@ -86,15 +85,21 @@
             </div>
 
             <div class="col-3">
-              <label for="unit" class="form-label">Unit</label>
-              <select class="form-select" id="ether-unit" required>
-                <option>Wei</option>
-                <option>Gwei</option>
-                <option>Ether</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid unit.
-              </div>
+                <label for="unit" class="form-label">Unit</label>
+                <select class="form-select" id="ether-unit" required>
+                  <option {{weiSelected}}>Wei</option>
+                  <option {{gweiSelected}}>Gwei</option>
+                  <option {{etherSelected}}>Ether</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please select a valid unit.
+                </div>
+            </div>
+
+            <div style="display: none;">
+                <span id="deal-txid">{{txid}}</span>
+                <span id="deal-id">{{id}}</span>
+            </div>
             </div>
           </div>
 
@@ -105,7 +110,7 @@
             class="btn btn-primary"
             id="liveToastBtn"
           >Calculate fee</button>
-          <h5 class="mb-3 mt-3">Fee payment</h5>
+          <h5 class="mb-3 mt-3">Fee payment: <span  class="fee">{{fee}}</span></h5>
 
           <section id="fee-container">
             <input
@@ -123,7 +128,7 @@
           <button
             class="w-100 btn btn-primary btn-lg"
             type="submit"
-          >Create</button>
+          >{{btnName}}</button>
         </form>
       </div>
       <div class="col-md-5">
@@ -187,6 +192,5 @@
         </div>
       </div>
     </div>
-  </main>
-  {{!-- {{/each}} --}}
+    </main>
 </div>

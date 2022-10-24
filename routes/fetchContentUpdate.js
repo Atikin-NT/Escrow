@@ -15,7 +15,8 @@ async function changeDealView(req, res){
     }
     let unitList = ["", "", ""];
     unitList[dbAnswer.unit] = "selected";
-    res.render('partials/changeDeal', {
+    res.render('partials/createDeal', {
+        title: "Change Form",
         buyerCheck: buyerCheck,
         sellerCheck: sellerCheck,
         partner: partner, 
@@ -26,13 +27,16 @@ async function changeDealView(req, res){
         txid: dbAnswer.txid,
         id: dbAnswer.id,
         fee: dbAnswer.fee,
+        btnName: "Save",
     });
 }
 
 async function approveByPartnerView(req, res){
     const id = req.query.dealid;
     const account = req.query.account;
+    console.log(id, account);
     const dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
+    console.log(dbAnswer);
     const unitList = ["Wei", "Gwei", "Ether"];
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
