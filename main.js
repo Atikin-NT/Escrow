@@ -25,7 +25,11 @@ app.use(bodyParser.json());
 app.use('/', router);
 
 app.get('/', (req, res) => {
-  res.render('partials/createDeal');
+  res.render('partials/createDeal', {
+    title: "Create Form",
+    buyerCheck: "checked",
+    btnName: "Create"
+  });
 });
 
 app.get('/profile', (req, res) => {

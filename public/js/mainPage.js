@@ -28,23 +28,19 @@ const discountTrigger = document.getElementById("discount");
 import { MetaMaskWallet, escrowProvider, provider } from "./Web3Layer.js";
 import { approveByPartner, changeDeal } from "./changeView.js";
 
-createDealFormClick.addEventListener('submit', (evt) => {
+createDealFormClick.addEventListener('submit', async (evt) => {
     evt.preventDefault();
     if(MetaMaskWallet == null){
         CreateToast(true, "Login error");
         evt.stopImmediatePropagation();
     }
     try {
-        // const createID = createDeal(MetaMaskWallet[0]); // TODO: при создании надо возращать текущую сделку
-        approveByPartner(74, MetaMaskWallet[0]);
+        const createID = await createDeal(MetaMaskWallet[0]); // TODO: при создании надо возращать текущую сделку
+        approveByPartner(createID, MetaMaskWallet[0]);
     } catch (error) {
         CreateToast(true, error);
     }
 });
-
-// cahngeBtn.addEventListener('click', (evt) => {
-//     changeDeal(99);
-// });
 
 updateHistoryBtn.addEventListener('click', (evt) => {
     if(MetaMaskWallet == null) evt.stopImmediatePropagation();

@@ -14,16 +14,16 @@ function changeDeal(dealID, account){
     })
     .then((html) => {
         document.body.innerHTML = html;
-        const changeDealFormClick = document.getElementById("change-deal-btn");
-        changeDealFormClick.addEventListener('submit', (evt) => {
+        const changeDealFormClick = document.getElementById("create-deal-btn");
+        changeDealFormClick.addEventListener('submit', async (evt) => {
             evt.preventDefault();
             if(MetaMaskWallet == null){
                 CreateToast(true, "Login error");
                 evt.stopImmediatePropagation();
             }
             try {
-                const createID = updateDeal(MetaMaskWallet[0], 74); // TODO: при создании надо возращать текущую сделку
-                approveByPartner(74, MetaMaskWallet[0]);
+                const createID = await updateDeal(MetaMaskWallet[0], dealID); // TODO: при создании надо возращать текущую сделку
+                approveByPartner(createID, MetaMaskWallet[0]);
             } catch (error) {
                 CreateToast(true, error);
             }
@@ -46,7 +46,7 @@ function approveByPartner(dealID, account){
         document.body.innerHTML = html;
         const cahngeBtn = document.getElementById("change-deal-step");
         cahngeBtn.addEventListener('click', (evt) => {
-            changeDeal(74, account);
+            changeDeal(dealID, account);
         });
     })
     .catch((err) => {

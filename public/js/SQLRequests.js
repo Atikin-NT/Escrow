@@ -16,7 +16,7 @@ function updateElementsID(){
   historyList = document.getElementById("history-list");
 }
 
-function createDeal(account){
+async function createDeal(account){
   updateElementsID();
   console.log("create");
   const value = parseInt(transactionAmount.value);
@@ -47,25 +47,29 @@ function createDeal(account){
     unit: unit,
   });
 
-  fetch("/fetch/createDeal", { method: "post", body, headers })
-    .then((resp) => {
+  let res = -1;
+
+  await fetch("/fetch/createDeal", { method: "post", body, headers })
+    .then(async(resp) => {
       console.log(resp);
       if (resp.status < 200 || resp.status >= 300)
         throw new Error("connect error");
       return resp.json();
     })
-    .then((json) => {
+    .then(async(json) => {
       console.log(json);
       if(json.code != 0)
-        CreateToast(true, json.msg);
-      else
+        CreateToast(true, json.msg)
+      else{
         CreateToast(false, json.msg);
-      return json.list[0];
+        res = json.list[0];
+      }
     })
-    .catch((err) => {
+    .catch(async(err) => {
       console.log(err);
       CreateToast(true, err);
-    });
+  });
+  return res;
 }
 
 function updateHistory(account){
@@ -113,7 +117,7 @@ function updateHistory(account){
     });
 }
 
-function updateDeal(account, id){
+async function updateDeal(account, id){
   updateElementsID();
   console.log("update");
   const value = parseInt(transactionAmount.value);
@@ -145,7 +149,10 @@ function updateDeal(account, id){
     id: id,
   });
 
-  fetch("/fetch/updateDeal", { method: "post", body, headers })
+  console.log(body);
+  let res = -1;
+
+  await fetch("/fetch/updateDeal", { method: "post", body, headers })
     .then((resp) => {
       console.log(resp);
       if (resp.status < 200 || resp.status >= 300)
@@ -156,14 +163,16 @@ function updateDeal(account, id){
       console.log(json);
       if(json.code != 0)
         CreateToast(true, json.msg);
-      else
+      else{
         CreateToast(false, json.msg);
-      // return json.list[0];
+        res = json.list[0];
+      }
     })
     .catch((err) => {
       console.log(err);
       CreateToast(true, err);
-    });
+  });
+  return res;
 }
 
 export { updateHistory, createDeal, updateDeal };
