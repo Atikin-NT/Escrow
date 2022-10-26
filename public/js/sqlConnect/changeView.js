@@ -1,5 +1,5 @@
-import { MetaMaskWallet } from "./Web3Layer.js";
-import { CreateToast } from "./Toasts.js";
+import { MetaMaskWallet } from "../web3/Web3Layer.js";
+import { CreateToast } from "../frontend/Toasts.js";
 import { updateDeal } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };

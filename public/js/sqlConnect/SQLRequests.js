@@ -1,4 +1,4 @@
-import { CreateToast } from "./Toasts.js";
+import { CreateToast } from "../frontend/Toasts.js";
 
 let buyerSwitch = document.getElementById("buyer-role");
 let partnerWallet = document.getElementById("deal-partner");
