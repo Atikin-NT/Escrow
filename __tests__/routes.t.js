@@ -2,11 +2,32 @@ const request = require('supertest');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { router } = require('../routes/main.js');
+const {openSQLite, closeSQLite} = require('../lib/sqlite.js');
+openSQLite();
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('/', router);
+
+process.on('SIGINT', () => {
+  console.log("SIGINT");
+  closeSQLite();
+  console.log("db close");
+  server.close();
+});
+
+process.on('uncaughtExceptionMonitor', (err, origin) => {
+  console.log('uncaughtExceptionMonitor');
+  closeSQLite();
+  console.log("db close");
+});
+
+process.on('uncaughtException', (err, origin) => {
+  console.log('uncaughtException');
+  console.log(err, origin);
+  process.exit(1);
+});
 
 const jsonSerialize = data => JSON.stringify(data, (key, value) =>
   typeof value === "bigint" ? `BIGINT::${value}` : value
@@ -19,6 +40,7 @@ describe('Create deal', function () {
         buyer: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
         seller: "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
         value: 5,
+        unit: 0,
     });
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
@@ -30,6 +52,7 @@ describe('Create deal', function () {
         buyer: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
         seller: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
         value: 5,
+        unit: 0,
     });
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
@@ -41,6 +64,7 @@ describe('Create deal', function () {
         buyer: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
         seller: "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
         value: -5,
+        unit: 0,
     });
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
@@ -52,6 +76,7 @@ describe('Create deal', function () {
         buyer: null,
         seller: "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
         value: 5,
+        unit: 0,
     });
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
@@ -63,6 +88,7 @@ describe('Create deal', function () {
         buyer: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
         seller: "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
         value: null,
+        unit: 0,
     });
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
@@ -74,6 +100,7 @@ describe('Create deal', function () {
         buyer: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
         seller: "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
         value: "5",
+        unit: 0,
     });
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
@@ -84,21 +111,11 @@ describe('Create deal', function () {
     const body = JSON.stringify({
         buyer: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
         seller: "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
+        unit: 0,
     });
     const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text).code).toEqual(614);
-  });
-
-  test('Value is bigint', async () => {
-    const body = jsonSerialize({
-        buyer: "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
-        seller: "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
-        value: 12n,
-    });
-    const res = await request(app).post('/fetch/createDeal').send(body).set('Content-Type', 'application/json');
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.text).code).toEqual(0);
   });
 });
 

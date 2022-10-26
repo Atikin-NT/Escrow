@@ -1,9 +1,20 @@
 const { dbGetDealsByID } = require('../lib/sqlite.js');
 
 async function changeDealView(req, res){
+    //TODO: добавить какую-нибудь сделку по умолчанию, если вдруг dealid будет undefind
     const id = req.query.dealid;
     const account = req.query.account;
-    const dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
+    let dbAnswer = {
+        seller: "0x0", 
+        buyer: "0x0", 
+        value: 0, 
+        unit: 0,
+        txid: -1,
+        id: -1,
+        fee: 0,
+    };
+    if(id != undefined && id != null && id >= 0)
+        dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
 
     let partner = dbAnswer.seller;
     let buyerCheck = "checked";
@@ -34,9 +45,17 @@ async function changeDealView(req, res){
 async function approveByPartnerView(req, res){
     const id = req.query.dealid;
     const account = req.query.account;
-    console.log(id, account);
-    const dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
-    console.log(dbAnswer);
+    let dbAnswer = {
+        seller: "0x0", 
+        buyer: "0x0", 
+        value: 0,
+        unit: 0,
+        txid: -1,
+        id: -1,
+        fee: 0,
+    };
+    if(id != undefined && id != null && id >= 0)
+        dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
     const unitList = ["Wei", "Gwei", "Ether"];
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
