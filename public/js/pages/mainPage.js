@@ -1,4 +1,4 @@
-import { updateHistory, createDeal } from "./SQLRequests.js";
+import { updateHistory, createDeal } from "../sqlConnect/SQLRequests.js";
 //Create Deal
 const createDealFormClick = document.getElementById("create-deal-btn");
 //Get History
@@ -17,7 +17,7 @@ const transactionAmount = document.getElementById("transaction-amount");
 const nextStepBtn = document.getElementById("next-deal-step");
 
 //Toast Element
-import { CreateToast } from "./Toasts.js";
+import { CreateToast } from "../frontend/Toasts.js";
 const toastTrigger = document.getElementById("liveToastBtn");
 
 //Fee payment
@@ -25,8 +25,8 @@ const feeSection = document.getElementById("fee-container");
 const discountTrigger = document.getElementById("discount");
 
 //Main logic
-import { MetaMaskWallet, escrowProvider, provider } from "./Web3Layer.js";
-import { approveByPartner, changeDeal } from "./changeView.js";
+import { MetaMaskWallet, escrowProvider, provider } from "../web3/Web3Layer.js";
+import { approveByPartner, changeDeal } from "../sqlConnect/changeView.js";
 
 createDealFormClick.addEventListener('submit', async (evt) => {
     evt.preventDefault();
