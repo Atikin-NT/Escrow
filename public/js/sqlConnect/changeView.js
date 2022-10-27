@@ -34,6 +34,21 @@ function changeDeal(dealID, account){
     });
 }
 
+function inProgress(dealID, account){
+    fetch(`view/inProgressView?dealid=${dealID}&account=${account}`, { headers })
+    .then((resp) => {
+        if (resp.status < 200 || resp.status >= 300)
+            throw new Error("connect error");
+        return resp.text();
+    })
+    .then((html) => {
+        document.body.innerHTML = html;
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+}
+
 function approveByPartner(dealID, account){
     // IDEA: сделать проверку по паре (id пользователя в сделке / txid сделки)
     fetch(`view/approveByPartner?dealid=${dealID}&account=${account}`, { headers })
@@ -44,9 +59,14 @@ function approveByPartner(dealID, account){
     })
     .then((html) => {
         document.body.innerHTML = html;
-        const cahngeBtn = document.getElementById("change-deal-step");
-        cahngeBtn.addEventListener('click', (evt) => {
+        const changeBtn = document.getElementById("change-deal-step");
+        changeBtn.addEventListener('click', (evt) => {
             changeDeal(dealID, account);
+        });
+
+        const approveDealBtn = document.getElementById("next-deal-step");
+        approveDealBtn.addEventListener('click', (evt) => {
+            inProgress(dealID, account);
         });
     })
     .catch((err) => {

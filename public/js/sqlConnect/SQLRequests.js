@@ -20,7 +20,7 @@ async function createDeal(account){
   updateElementsID();
   console.log("create");
   const value = parseInt(transactionAmount.value);
-  if(!ethers.utils.isAddress(partnerWallet.value) || partnerWallet.value == account)
+  if(!ethers.utils.isAddress(partnerWallet.value) || !ethers.utils.isAddress(account) || partnerWallet.value == account)
     throw "invalid partner address";
   if(value <= 0)
     throw "invalid value";
