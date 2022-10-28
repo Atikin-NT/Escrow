@@ -4,6 +4,15 @@ import { updateDeal } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
 
+const updateConnectionBtn = (account) => {
+    const button = document.getElementById("connectButton");
+    if (button !== null && account != null) {
+        button.remove();
+        const show = document.getElementById("show-account");
+        show.textContent = account;
+    }
+}
+
 function changeDeal(dealID, account){
     fetch(`view/changeDealView?dealid=${dealID}&account=${account}`, { headers })
     .then((resp) => {
@@ -14,6 +23,7 @@ function changeDeal(dealID, account){
     })
     .then((html) => {
         document.body.innerHTML = html;
+        updateConnectionBtn(account);
         const changeDealFormClick = document.getElementById("create-deal-btn");
         changeDealFormClick.addEventListener('submit', async (evt) => {
             evt.preventDefault();
