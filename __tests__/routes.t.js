@@ -29,11 +29,7 @@ process.on('uncaughtException', (err, origin) => {
   process.exit(1);
 });
 
-const jsonSerialize = data => JSON.stringify(data, (key, value) =>
-  typeof value === "bigint" ? `BIGINT::${value}` : value
-);
-
-describe('Create deal', function () {
+describe('Create_deal', function () {
 
   test('Without errors', async () => {
     const body = JSON.stringify({
@@ -119,7 +115,7 @@ describe('Create deal', function () {
   });
 });
 
-describe('Delete deal', function () {
+describe('Delete_deal', function () {
 
   test('Without errors', async () => {
     const body = JSON.stringify({
@@ -157,7 +153,7 @@ describe('Delete deal', function () {
   });
 });
 
-describe('Get deals by account', function () {
+describe('Get_deals_by_account', function () {
 
   test('Without errors', async () => {
     const account = "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec";
@@ -188,7 +184,7 @@ describe('Get deals by account', function () {
   });
 });
 
-describe('Update deal status', function () {
+describe('Update_deal_status', function () {
 
   test('Without errors', async () => {
     const body = JSON.stringify({

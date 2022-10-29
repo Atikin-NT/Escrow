@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage -t Create_deal",
     "start": "nodemon main.js"
   },
   "repository": {

@@ -1,6 +1,5 @@
 const { dbGetDealsByID, dbUpdateDealStatus } = require('../lib/sqlite.js');
-
-//TODO: проверка параметра account через ethers
+const ethers = require('ethers');
 
 const defaulDeal = {
     seller: "0x0", 
@@ -11,13 +10,13 @@ const defaulDeal = {
     id: -1,
     fee: 0,
 };
+const unitList = ["Wei", "Gwei", "Ether"];
 
 async function changeDealView(req, res){
-    //TODO: добавить какую-нибудь сделку по умолчанию, если вдруг dealid будет undefind
     const id = parseInt(req.query.dealid);
     const account = req.query.account;
     let dbAnswer = defaulDeal;
-    if(id != undefined && id != null && id >= 0)
+    if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
 
     let partner = dbAnswer.seller;
@@ -28,17 +27,17 @@ async function changeDealView(req, res){
         buyerCheck = "";
         sellerCheck = "checked";
     }
-    let unitList = ["", "", ""];
-    unitList[dbAnswer.unit] = "selected";
+    let unitListWithSelect = ["", "", ""];
+    unitListWithSelect[dbAnswer.unit] = "selected";
     res.render('partials/createDeal', {
         title: "Change Form",
         buyerCheck: buyerCheck,
         sellerCheck: sellerCheck,
         partner: partner, 
         value: dbAnswer.value, 
-        weiSelected: unitList[0],
-        gweiSelected: unitList[1],
-        etherSelected: unitList[2],
+        weiSelected: unitListWithSelect[0],
+        gweiSelected: unitListWithSelect[1],
+        etherSelected: unitListWithSelect[2],
         txid: dbAnswer.txid,
         id: dbAnswer.id,
         fee: dbAnswer.fee,
@@ -51,9 +50,8 @@ async function approveByPartnerView(req, res){
     const id = parseInt(req.query.dealid);
     const account = req.query.account;
     let dbAnswer = defaulDeal;
-    if(id != undefined && id != null && id >= 0)
+    if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
-    const unitList = ["Wei", "Gwei", "Ether"];
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
     res.render('partials/approveByPartner', {
@@ -75,10 +73,7 @@ async function inProgressView(req, res){
     let dbAnswer = defaulDeal;
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
-        if(answer.code != 0 || answer.list[0].buyer != account){
-            dbAnswer = defaulDeal;
-        }
-        else{
+        if(answer.code == 0 && answer.list[0].buyer == account){
             const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, 1)).code;
             if(changeDealStatusAnswer == 0){
                 dbAnswer = answer.list[0];
@@ -86,7 +81,6 @@ async function inProgressView(req, res){
             }
         }
     }
-    const unitList = ["Wei", "Gwei", "Ether"];
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
     res.render('partials/sendSubject', {
