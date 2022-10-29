@@ -1,4 +1,5 @@
 import { CreateToast } from "../frontend/Toasts.js";
+import { showCurrentDeal } from "../sqlConnect/changeView.js";
 
 let buyerSwitch = document.getElementById("buyer-role");
 let partnerWallet = document.getElementById("deal-partner");
@@ -20,7 +21,7 @@ async function createDeal(account){
   updateElementsID();
   console.log("create");
   const value = parseInt(transactionAmount.value);
-  if(!ethers.utils.isAddress(partnerWallet.value) || partnerWallet.value == account)
+  if(!ethers.utils.isAddress(partnerWallet.value) || !ethers.utils.isAddress(account) || partnerWallet.value == account)
     throw "invalid partner address";
   if(value <= 0)
     throw "invalid value";
@@ -73,6 +74,7 @@ async function createDeal(account){
 }
 
 function updateHistory(account){
+  updateElementsID();
   fetch(`/fetch/getDeals?account=${account}`, { headers })
     .then((resp) => {
       console.log(resp);
@@ -85,25 +87,38 @@ function updateHistory(account){
       while (historyList.firstChild) {
         historyList.removeChild(historyList.firstChild);
       }
-      for(let element of json.list){
-        console.log(element)
-        console.log(element.seller)
-        var li = document.createElement("li");
+      for(let i = json.list.length - 1; i > json.list.length - 6; i--){
+        let element = json.list[i];
+        let li = document.createElement("li");
+        li.addEventListener('click', (evt) => {
+            showCurrentDeal(element.id, account, element.status);
+        })
         li.classList.add('list-group-item', 'd-flex', 'justify-content-between');
+        if(i%2 == 1) li.classList.add('bg-light');
 
-        var div = document.createElement("div");
-        if(element.status != 0) div.className = 'text-success';
-        var h6 = document.createElement("h6");
-        h6.className = 'my-0';
-        h6.innerHTML = element.seller; //TODO: фильтрация с тем у кого сделка
+        let div = document.createElement("div");
+        div.className = "history-div";
+
+        let h6 = document.createElement("h6");
+        h6.classList.add("text-container", "my-0");
+
+        let role = "buyer";
+        if(account == element.seller) {h6.innerHTML = element.buyer; role = "seller"; }
+        else h6.innerHTML = element.seller;
         div.appendChild(h6);
 
-        var small = document.createElement("small");
+        let small = document.createElement("small");
         small.className = 'text-muted';
-        small.innerHTML = "pending";
+        small.innerHTML = `id: ${element.id}, role: ${role}`;
+        div.appendChild(small);
 
+        const unitList = ["Wei", "Gwei", "Ether"];
+        let span = document.createElement("span");
+        span.className = 'text-muted';
+        span.innerHTML = `${element.value} ${unitList[element.unit]}`;
+        
         li.appendChild(div);
-        li.appendChild(small);
+        li.appendChild(span);
         historyList.appendChild(li);
       }
       if(json.code != 0)

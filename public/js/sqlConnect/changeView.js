@@ -1,8 +1,21 @@
 import { MetaMaskWallet } from "../web3/Web3Layer.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { updateDeal } from "./SQLRequests.js";
+import { updateDeal, updateHistory } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
+
+function showCurrentDeal(dealID, account, status){
+    switch(status){
+        case 0:
+            approveByPartner(dealID, account);
+            break;
+        case 1:
+            inProgress(dealID, account);
+            break;
+        default:
+            alert("Cant`t find");
+    }
+}
 
 function changeDeal(dealID, account){
     fetch(`view/changeDealView?dealid=${dealID}&account=${account}`, { headers })
@@ -28,6 +41,23 @@ function changeDeal(dealID, account){
                 CreateToast(true, error);
             }
         });
+        updateHistory(account);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+}
+
+function inProgress(dealID, account){
+    fetch(`view/inProgressView?dealid=${dealID}&account=${account}`, { headers })
+    .then((resp) => {
+        if (resp.status < 200 || resp.status >= 300)
+            throw new Error("connect error");
+        return resp.text();
+    })
+    .then((html) => {
+        document.body.innerHTML = html;
+        updateHistory(account);
     })
     .catch((err) => {
         console.log(err);
@@ -44,10 +74,17 @@ function approveByPartner(dealID, account){
     })
     .then((html) => {
         document.body.innerHTML = html;
-        const cahngeBtn = document.getElementById("change-deal-step");
-        cahngeBtn.addEventListener('click', (evt) => {
+        const changeBtn = document.getElementById("change-deal-step");
+        changeBtn.addEventListener('click', (evt) => {
             changeDeal(dealID, account);
         });
+
+        const approveDealBtn = document.getElementById("next-deal-step");
+        approveDealBtn.addEventListener('click', (evt) => {
+            inProgress(dealID, account);
+        });
+
+        updateHistory(account);
     })
     .catch((err) => {
         console.log(err);
@@ -56,7 +93,8 @@ function approveByPartner(dealID, account){
 
 export { 
     approveByPartner, 
-    changeDeal 
+    changeDeal,
+    showCurrentDeal,
 };
 
 /*

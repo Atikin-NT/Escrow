@@ -1,7 +1,7 @@
-<div class="base-container container" id="send-subject-container" style="display: none;">
+<div class="base-container container" id="send-money-container" style="display: block;">
     <main id="main">
     <div class="py-5 text-center deal-form">
-        <h2>Send Subject</h2>
+        <h2>Wait For Send Magic Box</h2>
     </div>
 
     <div class="row g-5 deal-details">
@@ -10,97 +10,58 @@
         <div class="form-check">
             <label class="form-check-label" for="switchRole">My Role: </label>
             <div class="container-sm">
-            <input
-                type="radio"
-                class="btn-check buyer-role"
-                name="options-outlined"
-                id="buyer-role-send-sub"
-                autocomplete="off"
-                disabled
-            />
-            <label
-                class="btn btn-outline-secondary"
-                for="buyer-role-send-sub"
-            >Buyer</label>
-
-            <input
-                type="radio"
-                class="btn-check seller-role"
-                name="options-outlined"
-                id="seller-role-send-sub"
-                autocomplete="off"
-                disabled
-            />
-            <label
-                class="btn btn-outline-secondary"
-                for="seller-role-send-sub"
-            >Seller</label>
-        </div>
+                <label
+                    class="btn btn-outline-secondary"
+                    for="role-in-deal"
+                >{{role}}</label>
+            </div>
             <div class="row g-3">
             <div class="col-12">
-                <label for="deal-seller-send-sub" class="form-label" id="deal-seller-label">Seller address</label>
-                <input
-                type="text"
-                name="buyer"
-                class="form-control text-container seller-address"
-                id="deal-seller-send-sub"
-                placeholder="Seller address"
-                value=""
-                readonly
-                />
+                <label for="deal-seller" class="form-label" id="deal-seller-label">Seller address</label>
+                <p
+                class="form-control text-container"
+                id="deal-seller"
+                >{{seller}}</p>
             </div>
 
              <div class="col-12">
-                <label for="deal-buyer-send-sub" class="form-label" id="deal-buyer-label">Buyer address</label>
-                <input
-                type="text"
-                name="buyer"
-                class="form-control text-container buyer-address"
-                id="deal-buyer-send-sub"
-                placeholder="Buyer address"
-                value=""
-                readonly
-                />
+                <label for="deal-buyer" class="form-label" id="deal-buyer-label">Buyer address</label>
+                <p
+                class="form-control text-container"
+                id="deal-buyer"
+                >{{buyer}}</p>
             </div>
 
             <div class="col-9">
-                <label for="transaction-amount-send-sub" class="form-label">Value</label>
-                <input
-                type="text"
-                name="value"
+                <label for="transaction-amount" class="form-label">Value</label>
+                <p
                 class="form-control text-container transaction-value"
-                id="transaction-amount-send-sub"
-                placeholder="value"
-                value=""
-                readonly
-                />
+                id="transaction-amount"
+                >{{value}}</p>
             </div>
 
             <div class="col-3">
-                <label for="unit-send-sub" class="form-label">Unit</label>
-                <input
-                type="text"
-                name="value"
+                <label for="unit" class="form-label">Unit</label>
+                <p
                 class="form-control text-container ether-unit"
-                id="unit-send-sub"
-                placeholder="Unit"
-                value=""
-                readonly
-                />
+                id="unit"
+                >{{unit}}</p>
+            </div>
+
+            <div style="display: none;">
+                <span id="deal-txid">{{txid}}</span>
+                <span id="deal-id">{{id}}</span>
+                <span id="deal-status">{{status}}</span>
             </div>
             </div>
 
             <hr class="my-4" />
-            <h5 class="mb-3 mt-3">Fee payment: <span  class="fee"></span></h5>
+            <h5 class="mb-3 mt-3">Fee payment: <span  class="fee">{{status}}</span></h5>
             <hr class="my-4" />
             <button
             class="w-100 btn btn-primary btn-lg"
-            id="send-sub-next"
-            >Next</button>
-            <button
-            class="w-100 btn btn-primary btn-lg"
-            id="send-sub-previous"
-            >Previous</button>
+            id="next-deal-step"
+            >Next Step</button>
         </div>
         </div>
         <div class="col-md-5">
