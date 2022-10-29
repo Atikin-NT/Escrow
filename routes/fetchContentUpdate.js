@@ -18,7 +18,7 @@ async function changeDealView(req, res){
     let dbAnswer = defaulDeal;
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
-
+    if(dbAnswer.status != 0) dbAnswer = defaulDeal;
     let partner = dbAnswer.seller;
     let buyerCheck = "checked";
     let sellerCheck = "";
@@ -52,6 +52,7 @@ async function approveByPartnerView(req, res){
     let dbAnswer = defaulDeal;
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
+    if(dbAnswer.status != 0) dbAnswer = defaulDeal;
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
     res.render('partials/approveByPartner', {
@@ -73,7 +74,7 @@ async function inProgressView(req, res){
     let dbAnswer = defaulDeal;
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
-        if(answer.code == 0 && answer.list[0].buyer == account){
+        if(answer.code == 0 && answer.list[0].buyer == account && answer.list[0].status == 0){
             const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, 1)).code;
             if(changeDealStatusAnswer == 0){
                 dbAnswer = answer.list[0];
