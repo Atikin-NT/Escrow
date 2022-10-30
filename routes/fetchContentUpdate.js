@@ -9,6 +9,7 @@ const defaulDeal = {
     txid: -1,
     id: -1,
     fee: 0,
+    status: -1,
 };
 const unitList = ["Wei", "Gwei", "Ether"];
 
@@ -29,8 +30,8 @@ async function changeDealView(req, res){
     }
     let unitListWithSelect = ["", "", ""];
     unitListWithSelect[dbAnswer.unit] = "selected";
-    res.render('partials/createDeal', {
-        title: "Change Form",
+    res.render('partials/inputLayout', {
+        layout : 'part',
         buyerCheck: buyerCheck,
         sellerCheck: sellerCheck,
         partner: partner, 
@@ -55,7 +56,8 @@ async function approveByPartnerView(req, res){
     if(dbAnswer.status != 0) dbAnswer = defaulDeal;
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
-    res.render('partials/approveByPartner', {
+    res.render('partials/textLayout', {
+        layout : 'part',
         role: role,
         seller: dbAnswer.seller, 
         buyer: dbAnswer.buyer, 
@@ -65,6 +67,7 @@ async function approveByPartnerView(req, res){
         id: dbAnswer.id,
         fee: dbAnswer.fee,
         status: dbAnswer.status,
+        change: true,
     });
 }
 
@@ -74,17 +77,23 @@ async function inProgressView(req, res){
     let dbAnswer = defaulDeal;
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
-        if(answer.code == 0 && answer.list[0].buyer == account && answer.list[0].status == 0){
-            const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, 1)).code;
-            if(changeDealStatusAnswer == 0){
+        if(answer.code == 0){
+            if(answer.list[0].status == 0 && answer.list[0].buyer == account){
+                const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, 1)).code;
+                if(changeDealStatusAnswer == 0){
+                    dbAnswer = answer.list[0];
+                    dbAnswer.status = 1;
+                }
+            }
+            else{
                 dbAnswer = answer.list[0];
-                dbAnswer.status = 1;
             }
         }
     }
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
-    res.render('partials/sendSubject', {
+    res.render('partials/textLayout', {
+        layout : 'part',
         role: role,
         seller: dbAnswer.seller, 
         buyer: dbAnswer.buyer, 
@@ -94,6 +103,7 @@ async function inProgressView(req, res){
         id: dbAnswer.id,
         fee: dbAnswer.fee,
         status: dbAnswer.status,
+        change: false,
     });
 }
 

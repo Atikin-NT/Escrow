@@ -3,6 +3,8 @@ import { CreateToast } from "../frontend/Toasts.js";
 import { updateDeal, updateHistory } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
+let bodyInput = document.getElementById("inputBody");
+let bodyTitle = document.getElementById("title");
 
 function showCurrentDeal(dealID, account, status){
     switch(status){
@@ -26,7 +28,8 @@ function changeDeal(dealID, account){
         return resp.text();
     })
     .then((html) => {
-        document.body.innerHTML = html;
+        bodyInput.innerHTML = html;
+        bodyTitle.innerHTML = "Change Form";
         const changeDealFormClick = document.getElementById("create-deal-btn");
         changeDealFormClick.addEventListener('submit', async (evt) => {
             evt.preventDefault();
@@ -35,13 +38,12 @@ function changeDeal(dealID, account){
                 evt.stopImmediatePropagation();
             }
             try {
-                const createID = await updateDeal(MetaMaskWallet[0], dealID); // TODO: при создании надо возращать текущую сделку
+                const createID = await updateDeal(MetaMaskWallet[0], dealID);
                 approveByPartner(createID, MetaMaskWallet[0]);
             } catch (error) {
                 CreateToast(true, error);
             }
         });
-        updateHistory(account);
     })
     .catch((err) => {
         console.log(err);
@@ -56,7 +58,9 @@ function inProgress(dealID, account){
         return resp.text();
     })
     .then((html) => {
-        document.body.innerHTML = html;
+        console.log(html);
+        bodyInput.innerHTML = html;
+        bodyTitle.innerHTML = "In Progress";
         updateHistory(account);
     })
     .catch((err) => {
@@ -73,7 +77,8 @@ function approveByPartner(dealID, account){
         return resp.text();
     })
     .then((html) => {
-        document.body.innerHTML = html;
+        bodyInput.innerHTML = html;
+        bodyTitle.innerHTML = "Wait For Confirmation";
         const changeBtn = document.getElementById("change-deal-step");
         changeBtn.addEventListener('click', (evt) => {
             changeDeal(dealID, account);
@@ -83,8 +88,6 @@ function approveByPartner(dealID, account){
         approveDealBtn.addEventListener('click', (evt) => {
             inProgress(dealID, account);
         });
-
-        updateHistory(account);
     })
     .catch((err) => {
         console.log(err);

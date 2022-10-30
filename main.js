@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use('/', router);
 
 app.get('/', (req, res) => {
-  res.render('partials/createDeal', {
+  res.render('partials/inputLayout', {
     title: "Create Form",
     buyerCheck: "checked",
     btnName: "Create"

@@ -109,7 +109,7 @@ function updateHistory(account){
 
         let small = document.createElement("small");
         small.className = 'text-muted';
-        small.innerHTML = `id: ${element.id}, role: ${role}`;
+        small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status}`;
         div.appendChild(small);
 
         const unitList = ["Wei", "Gwei", "Ether"];
@@ -134,7 +134,6 @@ function updateHistory(account){
 
 async function updateDeal(account, id){
   updateElementsID();
-  console.log("update");
   const value = parseInt(transactionAmount.value);
   if(!ethers.utils.isAddress(partnerWallet.value) || partnerWallet.value == account)
     throw "invalid partner address";
@@ -155,7 +154,6 @@ async function updateDeal(account, id){
     buyer = account;
     seller = partnerWallet.value;
   }
-  console.log(typeof(value));
   const body = JSON.stringify({
     buyer: buyer,
     seller: seller,
@@ -163,8 +161,6 @@ async function updateDeal(account, id){
     unit: unit,
     id: id,
   });
-
-  console.log(body);
   let res = -1;
 
   await fetch("/fetch/updateDeal", { method: "post", body, headers })
