@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const {createDeal, deleteDeal, getDeals, updateDealStatus, updateDeal} = require("./fetch.js");
 const {changeDealView, approveByPartnerView, inProgressView} = require("./fetchContentUpdate.js");
+const { SignIn } = require("./profile.js");
 
 const router = Router();
 
@@ -13,6 +14,8 @@ router.post("/fetch/updateDeal", updateDeal);
 router.get("/view/changeDealView", changeDealView);
 router.get("/view/approveByPartner", approveByPartnerView);
 router.get("/view/inProgressView", inProgressView);
+
+router.post("/profile", SignIn);
 
 exports.router = router;
 
