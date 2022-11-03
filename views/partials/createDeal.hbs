@@ -1,41 +1,41 @@
 <div class="base-container container" id="create-container">
-    <main id="main">
+  <main id="main">
     <div class="py-5 text-center deal-form">
-        <h2>{{title}}</h2>
+      <h2>{{title}}</h2>
     </div>
 
     <div class="row g-5 deal-details">
       <div class="col-md-7">
         <h4 class="mb-3">Deal details</h4>
         <div class="form-check">
-            <label class="form-check-label" for="switchRole">My Role: </label>
-            <div class="container-sm">
-                <input
-                    type="radio"
-                    class="btn-check"
-                    name="options-outlined"
-                    id="buyer-role"
-                    autocomplete="off"
-                    {{buyerCheck}}
-                />
-                <label
-                    class="btn btn-outline-primary"
-                    for="buyer-role"
-                >Buyer</label>
+          <label class="form-check-label" for="switchRole">My Role: </label>
+          <div class="container-sm">
+            <input
+              type="radio"
+              class="btn-check"
+              name="options-outlined"
+              id="buyer-role"
+              autocomplete="off"
+              {{buyerCheck}}
+            />
+            <label
+              class="btn btn-outline-primary"
+              for="buyer-role"
+            >Buyer</label>
 
-                <input
-                    type="radio"
-                    class="btn-check"
-                    name="options-outlined"
-                    id="seller-role"
-                    autocomplete="off"
-                    {{sellerCheck}}
-                />
-                <label
-                    class="btn btn-outline-primary"
-                    for="seller-role"
-                >Seller</label>
-            </div>
+            <input
+              type="radio"
+              class="btn-check"
+              name="options-outlined"
+              id="seller-role"
+              autocomplete="off"
+              {{sellerCheck}}
+            />
+            <label
+              class="btn btn-outline-primary"
+              for="seller-role"
+            >Seller</label>
+          </div>
 
           <div class="col-xl-6 div-address"><p id="address">My Address:
               <span id="show-account"><button
@@ -85,20 +85,20 @@
             </div>
 
             <div class="col-3">
-                <label for="unit" class="form-label">Unit</label>
-                <select class="form-select" id="ether-unit" required>
-                  <option {{weiSelected}}>Wei</option>
-                  <option {{gweiSelected}}>Gwei</option>
-                  <option {{etherSelected}}>Ether</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please select a valid unit.
-                </div>
+              <label for="unit" class="form-label">Unit</label>
+              <select class="form-select" id="ether-unit" required>
+                <option {{weiSelected}}>Wei</option>
+                <option {{gweiSelected}}>Gwei</option>
+                <option {{etherSelected}}>Ether</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid unit.
+              </div>
             </div>
 
             <div style="display: none;">
-                <span id="deal-txid">{{txid}}</span>
-                <span id="deal-id">{{id}}</span>
+              <span id="deal-txid">{{txid}}</span>
+              <span id="deal-id">{{id}}</span>
             </div>
           </div>
 
@@ -109,18 +109,38 @@
             class="btn btn-primary"
             id="liveToastBtn"
           >Calculate fee</button>
-          <h5 class="mb-3 mt-3">Fee payment: <span  class="fee">{{fee}}</span></h5>
+          <h5 class="mb-3 mt-3">Fee payment:
+            <span class="fee">{{fee}}</span></h5>
 
-          <section id="fee-container">
+          <div id="fee-container" class="container-sm">
             <input
-              type="checkbox"
+              type="radio"
               class="btn-check"
               id="discount"
+              name="options-outlined"
+              autocomplete="off"
+              checked
+            />
+            <label class="btn btn-outline-secondary" for="discount">50/50</label>
+
+            <input
+              type="radio"
+              class="btn-check"
+              id="fee-role-buyer"
+              name="options-outlined"
               autocomplete="off"
             />
-            <label class="btn btn-outline-primary" for="discount">50/50</label>
+            <label class="btn btn-outline-secondary fee-buyer" for="fee-role-buyer">Buyer</label>
 
-          </section>
+            <input
+              type="radio"
+              class="btn-check"
+              id="fee-role-seller"
+              name="options-outlined"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-secondary fee-seller" for="fee-role-seller">Seller</label>
+          </div>
 
           <hr class="my-4" />
 
@@ -191,5 +211,5 @@
         </div>
       </div>
     </div>
-    </main>
+  </main>
 </div>

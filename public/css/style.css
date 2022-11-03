@@ -80,7 +80,7 @@ body h3 {
   display: flex;
   flex-direction: row;
 }
-#fee-container .primary-btn {
-  margin-left: 0.5rem;
+#fee-container .fee-buyer,
+#fee-container .fee-seller {
   opacity: 100%;
 }/*# sourceMappingURL=style.css.map */

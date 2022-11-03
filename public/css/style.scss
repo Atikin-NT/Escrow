@@ -94,8 +94,10 @@ body {
   display: flex;
   flex-direction: row;
 
-  .primary-btn {
-    margin-left: 0.5rem;
+  
+  .fee-buyer,
+  .fee-seller {
+    // margin-left: 0.5rem;
 
     opacity: 100%;
   }
