@@ -22,7 +22,6 @@ const toastTrigger = document.getElementById("liveToastBtn");
 
 //Fee payment
 const feeSection = document.getElementById("fee-container");
-const discountTrigger = document.getElementById("discount");
 
 //Main logic
 import { MetaMaskWallet, escrowProvider, provider } from "../web3/Web3Layer.js";
@@ -66,35 +65,3 @@ toastTrigger.addEventListener("click", async () => {
         CreateToast(true, err);
     }
 });
-
-discountTrigger.addEventListener("click", (evt) => {
-    if (discountTrigger.checked) {
-        const buttonBuyer = document.createElement("button");
-        const buttonSeller = document.createElement("button");
-
-        buttonBuyer.type = "button";
-        buttonBuyer.id = "primary-btn-buyer";
-        buttonBuyer.className = "btn btn-secondary primary-btn";
-        buttonBuyer.textContent = "Buyer";
-        buttonBuyer.disabled = true;
-
-        buttonSeller.type = "button";
-        buttonSeller.id = "primary-btn-seller";
-        buttonSeller.className = "btn btn-secondary primary-btn";
-        buttonSeller.textContent = "Seller";
-        buttonSeller.disabled = true;
-
-        feeSection.appendChild(buttonBuyer);
-        feeSection.appendChild(buttonSeller);
-    } else {
-        const prBtnBuyer = document.getElementById("primary-btn-buyer");
-        const prBtnSeller = document.getElementById("primary-btn-seller");
-        if ((prBtnBuyer & prBtnSeller) != null) {
-            prBtnBuyer.remove();
-            prBtnSeller.remove();
-        }
-        
-    }
-
-
-})

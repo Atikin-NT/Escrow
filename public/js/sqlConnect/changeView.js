@@ -19,6 +19,15 @@ function showCurrentDeal(dealID, account, status){
     }
 }
 
+const updateConnectionBtn = (account) => {
+    const button = document.getElementById("connectButton");
+    if (button !== null && account != null) {
+        button.remove();
+        const show = document.getElementById("show-account");
+        show.textContent = account;
+    }
+}
+
 function changeDeal(dealID, account){
     fetch(`view/changeDealView?dealid=${dealID}&account=${account}`, { headers })
     .then((resp) => {
@@ -30,6 +39,7 @@ function changeDeal(dealID, account){
     .then((html) => {
         bodyInput.innerHTML = html;
         bodyTitle.innerHTML = "Change Form";
+        updateConnectionBtn(account);
         const changeDealFormClick = document.getElementById("create-deal-btn");
         changeDealFormClick.addEventListener('submit', async (evt) => {
             evt.preventDefault();

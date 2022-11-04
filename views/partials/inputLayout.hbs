@@ -60,13 +60,38 @@
     <hr class="my-4" />
 
     <button type="button" class="btn btn-primary" id="liveToastBtn">Calculate fee</button>
-    <h5 class="mb-3 mt-3">Fee payment: <span class="fee">{{fee}}</span></h5>
+    <h5 class="mb-3 mt-3">Fee payment:
+            <span class="fee">{{fee}}</span></h5>
 
-    <section id="fee-container">
-      <input type="checkbox" class="btn-check" id="discount" autocomplete="off" />
-      <label class="btn btn-outline-primary" for="discount">50/50</label>
+          <div id="fee-container" class="container-sm">
+            <input
+              type="radio"
+              class="btn-check"
+              id="discount"
+              name="options-outlined"
+              autocomplete="off"
+              checked
+            />
+            <label class="btn btn-outline-secondary" for="discount">50/50</label>
 
-    </section>
+            <input
+              type="radio"
+              class="btn-check"
+              id="fee-role-buyer"
+              name="options-outlined"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-secondary fee-buyer" for="fee-role-buyer">Buyer</label>
+
+            <input
+              type="radio"
+              class="btn-check"
+              id="fee-role-seller"
+              name="options-outlined"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-secondary fee-seller" for="fee-role-seller">Seller</label>
+          </div>
 
     <hr class="my-4" />
 
