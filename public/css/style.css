@@ -1,3 +1,8 @@
+:root {
+  --line-border-fill: #007e00;
+  --line-border-empty: #999;
+}
+
 body h2 {
   font-size: 2.5rem;
   margin: 0;
@@ -8,29 +13,92 @@ body h3 {
 
 .base-container {
   height: auto !important;
-}
-
-.container {
   max-width: 960px;
 }
 
 #main {
   height: 100vh;
+  min-width: 540px;
   display: flex;
   flex-direction: column;
 }
-#main .deal-form {
+#main .container {
+  text-align: center;
   padding-top: 0 !important;
+  padding-bottom: 0 !important;
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
 }
 @media (max-width: 768px) {
-  #main .deal-form {
+  #main .container {
     padding-top: 3rem !important;
   }
 }
+#main .progress-container {
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+}
+#main .progress-container::before {
+  content: "";
+  background-color: var(--line-border-empty);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 1px;
+  width: 100%;
+  z-index: -1;
+  transition: 0.4s ease;
+}
+#main .progress {
+  background-color: var(--line-border-fill);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 0;
+  z-index: -1;
+  transition: 0.4s ease;
+}
+#main .circle {
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+  height: 2.5rem;
+  width: 2.5rem;
+  border: 1px solid var(--line-border-empty);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s ease;
+}
+#main .circle.active {
+  background-color: var(--line-border-fill);
+  border-color: var(--line-border-fill);
+  color: white;
+}
+#main .state-names {
+  width: 85%;
+  min-width: 540px;
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  margin: 0 auto;
+}
 #main .deal-details {
   height: auto;
-  margin-bottom: auto;
+  margin: auto;
+}
+#main .deal-details #inputBody,
+#main .deal-details #historyBody {
+  margin-top: 0;
 }
 #main .deal-details .form-check {
   padding-left: 0;
@@ -79,9 +147,9 @@ body h3 {
 #fee-container {
   display: flex;
   flex-direction: row;
+  padding-left: 0;
 }
 #fee-container .fee-buyer,
 #fee-container .fee-seller {
   margin-left: 0.5rem;
-  opacity: 100%;
 }/*# sourceMappingURL=style.css.map */

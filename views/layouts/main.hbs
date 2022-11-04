@@ -22,7 +22,10 @@
     />
     <link rel="stylesheet" href="/css/style.css" />
 
-    <script src="js/libs/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script
+      src="js/libs/ethers-5.2.umd.min.js"
+      type="application/javascript"
+    ></script>
     <script src="/js/web3/EscrowProvider.js"></script>
 
   </head>
@@ -30,15 +33,41 @@
   <body class="bg-light">
     <div class="base-container container" id="create-container">
       <main id="main">
-        <div class="py-5 text-center deal-form">
-            <h2 id="title">{{title}}</h2>
+        <div class="py-5 container">
+
+          <div class="progress-container">
+            <div class="progress">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                {{!-- aria-label="2px high" --}}
+                {{!-- aria-valuenow="25"
+                aria-valuemin="0"
+                aria-valuemax="100" --}}
+              ></div>
+            </div>
+            <div class="circle active">1</div>
+            <div class="circle">2</div>
+            <div class="circle">3</div>
+            <div class="circle">4</div>
+            <div class="circle">5</div>
+          </div>
+
+          <div class="state-names">
+            <div class="name">Comment</div>
+            <div class="name">Comment</div>
+            <div class="name">Comment</div>
+            <div class="name">Comment</div>
+            <div class="name">Comment</div>
+          </div>
+
         </div>
 
         <div class="row g-5 deal-details">
           <div id="inputBody" class="col-md-7">
             {{{body}}}
           </div>
-          <div class="col-md-5">
+          <div id="historyBody" class="col-md-5">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
               <span class="text-primary">History</span>
             </h4>
@@ -53,7 +82,9 @@
                 </div>
                 <span class="text-muted">0.1 ETH</span>
               </li>
-              <li class="list-group-item d-flex justify-content-between bg-light">
+              <li
+                class="list-group-item d-flex justify-content-between bg-light"
+              >
                 <div class="history-div text-success">
                   <h6
                     class="text-container my-0"
@@ -104,7 +135,10 @@
     </div>
   </body>
 
-  <script src="js/libs/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script
+    src="js/libs/bootstrap.bundle.min.js"
+    crossorigin="anonymous"
+  ></script>
 
   <script src="js/frontend/form-validation.js"></script>
 
