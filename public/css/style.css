@@ -1,3 +1,8 @@
+:root {
+  --line-border-fill: #007e00;
+  --line-border-empty: #999;
+}
+
 body h2 {
   font-size: 2.5rem;
   margin: 0;
@@ -8,29 +13,22 @@ body h3 {
 
 .base-container {
   height: auto !important;
-}
-
-.container {
   max-width: 960px;
 }
 
 #main {
   height: 100vh;
+  min-width: 540px;
   display: flex;
   flex-direction: column;
 }
-#main .deal-form {
-  padding-top: 0 !important;
-  margin-top: auto;
-}
-@media (max-width: 768px) {
-  #main .deal-form {
-    padding-top: 3rem !important;
-  }
-}
 #main .deal-details {
   height: auto;
-  margin-bottom: auto;
+  margin: auto;
+}
+#main .deal-details #inputBody,
+#main .deal-details #historyBody {
+  margin-top: 0;
 }
 #main .deal-details .form-check {
   padding-left: 0;
@@ -79,9 +77,9 @@ body h3 {
 #fee-container {
   display: flex;
   flex-direction: row;
+  padding-left: 0;
 }
 #fee-container .fee-buyer,
 #fee-container .fee-seller {
   margin-left: 0.5rem;
-  opacity: 100%;
 }/*# sourceMappingURL=style.css.map */

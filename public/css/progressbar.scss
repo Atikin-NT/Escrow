@@ -1,0 +1,105 @@
+#main {
+    .container {
+        @media (max-width: 768px) {
+          padding-top: 3rem !important;
+        }
+        text-align: center;
+        // background-color: orange;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+      }
+    
+      .progress-container {
+        font-size: 1.1rem;
+    
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        width: 80%;
+        margin: 0 auto;
+        margin-bottom: 1rem;
+      }
+    
+      .progress-container::before {
+        content: "";
+        background-color: var(--line-border-empty);
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        height: 1px;
+        width: 100%;
+        z-index: -1;
+        transition: 0.4s ease;
+      }
+      
+      #progress {
+        background-color: var(--line-border-fill);
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        height: 4px;
+        z-index: -1;
+        transition: 0.4s ease;
+      }
+
+      .progress-1 {
+        background-color: var(--line-border-fill);
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        height: 4px;
+        width: 0;
+        z-index: -1;
+        transition: 0.4s ease;
+      }
+    
+      .progress-2 {
+        width: 25%!important;
+      }
+
+      .progress-3 {
+        width: 50%!important;
+      }
+
+      .progress-4 {
+        width: 75%!important;
+      }
+
+      .progress-5 {
+        width: 100%!important;
+      }
+
+      .circle {
+        background-color: white;
+        color: black;
+        border-radius: 50%;
+        height: 2.5rem;
+        width: 2.5rem;
+        border: 1px solid var(--line-border-empty);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.4s ease;
+      }
+    
+      .circle.active {
+        background-color: var(--line-border-fill);
+        border-color: var(--line-border-fill);
+        color: white;
+      }
+    
+      .state-names {
+        width: 84%;
+        min-width: calc(540px * 0.84);
+        display: flex;
+        text-align: center;
+        justify-content: space-between;
+        margin: 0 auto;
+      }
+}

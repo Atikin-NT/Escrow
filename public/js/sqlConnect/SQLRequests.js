@@ -19,7 +19,7 @@ function updateElementsID(){
 
 async function createDeal(account){
   updateElementsID();
-  console.log("create");
+  // console.log("create");
   const value = parseInt(transactionAmount.value);
   if(!ethers.utils.isAddress(partnerWallet.value) || !ethers.utils.isAddress(account) || partnerWallet.value == account)
     throw "invalid partner address";
@@ -42,7 +42,7 @@ async function createDeal(account){
     seller = partnerWallet.value;
     sellerIsAdmin = 0;
   }
-  console.log(typeof(value));
+  // console.log(typeof(value));
   const body = JSON.stringify({
     buyer: buyer,
     seller: seller,
@@ -55,13 +55,13 @@ async function createDeal(account){
 
   await fetch("/fetch/createDeal", { method: "post", body, headers })
     .then(async(resp) => {
-      console.log(resp);
+      // console.log(resp);
       if (resp.status < 200 || resp.status >= 300)
         throw new Error("connect error");
       return resp.json();
     })
     .then(async(json) => {
-      console.log(json);
+      // console.log(json);
       if(json.code != 0)
         CreateToast(true, json.msg)
       else{
