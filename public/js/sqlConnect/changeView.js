@@ -7,16 +7,11 @@ let bodyInput = document.getElementById("inputBody");
 let bodyTitle = document.getElementById("title");
 
 function showCurrentDeal(dealID, account, status){
-    switch(status){
-        case 0:
-            approveByPartner(dealID, account);
-            break;
-        case 1:
-            inProgress(dealID, account);
-            break;
-        default:
-            alert("Cant`t find");
+    if(status == 0){
+        approveByPartner(dealID, account);
+        return;
     }
+    changeDealStatus(dealID, account, status);
 }
 
 const updateConnectionBtn = (account) => {
@@ -60,8 +55,8 @@ function changeDeal(dealID, account){
     });
 }
 
-function inProgress(dealID, account){
-    fetch(`view/inProgressView?dealid=${dealID}&account=${account}`, { headers })
+function changeDealStatus(dealID, account, status){
+    fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers })
     .then((resp) => {
         if (resp.status < 200 || resp.status >= 300)
             throw new Error("connect error");
@@ -71,6 +66,11 @@ function inProgress(dealID, account){
         console.log(html);
         bodyInput.innerHTML = html;
         bodyTitle.innerHTML = "In Progress";
+
+        const approveDealBtn = document.getElementById("next-deal-step");
+        approveDealBtn.addEventListener('click', (evt) => {
+            changeDealStatus(dealID, account, status+1);
+        });
         updateHistory(account);
     })
     .catch((err) => {
@@ -96,7 +96,7 @@ function approveByPartner(dealID, account){
 
         const approveDealBtn = document.getElementById("next-deal-step");
         approveDealBtn.addEventListener('click', (evt) => {
-            inProgress(dealID, account);
+            changeDealStatus(dealID, account, 1);
         });
     })
     .catch((err) => {

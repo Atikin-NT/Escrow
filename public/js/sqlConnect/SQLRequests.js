@@ -36,9 +36,11 @@ async function createDeal(account){
     
   let buyer = partnerWallet.value;
   let seller = account;
+  let sellerIsAdmin = 1;
   if(buyerSwitch.checked == true){
     buyer = account;
     seller = partnerWallet.value;
+    sellerIsAdmin = 0;
   }
   console.log(typeof(value));
   const body = JSON.stringify({
@@ -46,6 +48,7 @@ async function createDeal(account){
     seller: seller,
     value: value,
     unit: unit,
+    sellerIsAdmin: sellerIsAdmin,
   });
 
   let res = -1;
@@ -87,7 +90,7 @@ function updateHistory(account){
       while (historyList.firstChild) {
         historyList.removeChild(historyList.firstChild);
       }
-      for(let i = json.list.length - 1; i > json.list.length - 6; i--){
+      for(let i = json.list.length - 1; i >= 0 && i > json.list.length - 6; i--){
         let element = json.list[i];
         let li = document.createElement("li");
         li.addEventListener('click', (evt) => {

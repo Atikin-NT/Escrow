@@ -1,7 +1,7 @@
 const { dbInsertData, dbGetDealsByAccount, dbDeleteData, dbUpdateDealStatus, dbUpdateData } = require('../lib/sqlite.js');
 
 async function createDeal(req, res){
-    answer = await dbInsertData(req.body.buyer, req.body.seller, req.body.value, req.body.unit);
+    answer = await dbInsertData(req.body.buyer, req.body.seller, req.body.value, req.body.unit, req.body.sellerIsAdmin);
     res.send(answer);
 }
 
