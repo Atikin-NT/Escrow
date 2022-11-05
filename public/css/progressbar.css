@@ -32,7 +32,17 @@
   z-index: -1;
   transition: 0.4s ease;
 }
-#main .progress {
+#main #progress {
+  background-color: var(--line-border-fill);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  z-index: -1;
+  transition: 0.4s ease;
+}
+#main .progress-1 {
   background-color: var(--line-border-fill);
   position: absolute;
   top: 50%;
@@ -42,6 +52,18 @@
   width: 0;
   z-index: -1;
   transition: 0.4s ease;
+}
+#main .progress-2 {
+  width: 25% !important;
+}
+#main .progress-3 {
+  width: 50% !important;
+}
+#main .progress-4 {
+  width: 75% !important;
+}
+#main .progress-5 {
+  width: 100% !important;
 }
 #main .circle {
   background-color: white;
@@ -61,8 +83,8 @@
   color: white;
 }
 #main .state-names {
-  width: 85%;
-  min-width: 540px;
+  width: 84%;
+  min-width: 453.6px;
   display: flex;
   text-align: center;
   justify-content: space-between;

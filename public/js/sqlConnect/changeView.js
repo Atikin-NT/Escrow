@@ -28,6 +28,15 @@ const updateConnectionBtn = (account) => {
     }
 }
 
+async function changeProgressState(status) {
+    const progress = document.getElementById("progress");
+    // console.log(progress.classList[0]);
+    progress.classList.remove(progress.classList[0]);
+    progress.classList.add(`progress-${status+1}`);
+}
+const ds = parseInt(document.getElementById("deal-status"));
+const status = 2;
+
 function changeDeal(dealID, account){
     fetch(`view/changeDealView?dealid=${dealID}&account=${account}`, { headers })
     .then((resp) => {
@@ -54,6 +63,7 @@ function changeDeal(dealID, account){
                 CreateToast(true, error);
             }
         });
+        changeProgressState(status);
     })
     .catch((err) => {
         console.log(err);
@@ -72,6 +82,7 @@ function inProgress(dealID, account){
         bodyInput.innerHTML = html;
         bodyTitle.innerHTML = "In Progress";
         updateHistory(account);
+        changeProgressState(status);
     })
     .catch((err) => {
         console.log(err);
@@ -88,7 +99,7 @@ function approveByPartner(dealID, account){
     })
     .then((html) => {
         bodyInput.innerHTML = html;
-        bodyTitle.innerHTML = "Wait For Confirmation";
+        // bodyTitle.innerHTML = "Wait For Confirmation";
         const changeBtn = document.getElementById("change-deal-step");
         changeBtn.addEventListener('click', (evt) => {
             changeDeal(dealID, account);
@@ -98,6 +109,7 @@ function approveByPartner(dealID, account){
         approveDealBtn.addEventListener('click', (evt) => {
             inProgress(dealID, account);
         });
+        changeProgressState(status);
     })
     .catch((err) => {
         console.log(err);
