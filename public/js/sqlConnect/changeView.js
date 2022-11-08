@@ -44,6 +44,7 @@ function changeDeal(dealID, account){
         return resp.text();
     })
     .then((html) => {
+        changeProgressState(0);
         bodyInput.innerHTML = html;
         bodyTitle.innerHTML = "Change Form";
         updateConnectionBtn(account);
@@ -62,7 +63,6 @@ function changeDeal(dealID, account){
             }
         });
         updateHistory(account);
-        changeProgressState(0);
     })
     .catch((err) => {
         console.log(err);
@@ -101,6 +101,7 @@ function approveByPartner(dealID, account){
         return resp.text();
     })
     .then((html) => {
+        changeProgressState(1);
         bodyInput.innerHTML = html;
         const changeBtn = document.getElementById("change-deal-step");
         changeBtn.addEventListener('click', (evt) => {
@@ -112,7 +113,6 @@ function approveByPartner(dealID, account){
             changeDealStatus(dealID, account, 1);
         });
         updateHistory(account);
-        changeProgressState(1);
     })
     .catch((err) => {
         console.log(err);
