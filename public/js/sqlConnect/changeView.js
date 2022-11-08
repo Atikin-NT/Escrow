@@ -74,14 +74,14 @@ function changeDealStatus(dealID, account, status){
         return resp.text();
     })
     .then((html) => {
-        console.log(html);
         bodyInput.innerHTML = html;
-        bodyTitle.innerHTML = "In Progress";
 
         const approveDealBtn = document.getElementById("next-deal-step");
-        approveDealBtn.addEventListener('click', (evt) => {
-            changeDealStatus(dealID, account, status+1);
-        });
+        if(approveDealBtn != null){
+            approveDealBtn.addEventListener('click', (evt) => {
+                changeDealStatus(dealID, account, status+1);
+            });
+        }
         updateHistory(account);
         changeProgressState(status);
     })
@@ -100,7 +100,6 @@ function approveByPartner(dealID, account){
     })
     .then((html) => {
         bodyInput.innerHTML = html;
-        // bodyTitle.innerHTML = "Wait For Confirmation";
         const changeBtn = document.getElementById("change-deal-step");
         changeBtn.addEventListener('click', (evt) => {
             changeDeal(dealID, account);

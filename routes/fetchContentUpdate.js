@@ -45,6 +45,7 @@ async function changeDealView(req, res){
         fee: dbAnswer.fee,
         status: dbAnswer.status,
         btnName: "Save",
+        notEnd: true,
     });
 }
 
@@ -52,14 +53,23 @@ async function approveByPartnerView(req, res){
     const id = parseInt(req.query.dealid);
     const account = req.query.account;
     let dbAnswer = defaulDeal;
+    let showNextButton = false;
+    let title = 'Waiting for approved by your partner';
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
+    if(dbAnswer.status == 0 && 
+        ((account.toUpperCase() == dbAnswer.seller && dbAnswer.sellerIsAdmin == 0) || (account.toUpperCase() == dbAnswer.buyer && dbAnswer.sellerIsAdmin == 1))){
+        showNextButton = true
+        title = 'Waiting for your approve';
+    }
+    console.log(dbAnswer);
+    console.log(showNextButton, account);
     if(dbAnswer.status != 0) dbAnswer = defaulDeal;
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
     res.render('partials/textLayout', {
         layout : 'part',
-        title: 'Waiting for approved by your partner',
+        title: title,
         role: role,
         seller: dbAnswer.seller, 
         buyer: dbAnswer.buyer, 
@@ -71,6 +81,8 @@ async function approveByPartnerView(req, res){
         status: dbAnswer.status,
         change: true,
         btnName: "Approve",
+        showNextButton: showNextButton,
+        notEnd: true,
     });
 }
 
@@ -80,24 +92,38 @@ async function changeDealStatus(req, res){
     const newStatus = parseInt(req.query.status);
     let dbAnswer = defaulDeal;
     let title = "default";
+    let showNextButton = true;
+    let btnName = "";
+    let notEnd = true;
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
         console.log("answer.list[0].status = ", answer.list[0].status, " newStatus-1 = ", newStatus-1);
         if(answer.code == 0){
             switch(newStatus){
                 case 1:
-                    title = "Have Been Aproved By Your Partner";
+                    title = "Waiting when your partner will send Ethers";
+                    btnName = "Send Ethers";
                     if(answer.list[0].status == newStatus-1 && (answer.list[0].sellerIsAdmin == 0 && answer.list[0].seller == account) || (answer.list[0].sellerIsAdmin == 1 && answer.list[0].buyer == account)){
                         const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
+                            showNextButton = false;
                         }
                     }
-                    else dbAnswer = answer.list[0];
-                    break;
+                    else {
+                        dbAnswer = answer.list[0];
+                        title = "Waiting when you will send Ethers";
+                        if((answer.list[0].sellerIsAdmin == 0 && answer.list[0].seller == account) || (answer.list[0].sellerIsAdmin == 1 && answer.list[0].buyer == account)){
+                            showNextButton = false;
+                            title = "Waiting when your partner will send Ethers";
+                        }
+                    }
+                    btnName = "Approve transaction";
+                break;
                 case 2:
-                    title = "Send Ethers by buyer";
+                    title = "Waiting when your partner will send Magic Box";
+                    btnName = "Send Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
                         //IDEA: blockchain send money
                         const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
@@ -105,23 +131,40 @@ async function changeDealStatus(req, res){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
                         }
+                        showNextButton = false;
                     }
-                    else dbAnswer = answer.list[0];
+                    else {
+                        dbAnswer = answer.list[0];
+                        title = "Waiting when you will send Magic Box";
+                        if(answer.list[0].buyer == account){
+                            title = "Waiting when your partner will send Magic Box";
+                            showNextButton = false;
+                        }
+                    }
                 break;
                 case 3:
-                    title = "Send magic box by seller";
+                    title = "Waiting when your partner will approve Magic Box";
+                    btnName = "Approve Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].seller == account){
                         //IDEA: blockchain send box
                         const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
+                            showNextButton = false;
                         }
                     }
-                    else dbAnswer = answer.list[0];
+                    else {
+                        dbAnswer = answer.list[0];
+                        title = "Waiting when you will approve Magic Box";
+                        if(answer.list[0].seller == account){
+                            showNextButton = false;
+                            title = "Waiting when your partner will approve Magic Box";
+                        }
+                    }
                 break;
                 case 4:
-                    title = ":)";
+                    title = "ヾ(⌐■_■)ノ♪";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
                         //IDEA: blockchain approve that box is with buyer
                         const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
@@ -130,11 +173,15 @@ async function changeDealStatus(req, res){
                             dbAnswer.status = newStatus;
                         }
                     }
-                    else dbAnswer = answer.list[0];
+                    else
+                        dbAnswer = answer.list[0];
+                    showNextButton = false;
+                    notEnd = false;
                 break;
                 default:
                     title = "Something went wrong :(";
                     dbAnswer = answer.list[0];
+                    showNextButton = false;
                     break;
             }
         }
@@ -154,7 +201,9 @@ async function changeDealStatus(req, res){
         fee: dbAnswer.fee,
         status: dbAnswer.status,
         change: false,
-        btnName: "Send Money Step",
+        btnName: btnName,
+        showNextButton: showNextButton,
+        notEnd: notEnd,
     });
 }
 

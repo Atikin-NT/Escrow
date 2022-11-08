@@ -39,6 +39,12 @@
         {{#if change}}
             <button class="w-100 btn btn-primary btn-lg" id="change-deal-step">Change</button>
         {{/if}}
-        <button class="w-100 btn btn-primary btn-lg" id="next-deal-step">{{btnName}}</button>
+        {{#if notEnd}}
+        {{#if showNextButton}}
+            <button class="w-100 btn btn-primary btn-lg" id="next-deal-step">{{btnName}}</button>
+        {{else}}
+            <h6>Waiting for your partner</h6>
+        {{/if}}
+        {{/if}}
     </div>
 </div>
