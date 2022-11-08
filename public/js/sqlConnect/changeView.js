@@ -23,14 +23,17 @@ const updateConnectionBtn = (account) => {
     }
 }
 
-async function changeProgressState(status) {
+async function changeProgressState(state) {
     const progress = document.getElementById("progress");
-    // console.log(progress.classList[0]);
+    const circles = document.getElementsByClassName("circle");
+
+    for (let i = 0; i < 5; i++) {
+        i <= state ? circles[i].classList.add("active") : circles[i].classList.remove("active");
+    }
+
     progress.classList.remove(progress.classList[0]);
-    progress.classList.add(`progress-${status+1}`);
+    progress.classList.add(`progress-${state+1}`);
 }
-const ds = parseInt(document.getElementById("deal-status"));
-const status = 2;
 
 function changeDeal(dealID, account){
     fetch(`view/changeDealView?dealid=${dealID}&account=${account}`, { headers })
@@ -59,7 +62,7 @@ function changeDeal(dealID, account){
             }
         });
         updateHistory(account);
-        changeProgressState(status);
+        changeProgressState(0);
     })
     .catch((err) => {
         console.log(err);
@@ -83,7 +86,6 @@ function changeDealStatus(dealID, account, status){
             });
         }
         updateHistory(account);
-        changeProgressState(status);
     })
     .catch((err) => {
         console.log(err);
@@ -110,7 +112,7 @@ function approveByPartner(dealID, account){
             changeDealStatus(dealID, account, 1);
         });
         updateHistory(account);
-        changeProgressState(status);
+        changeProgressState(1);
     })
     .catch((err) => {
         console.log(err);
