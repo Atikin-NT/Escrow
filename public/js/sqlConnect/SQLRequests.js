@@ -76,7 +76,7 @@ async function createDeal(account){
   return res;
 }
 
-function updateHistory(account){
+function updateHistory(account, count = 5){
   updateElementsID();
   fetch(`/fetch/getDeals?account=${account}`, { headers })
     .then((resp) => {
@@ -90,7 +90,7 @@ function updateHistory(account){
       while (historyList.firstChild) {
         historyList.removeChild(historyList.firstChild);
       }
-      for(let i = json.list.length - 1; i >= 0 && i > json.list.length - 6; i--){
+      for(let i = json.list.length - 1; i >= 0 && i > json.list.length - count; i--){
         let element = json.list[i];
         let li = document.createElement("li");
         li.addEventListener('click', (evt) => {
@@ -126,8 +126,6 @@ function updateHistory(account){
       }
       if(json.code != 0)
         CreateToast(true, json.msg);
-      else
-        CreateToast(false, json.msg);
     })
     .catch((err) => {
       console.log(err);

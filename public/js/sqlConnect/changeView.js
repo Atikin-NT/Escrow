@@ -58,6 +58,7 @@ function changeDeal(dealID, account){
                 CreateToast(true, error);
             }
         });
+        updateHistory(account);
         changeProgressState(status);
     })
     .catch((err) => {
@@ -109,6 +110,7 @@ function approveByPartner(dealID, account){
         approveDealBtn.addEventListener('click', (evt) => {
             changeDealStatus(dealID, account, 1);
         });
+        updateHistory(account);
         changeProgressState(status);
     })
     .catch((err) => {

@@ -1,4 +1,4 @@
-// import { EscrowProvider } from "./EscrowProvider.js";
+import { updateHistory } from "../sqlConnect/SQLRequests.js";
 const onboardButton = document.getElementById("connectButton");
 
 let MetaMaskWallet;
@@ -44,6 +44,8 @@ const initialize = async () => {
       onboardButton.onclick = onClickConnect;
       onboardButton.disabled = false;
     }
+    if(wallet != undefined)
+      updateHistory(wallet);
   };
 
   const handleNewAccounts = async (newAccounts) => {
