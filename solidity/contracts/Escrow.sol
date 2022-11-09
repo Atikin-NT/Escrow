@@ -2,8 +2,10 @@
 
 pragma solidity >=0.8.9 <0.9.0;
 
+import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
+
 // Author: @avezorgen
-contract Escrow {
+contract Escrow is AutomationCompatibleInterface {
     mapping(bytes32 => details) public deals;
     struct details {
         address buyer;
@@ -19,6 +21,7 @@ contract Escrow {
 
     address public owner;
     uint public hold;
+    uint public limit;
 
     event Created(address buyer, address seller, bytes32 TxId);
     event BuyerConfim(bytes32 TxId);
@@ -30,8 +33,10 @@ contract Escrow {
         _;
     }
 
-    constructor() {
+    constructor(uint _limit) {
         owner = msg.sender;
+        hold = 0;
+        limit = _limit;
     }
 
     function create(address buyer, address seller, uint value) external {
@@ -91,6 +96,21 @@ contract Escrow {
         uint rest = hold / 100 * 2;
         payable(target).transfer(hold - rest);
         hold = rest;
+    }
+
+    function setOwner(address newOwner) external onlyPerson(owner) {
+        owner = newOwner;
+    }
+
+    function checkUpkeep(bytes calldata /* checkData */) external view override returns (bool upkeepNeeded, bytes memory /* performData */) {
+        upkeepNeeded = hold > limit;
+    }
+
+    function performUpkeep(bytes calldata /* performData */) external override {
+        if (hold > limit) {
+            payable(owner).transfer(hold);
+            hold = 0;
+        }
     }
     
     receive() external payable {

@@ -1,4 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
 
 task("balance", "Prints an account's balance")
   .addParam("account", "The account's address")
@@ -8,17 +9,20 @@ task("balance", "Prints an account's balance")
     console.log(ethers.utils.formatEther(balance), "ETH");
   });
 
-// const { API_URL, GOERLI_PRIVATE_KEY } = process.env;
+const { API_URL, GOERLI_PRIVATE_KEY, ETHERSSCAN_API_KEY } = process.env;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.9",
-  // networks: {
-  //   hardhat: {
-  //   },
-  //   goerli: {
-  //     url: API_URL,
-  //     accounts: [GOERLI_PRIVATE_KEY],
-  //   },
-  // },
+  networks: {
+    hardhat: {
+    },
+    goerli: {
+      url: API_URL,
+      accounts: [GOERLI_PRIVATE_KEY]
+    },
+  },
+  etherscan: {
+    apiKey: ETHERSSCAN_API_KEY,
+  },
 };

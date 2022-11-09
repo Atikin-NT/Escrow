@@ -33,7 +33,7 @@ async function SignIn(req, res){
     const payload = await verify().catch(console.error);
     const answer = await GoogleSignIn(payload.sub, payload.name, payload.email, payload.picture);
     console.log(answer);
-    res.redirect('profile');
+    res.redirect('/');
 }
 
 module.exports = {SignIn};
