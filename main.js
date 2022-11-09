@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const {router} = require('./routes/main.js');
 const {openSQLite, closeSQLite} = require('./lib/sqlite.js');
+const cookieParser = require('cookie-parser');
 
 openSQLite();
 
@@ -22,6 +23,7 @@ app.set('views', 'views');
 app.use(express.static(__dirname + '/public/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use('/', router);
 
 app.get('/', (req, res) => {
