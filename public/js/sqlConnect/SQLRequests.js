@@ -34,6 +34,8 @@ async function createDeal(account){
     unit = 1;
   if(ethUnit == "Ether")
     unit = 2;
+  if(ethUnit == "USD")
+    unit = 3;
     
   let buyer = partnerWallet.value;
   let seller = account;
@@ -117,7 +119,7 @@ function updateHistory(account, count = 5){
         small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status}`;
         div.appendChild(small);
 
-        const unitList = ["Wei", "Gwei", "Ether"];
+        const unitList = ["Wei", "Gwei", "Ether", "USD"];
         let span = document.createElement("span");
         span.className = 'text-muted';
         span.innerHTML = `${element.value} ${unitList[element.unit]}`;
@@ -150,6 +152,8 @@ async function updateDeal(account, id){
     unit = 1;
   if(ethUnit == "Ether")
     unit = 2;
+  if(ethUnit == "USD")
+    unit = 3;
     
   let buyer = partnerWallet.value;
   let seller = account;
