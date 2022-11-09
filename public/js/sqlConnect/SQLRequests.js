@@ -1,5 +1,6 @@
 import { CreateToast } from "../frontend/Toasts.js";
 import { showCurrentDeal } from "../sqlConnect/changeView.js";
+import { escrowProvider } from "../web3/Web3Layer.js";
 
 let buyerSwitch = document.getElementById("buyer-role");
 let partnerWallet = document.getElementById("deal-partner");
@@ -42,6 +43,7 @@ async function createDeal(account){
     seller = partnerWallet.value;
     sellerIsAdmin = 0;
   }
+  
   // console.log(typeof(value));
   const body = JSON.stringify({
     buyer: buyer,
@@ -55,13 +57,13 @@ async function createDeal(account){
 
   await fetch("/fetch/createDeal", { method: "post", body, headers })
     .then(async(resp) => {
-      // console.log(resp);
+      console.log(resp);
       if (resp.status < 200 || resp.status >= 300)
         throw new Error("connect error");
       return resp.json();
     })
     .then(async(json) => {
-      // console.log(json);
+      console.log(json);
       if(json.code != 0)
         CreateToast(true, json.msg)
       else{
@@ -187,4 +189,59 @@ async function updateDeal(account, id){
   return res;
 }
 
-export { updateHistory, createDeal, updateDeal };
+async function getDealById(id){
+  if(id <= 0)
+    throw "invalid value";
+  
+  const body = JSON.stringify({
+    id: id,
+  });
+  let res = -1;
+
+  await fetch("/fetch/getDealById", { method: "post", body, headers })
+    .then((resp) => {
+      console.log(resp);
+      if (resp.status < 200 || resp.status >= 300)
+        throw new Error("connect error");
+      return resp.json();
+    })
+    .then((json) => {
+      console.log(json);
+      if(json.code == 0)
+        res = json.list[0];
+    })
+    .catch((err) => {
+      console.log(err);
+  });
+  return res;
+} 
+
+async function setTxId(id, txId){
+  if(id <= 0)
+    throw "invalid value";
+  
+  const body = JSON.stringify({
+    id: id,
+    txId: txId,
+  });
+  let res = -1;
+
+  await fetch("/fetch/updateTxId", { method: "post", body, headers })
+    .then((resp) => {
+      console.log(resp);
+      if (resp.status < 200 || resp.status >= 300)
+        throw new Error("connect error");
+      return resp.json();
+    })
+    .then((json) => {
+      console.log(json);
+      if(json.code == 0)
+        res = 0
+    })
+    .catch((err) => {
+      console.log(err);
+  });
+  return res;
+} 
+
+export { updateHistory, createDeal, updateDeal, getDealById, setTxId };

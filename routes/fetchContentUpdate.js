@@ -12,6 +12,8 @@ const defaulDeal = {
     status: -1,
 };
 const unitList = ["Wei", "Gwei", "Ether"];
+//TODO: if something wrong send error resp status
+//2360
 
 async function changeDealView(req, res){
     const id = parseInt(req.query.dealid);
@@ -58,7 +60,7 @@ async function approveByPartnerView(req, res){
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
     if(dbAnswer.status == 0 && 
-        ((account.toUpperCase() == dbAnswer.seller && dbAnswer.sellerIsAdmin == 0) || (account.toUpperCase() == dbAnswer.buyer && dbAnswer.sellerIsAdmin == 1))){
+        ((account.toLowerCase() == dbAnswer.seller && dbAnswer.sellerIsAdmin == 0) || (account.toLowerCase() == dbAnswer.buyer && dbAnswer.sellerIsAdmin == 1))){
         showNextButton = true
         title = 'Waiting for your approve';
     }
@@ -88,7 +90,7 @@ async function approveByPartnerView(req, res){
 
 async function changeDealStatus(req, res){
     const id = parseInt(req.query.dealid);
-    const account = req.query.account.toUpperCase();
+    const account = req.query.account.toLowerCase();
     const newStatus = parseInt(req.query.status);
     let dbAnswer = defaulDeal;
     let title = "default";
@@ -119,7 +121,6 @@ async function changeDealStatus(req, res){
                             title = "Waiting when your partner will send Ethers";
                         }
                     }
-                    btnName = "Approve transaction";
                 break;
                 case 2:
                     title = "Waiting when your partner will send Magic Box";

@@ -8,7 +8,7 @@ const hre = require("hardhat");
 
 async function main() {
     const Escrow = await hre.ethers.getContractFactory("Escrow");
-    const escrow = await Escrow.deploy();
+    const escrow = await Escrow.deploy(1000);
     await escrow.deployed();
     console.log(`deployed at ${escrow.address}`);
 }

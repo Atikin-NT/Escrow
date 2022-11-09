@@ -1,6 +1,6 @@
-import { MetaMaskWallet } from "../web3/Web3Layer.js";
+import { MetaMaskWallet, escrowProvider } from "../web3/Web3Layer.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { updateDeal, updateHistory } from "./SQLRequests.js";
+import { updateDeal, updateHistory, getDealById, setTxId } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
@@ -69,7 +69,53 @@ function changeDeal(dealID, account){
     });
 }
 
-function changeDealStatus(dealID, account, status){
+
+
+async function changeDealStatus(dealID, account, status){
+    let answerDealById = await getDealById(dealID);
+    if(answerDealById == -1)
+        throw "Deal Not Found";
+
+    let txId = "0";
+    if(status != 0)
+        txId = answerDealById.txId;
+    console.log("Change Deal----------");
+    try {
+        let transaction = null;
+        console.log(transaction, txId, status);
+        if(status != answerDealById.status){
+            switch(status){
+                case 1:
+                    transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, parseInt(answerDealById.value));
+                    console.log(transaction, txId);
+                    break;
+                case 2:
+                    transaction = await escrowProvider.sendB(answerDealById.txId, {value: answerDealById.value});
+                    break;
+                case 3:
+                    transaction = await escrowProvider.sendS(answerDealById.txId);
+                    break;
+                case 4:
+                    transaction = await escrowProvider.approve(answerDealById.txId);
+                    break;
+                default:
+                    console.log("Unknown error");
+            }
+            const tx = await transaction.wait();
+            txId = tx.events[0].args.TxId;
+            console.log(txId);
+            if(status == 1){
+                console.log("set tx");
+                setTxId(dealID, txId);
+            }
+        }
+        //TODO: Toast ok
+    } catch (err) {
+        console.error(err);
+        //TODO: Toast error
+    }
+    console.log("End Change Deal----------")
+
     fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers })
     .then((resp) => {
         if (resp.status < 200 || resp.status >= 300)
