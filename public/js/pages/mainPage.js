@@ -2,6 +2,9 @@ import { createDeal } from "../sqlConnect/SQLRequests.js";
 //Create Deal
 const createDealFormClick = document.getElementById("create-deal-btn");
 
+//Calculete fee
+const feeContainer = document.getElementById("fee-container");
+
 //Role Switch
 const buyerSwitch = document.getElementById("buyer-role");
 const sellerSwitch = document.getElementById("seller-role");
@@ -41,14 +44,26 @@ sellerSwitch.addEventListener('click', (evt) => { //we are seller
     dealPartnerLabel.innerHTML = "Buyer address";
 });
 
-toastTrigger.addEventListener("click", async () => {
-    try {
-        const gas = await escrowProvider.estimateGas.create(
-            MetaMaskWallet[0], partnerWallet.value, transactionAmount.value
-            );
-        const gasPrice = await provider.getGasPrice();
-        CreateToast(false, `Fee will be ${gasPrice.mul(ethers.BigNumber.from(gas))} wei`)
-    } catch (err) {
-        CreateToast(true, err);
-    }
-});
+
+
+let tmp = 0;
+const p = document.getElementById("fee-p");
+transactionAmount.oninput = () => {
+    setTimeout(function () {
+        tmp = tmp + 1;
+        p.innerText = tmp;
+    }, 1000);
+    
+};
+
+// toastTrigger.addEventListener("click", async () => {
+//     try {
+//         const gas = await escrowProvider.estimateGas.create(
+//             MetaMaskWallet[0], partnerWallet.value, transactionAmount.value
+//             );
+//         const gasPrice = await provider.getGasPrice();
+//         CreateToast(false, `Fee will be ${gasPrice.mul(ethers.BigNumber.from(gas))} wei`)
+//     } catch (err) {
+//         CreateToast(true, err);
+//     }
+// });
