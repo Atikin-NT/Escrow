@@ -11,7 +11,7 @@ const defaulDeal = {
     fee: 0,
     status: -1,
 };
-const unitList = ["Wei", "Gwei", "Ether"];
+const unitList = ["Wei", "Gwei", "Ether", "USD"];
 
 async function changeDealView(req, res){
     const id = parseInt(req.query.dealid);
@@ -28,7 +28,7 @@ async function changeDealView(req, res){
         buyerCheck = "";
         sellerCheck = "checked";
     }
-    let unitListWithSelect = ["", "", ""];
+    let unitListWithSelect = ["", "", "", ""];
     unitListWithSelect[dbAnswer.unit] = "selected";
     res.render('partials/inputLayout', {
         layout : 'part',
@@ -40,6 +40,7 @@ async function changeDealView(req, res){
         weiSelected: unitListWithSelect[0],
         gweiSelected: unitListWithSelect[1],
         etherSelected: unitListWithSelect[2],
+        usdSelected: unitListWithSelect[3],
         txid: dbAnswer.txid,
         id: dbAnswer.id,
         fee: dbAnswer.fee,
