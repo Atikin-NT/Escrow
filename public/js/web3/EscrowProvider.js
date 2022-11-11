@@ -71,4 +71,4 @@ class EscrowProvider{
     async deals(TxId) {
         return await this.daiContract.deals(TxId);
     }
-}   
+}

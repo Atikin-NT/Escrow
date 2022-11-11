@@ -60,8 +60,12 @@
 
     <hr class="my-4" />
 
-    <button type="button" class="btn btn-primary" id="liveToastBtn">Calculate fee</button>
-    <h5 class="mb-3 mt-3">Fee payment:
+    <div id="fee-container" class="container-sm">
+      <h5>Fee: </h5>
+      <p id="fee-p">0</p>Wei
+    </div>
+    
+    <h5 class="mb-3 mt-3">Fee payer:
             <span class="fee">{{fee}}</span></h5>
 
           <div id="fee-container" class="container-sm">
@@ -71,7 +75,6 @@
               id="discount"
               name="options-outlined"
               autocomplete="off"
-              checked
             />
             <label class="btn btn-outline-secondary" for="discount">50/50</label>
 

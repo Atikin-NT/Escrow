@@ -60,7 +60,7 @@ async function approveByPartnerView(req, res){
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
     if(dbAnswer.status == 0 && 
-        ((account.toUpperCase() == dbAnswer.seller && dbAnswer.sellerIsAdmin == 0) || (account.toUpperCase() == dbAnswer.buyer && dbAnswer.sellerIsAdmin == 1))){
+        ((account.toLowerCase() == dbAnswer.seller && dbAnswer.sellerIsAdmin == 0) || (account.toLowerCase() == dbAnswer.buyer && dbAnswer.sellerIsAdmin == 1))){
         showNextButton = true
         title = 'Waiting for your approve';
     }
@@ -85,18 +85,20 @@ async function approveByPartnerView(req, res){
         btnName: "Approve",
         showNextButton: showNextButton,
         notEnd: true,
+        cancelBtn: true,
     });
 }
 
 async function changeDealStatus(req, res){
     const id = parseInt(req.query.dealid);
-    const account = req.query.account.toUpperCase();
+    const account = req.query.account.toLowerCase();
     const newStatus = parseInt(req.query.status);
     let dbAnswer = defaulDeal;
     let title = "default";
     let showNextButton = true;
     let btnName = "";
     let notEnd = true;
+    let cancelBtn = true;
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
         console.log("answer.list[0].status = ", answer.list[0].status, " newStatus-1 = ", newStatus-1);
@@ -121,13 +123,11 @@ async function changeDealStatus(req, res){
                             title = "Waiting when your partner will send Ethers";
                         }
                     }
-                    btnName = "Approve transaction";
                 break;
                 case 2:
                     title = "Waiting when your partner will send Magic Box";
                     btnName = "Send Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
-                        //IDEA: blockchain send money
                         const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
@@ -148,7 +148,6 @@ async function changeDealStatus(req, res){
                     title = "Waiting when your partner will approve Magic Box";
                     btnName = "Approve Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].seller == account){
-                        //IDEA: blockchain send box
                         const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
@@ -168,7 +167,6 @@ async function changeDealStatus(req, res){
                 case 4:
                     title = "ヾ(⌐■_■)ノ♪";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
-                        //IDEA: blockchain approve that box is with buyer
                         const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
@@ -206,6 +204,7 @@ async function changeDealStatus(req, res){
         btnName: btnName,
         showNextButton: showNextButton,
         notEnd: notEnd,
+        cancelBtn: cancelBtn,
     });
 }
 

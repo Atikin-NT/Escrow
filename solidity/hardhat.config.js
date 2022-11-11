@@ -9,7 +9,7 @@ task("balance", "Prints an account's balance")
     console.log(ethers.utils.formatEther(balance), "ETH");
   });
 
-const { API_URL, GOERLI_PRIVATE_KEY, ETHERSSCAN_API_KEY } = process.env;
+// const { API_URL, GOERLI_PRIVATE_KEY, ETHERSSCAN_API_KEY } = process.env;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -17,12 +17,12 @@ module.exports = {
   networks: {
     hardhat: {
     },
-    goerli: {
-      url: API_URL,
-      accounts: [GOERLI_PRIVATE_KEY]
-    },
+    // goerli: {
+    //   url: API_URL,
+    //   accounts: [GOERLI_PRIVATE_KEY]
+    // },
   },
-  etherscan: {
-    apiKey: ETHERSSCAN_API_KEY,
-  },
+  // etherscan: {
+  //   apiKey: ETHERSSCAN_API_KEY,
+  // },
 };
