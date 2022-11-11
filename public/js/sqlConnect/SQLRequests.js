@@ -44,7 +44,6 @@ async function createDeal(account){
     sellerIsAdmin = 0;
   }
   
-  // console.log(typeof(value));
   const body = JSON.stringify({
     buyer: buyer,
     seller: seller,

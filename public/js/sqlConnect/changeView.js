@@ -82,15 +82,18 @@ async function changeDealStatus(dealID, account, status){
     console.log("Change Deal----------");
     try {
         let transaction = null;
+        let current_value = -1;
         console.log(transaction, txId, status);
         if(status != answerDealById.status){
             switch(status){
                 case 1:
-                    transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, parseInt(answerDealById.value));
+                    current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
+                    transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value);
                     console.log(transaction, txId);
                     break;
                 case 2:
-                    transaction = await escrowProvider.sendB(answerDealById.txId, {value: answerDealById.value});
+                    current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
+                    transaction = await escrowProvider.sendB(answerDealById.txId, {value: current_value});
                     break;
                 case 3:
                     transaction = await escrowProvider.sendS(answerDealById.txId);
@@ -100,19 +103,21 @@ async function changeDealStatus(dealID, account, status){
                     break;
                 default:
                     console.log("Unknown error");
+                    break;
             }
             const tx = await transaction.wait();
+            console.log(tx);
             txId = tx.events[0].args.TxId;
-            console.log(txId);
             if(status == 1){
                 console.log("set tx");
                 setTxId(dealID, txId);
             }
         }
-        //TODO: Toast ok
+        CreateToast(false, "Deal has been created");
     } catch (err) {
         console.error(err);
-        //TODO: Toast error
+        CreateToast(true, "Something went wrong :(");
+        return;
     }
     console.log("End Change Deal----------")
 
