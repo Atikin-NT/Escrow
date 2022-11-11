@@ -23,16 +23,31 @@ const updateConnectionBtn = (account) => {
     }
 }
 
+let currentActiveCircle = 0;
+
 async function changeProgressState(state) {
+    console.log(currentActiveCircle);
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
 
-    for (let i = 0; i < 5; i++) {
-        i <= state ? circles[i].classList.add("active") : circles[i].classList.remove("active");
+    if (state - currentActiveCircle == 1) {
+        currentActiveCircle++;
+        circles[currentActiveCircle].classList.add("active");
+        progress.classList.add(`progress-${state}`);
+    } else if (currentActiveCircle - state) {
+        circles[currentActiveCircle].classList.remove("active");
+        progress.classList.add(`progress-${state}`);
+        currentActiveCircle--;
     }
 
-    progress.classList.remove(progress.classList[0]);
-    progress.classList.add(`progress-${state+1}`);
+    console.log(currentActiveCircle);
+
+    // for (let i = 0; i < 5; i++) {
+    //     i <= state ? circles[i].classList.add("active") : circles[i].classList.remove("active");
+    // }
+
+    // progress.classList.remove(progress.classList[0]);
+    // progress.classList.add(`progress-${state}`);
 }
 
 function changeDeal(dealID, account){
@@ -123,6 +138,7 @@ async function changeDealStatus(dealID, account, status){
         return resp.text();
     })
     .then((html) => {
+        changeProgressState(1);
         bodyInput.innerHTML = html;
 
         const approveDealBtn = document.getElementById("next-deal-step");

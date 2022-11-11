@@ -42,27 +42,19 @@
   z-index: -1;
   transition: 0.4s ease;
 }
-#main .progress-1 {
-  background-color: var(--line-border-fill);
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  height: 4px;
+#main .progress-0 {
   width: 0;
-  z-index: -1;
-  transition: 0.4s ease;
 }
-#main .progress-2 {
+#main .progress-1 {
   width: 25% !important;
 }
-#main .progress-3 {
+#main .progress-2 {
   width: 50% !important;
 }
-#main .progress-4 {
+#main .progress-3 {
   width: 75% !important;
 }
-#main .progress-5 {
+#main .progress-4 {
   width: 100% !important;
 }
 #main .circle {

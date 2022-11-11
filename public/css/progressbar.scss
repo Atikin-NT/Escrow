@@ -49,31 +49,23 @@
         transition: 0.4s ease;
       }
 
-      .progress-1 {
-        background-color: var(--line-border-fill);
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
-        height: 4px;
+      .progress-0 {
         width: 0;
-        z-index: -1;
-        transition: 0.4s ease;
       }
     
-      .progress-2 {
+      .progress-1 {
         width: 25%!important;
       }
 
-      .progress-3 {
+      .progress-2 {
         width: 50%!important;
       }
 
-      .progress-4 {
+      .progress-3 {
         width: 75%!important;
       }
 
-      .progress-5 {
+      .progress-4 {
         width: 100%!important;
       }
 
