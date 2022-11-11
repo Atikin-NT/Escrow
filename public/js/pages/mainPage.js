@@ -47,24 +47,13 @@ sellerSwitch.addEventListener('click', (evt) => { //we are seller
 const p = document.getElementById("fee-p");
 transactionAmount.oninput = () => {
     setTimeout(async function () {
-        const FAST_GAS_FEED = new ethers.Contract(
-            '0x169E633A2D1E6c10dD91238Ba11c4A708dfEF37C', 
-            ['function latestRoundData() external view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)'], provider);
-        let res = await FAST_GAS_FEED.latestRoundData();
-        const gasFeedValue = res.answer; // wei/gas
-        console.log('FAST_GAS_FEED', gasFeedValue);
-    
-        const ETH_USD = new ethers.Contract(
-            '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', 
-            ['function latestRoundData() public view returns(uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)'], provider);
-        res = await ETH_USD.latestRoundData();
-        const ethUsdFeedValue = res.answer; // usd/eth * 1e8
-        console.log('ETH_USD', ethUsdFeedValue); 
         try {
             const gas = await escrowProvider.estimateGas.create(
                 MetaMaskWallet[0], partnerWallet.value, transactionAmount.value
                 );
             // const gasPrice = await provider.getGasPrice();
+            let gasFeedValue, ethUsdFeedValue;
+            [gasFeedValue, ethUsdFeedValue] = await getFeeData();
             const inWei = gas.mul(gasFeedValue); // [gas] * [wei/gas] = [wei]
             /**
              * [wei] * [usd/eth * 1e8] / [1e8] = [(wei/eth) * usd]
