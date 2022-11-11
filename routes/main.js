@@ -7,7 +7,7 @@ const { SignIn } = require("./profile.js");
 const router = Router();
 
 router.post("/fetch/createDeal", createDeal);
-router.delete("/fetch/deleteDeal", deleteDeal);
+router.post("/fetch/deleteDeal", deleteDeal);
 router.get("/fetch/getDeals", getDeals);
 router.post("/fetch/updateDealStatus", updateDealStatus);
 router.post("/fetch/updateDeal", updateDeal);
