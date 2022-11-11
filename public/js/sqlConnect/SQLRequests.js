@@ -1,6 +1,6 @@
 import { CreateToast } from "../frontend/Toasts.js";
 import { showCurrentDeal } from "../sqlConnect/changeView.js";
-import { escrowProvider } from "../web3/Web3Layer.js";
+import { escrowProvider, getFeeData } from "../web3/Web3Layer.js";
 
 let buyerSwitch = document.getElementById("buyer-role");
 let partnerWallet = document.getElementById("deal-partner");
@@ -21,7 +21,7 @@ function updateElementsID(){
 async function createDeal(account){
   updateElementsID();
   // console.log("create");
-  const value = parseInt(transactionAmount.value);
+  let value = parseInt(transactionAmount.value);
   if(!ethers.utils.isAddress(partnerWallet.value) || !ethers.utils.isAddress(account) || partnerWallet.value == account)
     throw "invalid partner address";
   if(value <= 0)
@@ -34,8 +34,13 @@ async function createDeal(account){
     unit = 1;
   if(ethUnit == "Ether")
     unit = 2;
-  if(ethUnit == "USD")
-    unit = 3;
+  if(ethUnit == "USD"){
+    const inUSD = value;
+    let gasInWei, ethUsd;
+    [gasInWei, ethUsd] = await getFeeData();
+    value = inUSD * 1e8 / ethUsd.toNumber();
+    unit = 2; //in ETH
+  }
     
   let buyer = partnerWallet.value;
   let seller = account;
@@ -151,8 +156,6 @@ async function updateDeal(account, id){
     unit = 1;
   if(ethUnit == "Ether")
     unit = 2;
-  if(ethUnit == "USD")
-    unit = 3;
     
   let buyer = partnerWallet.value;
   let seller = account;

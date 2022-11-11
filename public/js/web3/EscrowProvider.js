@@ -1,21 +1,24 @@
 class EscrowProvider{
-    daiAddress = "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e";
+    daiAddress = "0x8d4Da75889CA76C55c4eAaf1A3C338c5902C7a98";
     daiAbi = [
-        "constructor()",
-        "function create(address buyer, address seller, uint value) external",
-        "function sendB(bytes32 TxId) external payable",
-        "function sendS(bytes32 TxId) external",
-        "function cancel(bytes32 TxId) external",
-        "function approve(bytes32 TxId) external",
-        "function disapprove(bytes32 TxId) external",
-        "function withdraw(address target) external",
-        "function hold() external view returns(uint256)",
-        "function owner() external view returns(address)",
-        "function deals(bytes32) external view returns(address buyer, address seller, uint256 value, uint8 status)",
-        "event Created(address buyer, address seller, bytes32 TxId)",
-        "event BuyerConfim(bytes32 TxId)",
-        "event SellerConfim(bytes32 TxId)",
-        "event Finished(bytes32 TxId)"
+        {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
+        {"anonymous":false,"inputs":[{"indexed":false,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"BuyerConfim","type":"event"},
+        {"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"address","name":"seller","type":"address"},{"indexed":false,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"Created","type":"event"},
+        {"anonymous":false,"inputs":[{"indexed":false,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"Finished","type":"event"},
+        {"anonymous":false,"inputs":[{"indexed":false,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"SellerConfim","type":"event"},
+        {"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},
+        {"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"cancel","outputs":[],"stateMutability":"nonpayable","type":"function"},
+        {"inputs":[{"internalType":"bytes","name":"","type":"bytes"}],"name":"checkUpkeep","outputs":[{"internalType":"bool","name":"upkeepNeeded","type":"bool"},{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"view","type":"function"},
+        {"inputs":[{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"seller","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"create","outputs":[],"stateMutability":"nonpayable","type":"function"},
+        {"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"deals","outputs":[{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"seller","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint8","name":"status","type":"uint8"}],"stateMutability":"view","type":"function"},
+        {"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"disapprove","outputs":[],"stateMutability":"nonpayable","type":"function"},
+        {"inputs":[],"name":"hold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+        {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+        {"inputs":[{"internalType":"bytes","name":"","type":"bytes"}],"name":"performUpkeep","outputs":[],"stateMutability":"nonpayable","type":"function"},
+        {"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"sendB","outputs":[],"stateMutability":"payable","type":"function"},
+        {"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"sendS","outputs":[],"stateMutability":"nonpayable","type":"function"},
+        {"inputs":[{"internalType":"address","name":"target","type":"address"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},
+        {"stateMutability":"payable","type":"receive"}
     ];
     daiContract;
     estimateGas;
