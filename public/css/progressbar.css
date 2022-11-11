@@ -83,10 +83,13 @@
   color: white;
 }
 #main .state-names {
-  width: 84%;
+  width: 90%;
   min-width: 453.6px;
   display: flex;
   text-align: center;
   justify-content: space-between;
   margin: 0 auto;
+}
+#main .name {
+  width: 16%;
 }/*# sourceMappingURL=progressbar.css.map */
