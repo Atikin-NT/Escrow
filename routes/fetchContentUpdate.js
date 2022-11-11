@@ -98,6 +98,7 @@ async function changeDealStatus(req, res){
     let showNextButton = true;
     let btnName = "";
     let notEnd = true;
+    let cancelBtn = true;
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
         console.log("answer.list[0].status = ", answer.list[0].status, " newStatus-1 = ", newStatus-1);
@@ -203,6 +204,7 @@ async function changeDealStatus(req, res){
         btnName: btnName,
         showNextButton: showNextButton,
         notEnd: notEnd,
+        cancelBtn: cancelBtn,
     });
 }
 

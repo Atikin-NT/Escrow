@@ -1,6 +1,6 @@
 import { MetaMaskWallet, escrowProvider } from "../web3/Web3Layer.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { updateDeal, updateHistory, getDealById, setTxId } from "./SQLRequests.js";
+import { updateDeal, updateHistory, getDealById, setTxId, deleteDeal } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
@@ -101,6 +101,14 @@ async function changeDealStatus(dealID, account, status){
                 case 4:
                     transaction = await escrowProvider.approve(answerDealById.txId);
                     break;
+                case -1:
+                    if(answerDealById.status != 3){
+                        transaction = await escrowProvider.cancel(answerDealById.txId);
+                    }
+                    else{
+                        transaction = await escrowProvider.disapprove(answerDealById.txId);
+                    }
+                    break;
                 default:
                     console.log("Unknown error");
                     break;
@@ -111,6 +119,12 @@ async function changeDealStatus(dealID, account, status){
             if(status == 1){
                 console.log("set tx");
                 setTxId(dealID, txId);
+            }
+            if(status == -1){
+                CreateToast(false, "Deal has been deleted");
+                deleteDeal(dealID);
+                window.location.reload();
+                return;
             }
         }
         CreateToast(false, "Deal has been created");
@@ -136,13 +150,19 @@ async function changeDealStatus(dealID, account, status){
                 changeDealStatus(dealID, account, status+1);
             });
         }
+        const cancelDealBtn = document.getElementById("cancel-deal");
+        if(cancelDealBtn != null){
+            cancelDealBtn.addEventListener('click', (evt) => {
+                changeDealStatus(dealID, account, -1);
+            });
+        }
         updateHistory(account);
     })
     .catch((err) => {
         console.log(err);
     });
 }
-
+//0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 function approveByPartner(dealID, account){
     // IDEA: сделать проверку по паре (id пользователя в сделке / txid сделки)
     fetch(`view/approveByPartner?dealid=${dealID}&account=${account}`, { headers })
@@ -155,14 +175,28 @@ function approveByPartner(dealID, account){
         changeProgressState(1);
         bodyInput.innerHTML = html;
         const changeBtn = document.getElementById("change-deal-step");
-        changeBtn.addEventListener('click', (evt) => {
-            changeDeal(dealID, account);
-        });
+        if(changeBtn != null){
+            changeBtn.addEventListener('click', (evt) => {
+                changeDeal(dealID, account);
+            });
+        }
 
         const approveDealBtn = document.getElementById("next-deal-step");
-        approveDealBtn.addEventListener('click', (evt) => {
-            changeDealStatus(dealID, account, 1);
-        });
+        if(approveDealBtn != null){
+            approveDealBtn.addEventListener('click', (evt) => {
+                changeDealStatus(dealID, account, 1);
+            });
+        }
+
+        const cancelDealBtn = document.getElementById("cancel-deal");
+        console.log(cancelDealBtn);
+        if(cancelDealBtn != null){
+            cancelDealBtn.addEventListener('click', (evt) => {
+                CreateToast(false, "Deal has been deleted");
+                deleteDeal(dealID);
+            });
+        }
+
         updateHistory(account);
     })
     .catch((err) => {

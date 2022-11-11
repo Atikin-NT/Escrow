@@ -36,10 +36,7 @@
         <hr class="my-4" />
         <h5 class="mb-3 mt-3">Fee payment: <span class="fee">{{status}}</span></h5>
         <hr class="my-4" />
-        {{#if change}}
-            <button class="w-100 btn btn-primary btn-lg" id="change-deal-step">Cancel</button>
-        {{/if}}
-        {{#if cancelBtn}}
+        {{#if cahnge}}
             <button class="w-100 btn btn-primary btn-lg" id="change-deal-step">Change</button>
         {{/if}}
         {{#if notEnd}}
@@ -47,6 +44,9 @@
             <button class="w-100 btn btn-primary btn-lg" id="next-deal-step">{{btnName}}</button>
         {{else}}
             <h6>Waiting for your partner</h6>
+        {{/if}}
+        {{#if cancelBtn}}
+            <button class="w-100 btn btn-primary btn-lg" id="cancel-deal">Cancel</button>
         {{/if}}
         {{/if}}
     </div>
