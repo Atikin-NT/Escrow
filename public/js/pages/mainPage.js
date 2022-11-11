@@ -16,7 +16,7 @@ import { CreateToast } from "../frontend/Toasts.js";
 const toastTrigger = document.getElementById("liveToastBtn");
 
 //Main logic
-import { MetaMaskWallet, escrowProvider, provider } from "../web3/Web3Layer.js";
+import { MetaMaskWallet, escrowProvider, getFeeData } from "../web3/Web3Layer.js";
 import { approveByPartner } from "../sqlConnect/changeView.js";
 
 createDealFormClick.addEventListener('submit', async (evt) => {

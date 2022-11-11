@@ -11,7 +11,9 @@ const defaulDeal = {
     fee: 0,
     status: -1,
 };
-const unitList = ["Wei", "Gwei", "Ether", "USD"];
+const unitList = ["Wei", "Gwei", "Ether"];
+//TODO: if something wrong send error resp status
+//2360
 
 async function changeDealView(req, res){
     const id = parseInt(req.query.dealid);
@@ -40,7 +42,6 @@ async function changeDealView(req, res){
         weiSelected: unitListWithSelect[0],
         gweiSelected: unitListWithSelect[1],
         etherSelected: unitListWithSelect[2],
-        usdSelected: unitListWithSelect[3],
         txid: dbAnswer.txid,
         id: dbAnswer.id,
         fee: dbAnswer.fee,
