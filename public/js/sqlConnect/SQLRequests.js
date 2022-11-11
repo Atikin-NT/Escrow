@@ -46,7 +46,6 @@ async function createDeal(account){
     sellerIsAdmin = 0;
   }
   
-  // console.log(typeof(value));
   const body = JSON.stringify({
     buyer: buyer,
     seller: seller,
@@ -246,6 +245,33 @@ async function setTxId(id, txId){
       console.log(err);
   });
   return res;
-} 
+}
 
-export { updateHistory, createDeal, updateDeal, getDealById, setTxId };
+async function deleteDeal(id){
+  if(id <= 0)
+    throw "invalid value";
+  
+  const body = JSON.stringify({
+    id: id,
+  });
+  let res = -1;
+
+  await fetch("/fetch/deleteDeal", { method: "post", body, headers })
+    .then((resp) => {
+      console.log(resp);
+      if (resp.status < 200 || resp.status >= 300)
+        throw new Error("connect error");
+      return resp.json();
+    })
+    .then((json) => {
+      console.log(json);
+      if(json.code == 0)
+        res = 0
+    })
+    .catch((err) => {
+      console.log(err);
+  });
+  return res;
+}
+
+export { updateHistory, createDeal, updateDeal, getDealById, setTxId, deleteDeal };

@@ -1,5 +1,5 @@
 class EscrowProvider{
-    daiAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    daiAddress = "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e";
     daiAbi = [
         "constructor()",
         "function create(address buyer, address seller, uint value) external",

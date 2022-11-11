@@ -11,7 +11,7 @@ async function updateDeal(req, res){
 }
 
 async function deleteDeal(req, res){
-    answer = await dbDeleteData(parseInt(req.query.id));
+    answer = await dbDeleteData(req.body.id);
     res.send(answer);
 }
 
