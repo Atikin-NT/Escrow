@@ -38,7 +38,21 @@ async function changeProgressState(state) {
         circles[currentActiveCircle].classList.remove("active");
         progress.classList.add(`progress-${state}`);
         currentActiveCircle--;
+    } else if (state > currentActiveCircle) {
+        progress.classList.add(`progress-${state}`);
+        for (let i = currentActiveCircle + 1; i <= state; i++) {
+            circles[currentActiveCircle].classList.add("active");
+            currentActiveCircle++;
+        }
+    } else if (state < currentActiveCircle) {
+        for (let i = currentActiveCircle; i > state; i--) {
+            circles[currentActiveCircle].classList.remove("active");
+            currentActiveCircle--;
+        }
+        progress.classList.add(`progress-${state}`);
     }
+
+
 
     console.log(currentActiveCircle);
 
@@ -157,7 +171,7 @@ async function changeDealStatus(dealID, account, status){
         return resp.text();
     })
     .then((html) => {
-        changeProgressState(1);
+        changeProgressState(status);
         bodyInput.innerHTML = html;
 
         const approveDealBtn = document.getElementById("next-deal-step");
