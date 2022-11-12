@@ -6,7 +6,7 @@ async function createDeal(req, res){
 }
 
 async function updateDeal(req, res){
-    answer = await dbUpdateData(req.body.buyer, req.body.seller, req.body.value, req.body.unit, req.body.id);
+    answer = await dbUpdateData(req.body.buyer, req.body.seller, req.body.value, req.body.unit, req.body.id, req.body.sellerIsAdmin);
     res.send(answer);
 }
 

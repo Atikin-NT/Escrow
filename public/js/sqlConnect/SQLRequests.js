@@ -85,6 +85,7 @@ async function createDeal(account){
 }
 
 function updateHistory(account, count = 5){
+  account = String(account).toLowerCase();
   updateElementsID();
   fetch(`/fetch/getDeals?account=${account}`, { headers })
     .then((resp) => {
@@ -156,19 +157,23 @@ async function updateDeal(account, id){
     unit = 1;
   if(ethUnit == "Ether")
     unit = 2;
-    
+
   let buyer = partnerWallet.value;
   let seller = account;
+  let sellerIsAdmin = 1;
   if(buyerSwitch.checked == true){
     buyer = account;
     seller = partnerWallet.value;
+    sellerIsAdmin = 0;
   }
+  
   const body = JSON.stringify({
     buyer: buyer,
     seller: seller,
     value: value,
     unit: unit,
     id: id,
+    sellerIsAdmin: sellerIsAdmin,
   });
   let res = -1;
 

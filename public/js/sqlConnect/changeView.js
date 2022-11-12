@@ -46,7 +46,7 @@ function changeDeal(dealID, account){
     .then((html) => {
         changeProgressState(0);
         bodyInput.innerHTML = html;
-        bodyTitle.innerHTML = "Change Form";
+        // bodyTitle.innerHTML = "Change Form";
         updateConnectionBtn(account);
         const changeDealFormClick = document.getElementById("create-deal-btn");
         changeDealFormClick.addEventListener('submit', async (evt) => {

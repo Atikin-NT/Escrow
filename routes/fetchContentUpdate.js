@@ -17,7 +17,7 @@ const unitList = ["Wei", "Gwei", "Ether"];
 
 async function changeDealView(req, res){
     const id = parseInt(req.query.dealid);
-    const account = req.query.account;
+    const account = req.query.account.toLowerCase();
     let dbAnswer = defaulDeal;
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
@@ -53,14 +53,14 @@ async function changeDealView(req, res){
 
 async function approveByPartnerView(req, res){
     const id = parseInt(req.query.dealid);
-    const account = req.query.account;
+    const account = req.query.account.toLowerCase();
     let dbAnswer = defaulDeal;
     let showNextButton = false;
     let title = 'Waiting for approved by your partner';
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
     if(dbAnswer.status == 0 && 
-        ((account.toLowerCase() == dbAnswer.seller && dbAnswer.sellerIsAdmin == 0) || (account.toLowerCase() == dbAnswer.buyer && dbAnswer.sellerIsAdmin == 1))){
+        ((account == dbAnswer.seller && dbAnswer.sellerIsAdmin == 0) || (account == dbAnswer.buyer && dbAnswer.sellerIsAdmin == 1))){
         showNextButton = true
         title = 'Waiting for your approve';
     }
