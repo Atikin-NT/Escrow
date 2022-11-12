@@ -1,3 +1,8 @@
+:root {
+  --line-border-fill: #0d6efd;
+  --line-border-empty: #999;
+}
+
 #main {
     .container {
         @media (max-width: 768px) {
@@ -21,6 +26,8 @@
         width: 80%;
         margin: 0 auto;
         margin-bottom: 1rem;
+
+        // background-color: orange;
       }
     
       .progress-container::before {
@@ -47,31 +54,27 @@
         transition: 0.4s ease;
       }
 
-      .progress-1 {
-        background-color: var(--line-border-fill);
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
-        height: 4px;
+      .progress-0 {
         width: 0;
-        z-index: -1;
-        transition: 0.4s ease;
       }
     
-      .progress-2 {
+      .progress-01 {
+        width: calc(25%/2);
+      }
+
+      .progress-1 {
         width: 25%!important;
       }
 
-      .progress-3 {
+      .progress-2 {
         width: 50%!important;
       }
 
-      .progress-4 {
+      .progress-3 {
         width: 75%!important;
       }
 
-      .progress-5 {
+      .progress-4 {
         width: 100%!important;
       }
 
@@ -95,11 +98,15 @@
       }
     
       .state-names {
-        width: 84%;
+        width: 90%;
         min-width: calc(540px * 0.84);
         display: flex;
         text-align: center;
         justify-content: space-between;
         margin: 0 auto;
+        // background-color: grey;
+      }
+      .name {
+        width: calc(80%/5);
       }
 }

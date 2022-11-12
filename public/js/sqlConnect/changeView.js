@@ -23,16 +23,41 @@ const updateConnectionBtn = (account) => {
     }
 }
 
+let currentActiveCircle = 0;
+// console.log("curren active circle", currentActiveCircle);
+
 async function changeProgressState(state) {
+    // console.log(currentActiveCircle, state);
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
 
-    for (let i = 0; i < 5; i++) {
-        i <= state ? circles[i].classList.add("active") : circles[i].classList.remove("active");
+    if (state - currentActiveCircle == 1) {
+        circles[currentActiveCircle + 1].classList.add("active");
+        progress.classList.remove(`progress-${currentActiveCircle}`)
+        progress.classList.add(`progress-${state}`);
+        currentActiveCircle++;
+    } else if (currentActiveCircle - state == 1) {
+        circles[currentActiveCircle].classList.remove("active");
+        progress.classList.remove(`progress-${currentActiveCircle}`);
+        progress.classList.add(`progress-${state}`);
+        currentActiveCircle--;
+    } else if (state > currentActiveCircle) {
+        progress.classList.remove(`progress-${currentActiveCircle}`);
+        progress.classList.add(`progress-${state}`);
+        for (let i = currentActiveCircle + 1; i <= state; i++) {
+            console.log(i);
+            circles[i].classList.add("active");
+            currentActiveCircle++;
+        }
+    } else if (state < currentActiveCircle) {
+        progress.classList.remove(`progress-${currentActiveCircle}`);
+        for (let i = currentActiveCircle; i > state; i--) {
+            circles[i].classList.remove("active");
+            currentActiveCircle--;
+        }
+        progress.classList.add(`progress-${state}`);
     }
-
-    progress.classList.remove(progress.classList[0]);
-    progress.classList.add(`progress-${state+1}`);
+    // console.log(currentActiveCircle);
 }
 
 function changeDeal(dealID, account){
@@ -44,6 +69,7 @@ function changeDeal(dealID, account){
         return resp.text();
     })
     .then((html) => {
+        // console.log("set state 0");
         changeProgressState(0);
         bodyInput.innerHTML = html;
         // bodyTitle.innerHTML = "Change Form";
@@ -141,6 +167,7 @@ async function changeDealStatus(dealID, account, status){
         return resp.text();
     })
     .then((html) => {
+        changeProgressState(status);
         bodyInput.innerHTML = html;
 
         const approveDealBtn = document.getElementById("next-deal-step");
@@ -171,6 +198,7 @@ function approveByPartner(dealID, account){
         return resp.text();
     })
     .then((html) => {
+        // console.log("set state 1");
         changeProgressState(1);
         bodyInput.innerHTML = html;
         const changeBtn = document.getElementById("change-deal-step");
