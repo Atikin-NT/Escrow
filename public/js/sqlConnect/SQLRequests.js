@@ -7,6 +7,9 @@ let partnerWallet = document.getElementById("deal-partner");
 let transactionAmount = document.getElementById("transaction-amount");
 let etherUnit = document.getElementById("ether-unit");
 let historyList = document.getElementById("history-list");
+let fee = document.getElementById("fee-p");
+let feeRoleBuyer = document.getElementById("fee-role-buyer");
+let feeDiscount = document.getElementById("discount");
 
 const headers = { "Content-Type": "application/json" };
 
@@ -16,11 +19,13 @@ function updateElementsID(){
   transactionAmount = document.getElementById("transaction-amount");
   etherUnit = document.getElementById("ether-unit");
   historyList = document.getElementById("history-list");
+  fee = document.getElementById("fee-p");
+  feeRoleBuyer = document.getElementById("fee-role-buyer");
+  feeDiscount = document.getElementById("discount");
 }
 
 async function createDeal(account){
   updateElementsID();
-  // console.log("create");
   let value = parseInt(transactionAmount.value);
   if(!ethers.utils.isAddress(partnerWallet.value) || !ethers.utils.isAddress(account) || partnerWallet.value == account)
     throw "invalid partner address";
@@ -50,6 +55,17 @@ async function createDeal(account){
     seller = partnerWallet.value;
     sellerIsAdmin = 0;
   }
+
+  //0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+
+  let feeAmount = value * 0.02;
+  let feeRole = 2; // 0 - 50/50   1 - buyer   2 - seller
+  if(feeRoleBuyer.checked == true){
+    feeRole = 1;
+  }
+  if(feeDiscount.checked == true){
+    feeRole = 0;
+  }
   
   const body = JSON.stringify({
     buyer: buyer,
@@ -57,6 +73,8 @@ async function createDeal(account){
     value: value,
     unit: unit,
     sellerIsAdmin: sellerIsAdmin,
+    fee: feeAmount,
+    feeRole: feeRole,
   });
 
   let res = -1;
@@ -166,6 +184,15 @@ async function updateDeal(account, id){
     seller = partnerWallet.value;
     sellerIsAdmin = 0;
   }
+
+  let feeAmount = value * 0.02;
+  let feeRole = 2; // 0 - 50/50   1 - buyer   2 - seller
+  if(feeRoleBuyer.checked == true){
+    feeRole = 1;
+  }
+  if(feeDiscount.checked == true){
+    feeRole = 0;
+  }
   
   const body = JSON.stringify({
     buyer: buyer,
@@ -174,6 +201,8 @@ async function updateDeal(account, id){
     unit: unit,
     id: id,
     sellerIsAdmin: sellerIsAdmin,
+    fee: feeAmount,
+    feeRole: feeRole,
   });
   let res = -1;
 

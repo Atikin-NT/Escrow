@@ -30,7 +30,8 @@ app.get('/', (req, res) => {
   res.render('partials/inputLayout', {
     title: "Create Form",
     buyerCheck: "checked",
-    btnName: "Create"
+    btnName: "Create",
+    discountChecked: "checked",
   });
 });
 

@@ -12,6 +12,7 @@ const defaulDeal = {
     status: -1,
 };
 const unitList = ["Wei", "Gwei", "Ether"];
+const feeRoleList = ["50/50", "Buyer", "Seller"];
 //TODO: if something wrong send error resp status
 //2360
 
@@ -31,7 +32,9 @@ async function changeDealView(req, res){
         sellerCheck = "checked";
     }
     let unitListWithSelect = ["", "", "", ""];
+    let feeRoleList = ["", "", ""];
     unitListWithSelect[dbAnswer.unit] = "selected";
+    feeRoleList[dbAnswer.feeRole] = "checked";
     res.render('partials/inputLayout', {
         layout : 'part',
         title: 'Change Form',
@@ -42,6 +45,9 @@ async function changeDealView(req, res){
         weiSelected: unitListWithSelect[0],
         gweiSelected: unitListWithSelect[1],
         etherSelected: unitListWithSelect[2],
+        discountChecked: feeRoleList[0],
+        buyerFeeChecked: feeRoleList[1],
+        sellerFeeChecked: feeRoleList[2],
         txid: dbAnswer.txid,
         id: dbAnswer.id,
         fee: dbAnswer.fee,
@@ -77,6 +83,7 @@ async function approveByPartnerView(req, res){
         buyer: dbAnswer.buyer, 
         value: dbAnswer.value, 
         unit: unitList[dbAnswer.unit],
+        feeRole: feeRoleList[dbAnswer.feeRole],
         txid: dbAnswer.txid,
         id: dbAnswer.id,
         fee: dbAnswer.fee,
@@ -196,6 +203,7 @@ async function changeDealStatus(req, res){
         buyer: dbAnswer.buyer, 
         value: dbAnswer.value, 
         unit: unitList[dbAnswer.unit],
+        feeRole: feeRoleList[dbAnswer.feeRole],
         txid: dbAnswer.txid,
         id: dbAnswer.id,
         fee: dbAnswer.fee,
