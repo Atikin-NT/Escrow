@@ -7,7 +7,6 @@ let partnerWallet = document.getElementById("deal-partner");
 let transactionAmount = document.getElementById("transaction-amount");
 let etherUnit = document.getElementById("ether-unit");
 let historyList = document.getElementById("history-list");
-let fee = document.getElementById("fee-p");
 let feeRoleBuyer = document.getElementById("fee-role-buyer");
 let feeDiscount = document.getElementById("discount");
 
@@ -19,7 +18,6 @@ function updateElementsID(){
   transactionAmount = document.getElementById("transaction-amount");
   etherUnit = document.getElementById("ether-unit");
   historyList = document.getElementById("history-list");
-  fee = document.getElementById("fee-p");
   feeRoleBuyer = document.getElementById("fee-role-buyer");
   feeDiscount = document.getElementById("discount");
 }
@@ -61,10 +59,10 @@ async function createDeal(account){
   let feeAmount = value * 0.02;
   let feeRole = 2; // 0 - 50/50   1 - buyer   2 - seller
   if(feeRoleBuyer.checked == true){
-    feeRole = 1;
+    feeRole = 0; //0
   }
   if(feeDiscount.checked == true){
-    feeRole = 0;
+    feeRole = 1; //1
   }
   
   const body = JSON.stringify({

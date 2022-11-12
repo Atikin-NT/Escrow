@@ -12,7 +12,7 @@ const defaulDeal = {
     status: -1,
 };
 const unitList = ["Wei", "Gwei", "Ether"];
-const feeRoleList = ["50/50", "Buyer", "Seller"];
+const feeRoleList = ["Buyer", "50/50", "Seller"];
 //TODO: if something wrong send error resp status
 //2360
 
@@ -45,8 +45,8 @@ async function changeDealView(req, res){
         weiSelected: unitListWithSelect[0],
         gweiSelected: unitListWithSelect[1],
         etherSelected: unitListWithSelect[2],
-        discountChecked: feeRoleList[0],
-        buyerFeeChecked: feeRoleList[1],
+        discountChecked: feeRoleList[1],
+        buyerFeeChecked: feeRoleList[0],
         sellerFeeChecked: feeRoleList[2],
         txid: dbAnswer.txid,
         id: dbAnswer.id,

@@ -7,8 +7,9 @@
 const hre = require("hardhat");
 
 async function main() {
+    const limit = hre.ethers.utils.parseEther("0.02");
     const Escrow = await hre.ethers.getContractFactory("Escrow");
-    const escrow = await Escrow.deploy(1000);
+    const escrow = await Escrow.deploy(limit);
     await escrow.deployed();
     console.log(`deployed at ${escrow.address}`);
 }

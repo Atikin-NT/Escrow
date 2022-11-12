@@ -114,7 +114,7 @@ async function changeDealStatus(dealID, account, status){
             switch(status){
                 case 1:
                     current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
-                    transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value);
+                    transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
                     console.log(transaction, txId);
                     break;
                 case 2:

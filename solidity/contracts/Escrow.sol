@@ -11,6 +11,7 @@ contract Escrow is AutomationCompatibleInterface {
         address buyer;
         address seller;
         uint value;
+        uint Bfee;
         uint8 status;
     }
 
@@ -39,19 +40,25 @@ contract Escrow is AutomationCompatibleInterface {
         limit = _limit;
     }
 
-    function create(address buyer, address seller, uint value) external {
+    function getFee(uint value) internal pure returns(uint fee){
+        fee = value / 1e2 * 2;
+    }
+
+    function create(address buyer, address seller, uint value, uint8 feeStyle) external {
         require(msg.sender == buyer || msg.sender == seller, "Don't have permission");
         require(value != 0, "Can't provide deal with 0 value");
         bytes32 TxId = keccak256(abi.encode(buyer, seller, block.timestamp));
         require(deals[TxId].value == 0, "Deal already exists");
-        deals[TxId].buyer = buyer;
-        deals[TxId].seller = seller;
-        deals[TxId].value = value;
+        require(feeStyle <= 2, "Wrong feeStyle");
+        uint Bfee = 0;
+        if (feeStyle == 0) Bfee = getFee(value);
+        else if (feeStyle == 1) Bfee = getFee(value) / 2;
+        deals[TxId] = details(buyer, seller, value - Bfee, Bfee, 0);
         emit Created(buyer, seller, TxId);
     }
 
     function sendB(bytes32 TxId) external payable onlyPerson(deals[TxId].buyer) {
-        require(msg.value == deals[TxId].value, "Wrong money value");
+        require(msg.value == deals[TxId].value + deals[TxId].Bfee, "Wrong money value");
         require(deals[TxId].status == 0, "Money was already sent");
         deals[TxId].status = 2;
         emit BuyerConfim(TxId);
@@ -70,7 +77,7 @@ contract Escrow is AutomationCompatibleInterface {
             if (msg.sender == deals[TxId].seller) {
                 //seller отменил сделку, когда buyer уже отправил деньги
             }
-            payable(deals[TxId].buyer).transfer(deals[TxId].value);
+            payable(deals[TxId].buyer).transfer(deals[TxId].value + deals[TxId].Bfee);
         }
         delete deals[TxId];
         emit Finished(TxId);
@@ -78,24 +85,25 @@ contract Escrow is AutomationCompatibleInterface {
 
     function approve(bytes32 TxId) external onlyPerson(deals[TxId].buyer) {
         require(deals[TxId].status == 3, "Seller did not confirm the transaction");
-        uint fee = deals[TxId].value / 1000 * 25;
+        uint InpValue = deals[TxId].value + deals[TxId].Bfee;
+        uint fee = getFee(InpValue);
         hold += fee;
-        payable(deals[TxId].seller).transfer(deals[TxId].value - fee);
+        payable(deals[TxId].seller).transfer(InpValue - fee);
         delete deals[TxId];
         emit Finished(TxId);
     }
 
     function disapprove(bytes32 TxId) external onlyPerson(deals[TxId].buyer) {
         require(deals[TxId].status == 3, "Seller did not confirm the transaction");
+        hold += deals[TxId].Bfee;
         payable(msg.sender).transfer(deals[TxId].value); //buyer отправлял и seller отправлял
         delete deals[TxId];
         emit Finished(TxId);
     }
 
     function withdraw(address target) external onlyPerson(owner) {
-        uint rest = hold / 100 * 2;
-        payable(target).transfer(hold - rest);
-        hold = rest;
+        payable(target).transfer(hold);
+        hold = 0;
     }
 
     function setOwner(address newOwner) external onlyPerson(owner) {

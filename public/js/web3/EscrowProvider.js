@@ -1,5 +1,5 @@
 class EscrowProvider{
-    daiAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    daiAddress = "0x8d4Da75889CA76C55c4eAaf1A3C338c5902C7a98";
     daiAbi = [
         {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
         {"anonymous":false,"inputs":[{"indexed":false,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"BuyerConfim","type":"event"},
