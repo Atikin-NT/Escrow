@@ -127,7 +127,6 @@ async function changeDealStatus(dealID, account, status){
                 return;
             }
         }
-        CreateToast(false, "Deal has been created");
     } catch (err) {
         console.error(err);
         CreateToast(true, "Something went wrong :(");
