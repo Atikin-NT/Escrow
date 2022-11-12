@@ -120,7 +120,7 @@ function updateHistory(account, count = 5){
 
         let small = document.createElement("small");
         small.className = 'text-muted';
-        small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status}`;
+        small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status + 1}`;
         div.appendChild(small);
 
         const unitList = ["Wei", "Gwei", "Ether", "USD"];

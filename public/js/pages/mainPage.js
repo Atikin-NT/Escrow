@@ -2,9 +2,6 @@ import { createDeal } from "../sqlConnect/SQLRequests.js";
 //Create Deal
 const createDealFormClick = document.getElementById("create-deal-btn");
 
-//Calculete fee
-const feeContainer = document.getElementById("fee-container");
-
 //Role Switch
 const buyerSwitch = document.getElementById("buyer-role");
 const sellerSwitch = document.getElementById("seller-role");

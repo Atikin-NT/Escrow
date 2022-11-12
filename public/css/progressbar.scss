@@ -1,3 +1,8 @@
+:root {
+  --line-border-fill: #0d6efd;
+  --line-border-empty: #999;
+}
+
 #main {
     .container {
         @media (max-width: 768px) {
@@ -53,6 +58,10 @@
         width: 0;
       }
     
+      .progress-01 {
+        width: calc(25%/2);
+      }
+
       .progress-1 {
         width: 25%!important;
       }

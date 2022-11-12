@@ -1,3 +1,8 @@
+:root {
+  --line-border-fill: #0d6efd;
+  --line-border-empty: #999;
+}
+
 #main .container {
   text-align: center;
   padding-top: 0 !important;
@@ -44,6 +49,9 @@
 }
 #main .progress-0 {
   width: 0;
+}
+#main .progress-01 {
+  width: 12.5%;
 }
 #main .progress-1 {
   width: 25% !important;

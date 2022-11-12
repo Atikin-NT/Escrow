@@ -3,28 +3,58 @@
   <div class="form-check">
     <label class="form-check-label" for="switchRole">My Role: </label>
     <div class="container-sm">
-      <input type="radio" class="btn-check" name="options-outlined" id="buyer-role" autocomplete="off" {{buyerCheck}} />
+      <input
+        type="radio"
+        class="btn-check"
+        name="options-outlined"
+        id="buyer-role"
+        autocomplete="off"
+        {{buyerCheck}}
+      />
       <label class="btn btn-outline-primary" for="buyer-role">Buyer</label>
 
-      <input type="radio" class="btn-check" name="options-outlined" id="seller-role" autocomplete="off"
-        {{sellerCheck}} />
+      <input
+        type="radio"
+        class="btn-check"
+        name="options-outlined"
+        id="seller-role"
+        autocomplete="off"
+        {{sellerCheck}}
+      />
       <label class="btn btn-outline-primary" for="seller-role">Seller</label>
     </div>
 
     <div class="col-xl-6 div-address">
-      <p id="address">My Address:
-        <span id="show-account"><button id="connectButton" type="button" class="btn btn-primary"
-            disabled>Connect</button></span>
-      </p>
+      <div id="address">
+        <p id="my-addr">My Address:</p>
+        <p id="show-account"></p>
+      </div>
+      <span><button
+          id="connectButton"
+          type="button"
+          class="btn btn-primary"
+          disabled
+        >Connect</button></span>
     </div>
 
   </div>
   <form class="needs-validation" novalidate id="create-deal-btn">
     <div class="row g-3">
       <div class="col-12">
-        <label for="deal-partner" class="form-label" id="deal-partner-label">Seller address</label>
-        <input type="text" name="buyer" class="form-control text-container" id="deal-partner"
-          placeholder="{{role}} address" value="{{partner}}" required />
+        <label
+          for="deal-partner"
+          class="form-label"
+          id="deal-partner-label"
+        >Seller address</label>
+        <input
+          type="text"
+          name="buyer"
+          class="form-control text-container"
+          id="deal-partner"
+          placeholder="{{role}} address"
+          value="{{partner}}"
+          required
+        />
         <div class="invalid-feedback">
           Valid buyer address is required.
         </div>
@@ -32,8 +62,15 @@
 
       <div class="col-9">
         <label for="value" class="form-label">Value</label>
-        <input type="text" name="value" class="form-control text-container" id="transaction-amount" placeholder="value"
-          value="{{value}}" required />
+        <input
+          type="text"
+          name="value"
+          class="form-control text-container"
+          id="transaction-amount"
+          placeholder="value"
+          value="{{value}}"
+          required
+        />
         <div class="invalid-feedback">
           Valid value is required.
         </div>
@@ -64,41 +101,51 @@
       <h5>Fee: </h5>
       <p id="fee-p">0</p>Wei
     </div>
-    
+
     <h5 class="mb-3 mt-3">Fee payer:
-            <span class="fee">{{fee}}</span></h5>
+      <span class="fee">{{fee}}</span></h5>
 
-          <div id="fee-container" class="container-sm">
-            <input
-              type="radio"
-              class="btn-check"
-              id="discount"
-              name="options-outlined"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary" for="discount">50/50</label>
+    <div id="fee-container" class="container-sm">
+      <input
+        type="radio"
+        class="btn-check"
+        id="discount"
+        name="options-outlined"
+        autocomplete="off"
+        checked
+      />
+      <label class="btn btn-outline-secondary" for="discount">50/50</label>
 
-            <input
-              type="radio"
-              class="btn-check"
-              id="fee-role-buyer"
-              name="options-outlined"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary fee-buyer" for="fee-role-buyer">Buyer</label>
+      <input
+        type="radio"
+        class="btn-check"
+        id="fee-role-buyer"
+        name="options-outlined"
+        autocomplete="off"
+      />
+      <label
+        class="btn btn-outline-secondary fee-buyer"
+        for="fee-role-buyer"
+      >Buyer</label>
 
-            <input
-              type="radio"
-              class="btn-check"
-              id="fee-role-seller"
-              name="options-outlined"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary fee-seller" for="fee-role-seller">Seller</label>
-          </div>
+      <input
+        type="radio"
+        class="btn-check"
+        id="fee-role-seller"
+        name="options-outlined"
+        autocomplete="off"
+      />
+      <label
+        class="btn btn-outline-secondary fee-seller"
+        for="fee-role-seller"
+      >Seller</label>
+    </div>
 
     <hr class="my-4" />
 
-    <button class="w-100 btn btn-primary btn-lg" type="submit">{{btnName}}</button>
+    <button
+      class="w-100 btn btn-primary btn-lg"
+      type="submit"
+    >{{btnName}}</button>
   </form>
 </div>
