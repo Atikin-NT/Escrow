@@ -21,7 +21,7 @@ async function changeDealView(req, res){
     const account = req.query.account.toLowerCase();
     let dbAnswer = defaulDeal;
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
-        dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
+    dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
     if(dbAnswer.status != 0) dbAnswer = defaulDeal;
     let partner = dbAnswer.seller;
     let buyerCheck = "checked";
@@ -112,22 +112,18 @@ async function changeDealStatus(req, res){
         if(answer.code == 0){
             switch(newStatus){
                 case 1:
+                    dbAnswer = answer.list[0];
                     title = "Waiting when your partner will send Ethers";
                     btnName = "Send Ethers";
-                    if(answer.list[0].status == newStatus-1 && (answer.list[0].sellerIsAdmin == 0 && answer.list[0].seller == account) || (answer.list[0].sellerIsAdmin == 1 && answer.list[0].buyer == account)){
+                    showNextButton = false;
+                    if (answer.list[0].buyer == account) {
+                        title = "Waiting when you will send Ethers";
+                        showNextButton = true;
+                    }
+                    if (answer.list[0].status == newStatus - 1){
                         const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
-                            dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
-                            showNextButton = false;
-                        }
-                    }
-                    else {
-                        dbAnswer = answer.list[0];
-                        title = "Waiting when you will send Ethers";
-                        if((answer.list[0].sellerIsAdmin == 0 && answer.list[0].seller == account) || (answer.list[0].sellerIsAdmin == 1 && answer.list[0].buyer == account)){
-                            showNextButton = false;
-                            title = "Waiting when your partner will send Ethers";
                         }
                     }
                 break;

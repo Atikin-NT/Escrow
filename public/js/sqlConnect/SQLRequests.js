@@ -22,9 +22,8 @@ function updateElementsID(){
   feeDiscount = document.getElementById("discount");
 }
 
-async function createDeal(account){
-  updateElementsID();
-  let value = parseInt(transactionAmount.value);
+const getBody = async (account) => {
+  let value = Number(transactionAmount.value);
   if(!ethers.utils.isAddress(partnerWallet.value) || !ethers.utils.isAddress(account) || partnerWallet.value == account)
     throw "invalid partner address";
   if(value <= 0)
@@ -39,12 +38,11 @@ async function createDeal(account){
     unit = 2;
   if(ethUnit == "USD"){
     const inUSD = value;
-    let gasInWei, ethUsd;
-    [gasInWei, ethUsd] = await getFeeData();
+    let [gasInWei, ethUsd] = await getFeeData();
     value = inUSD * 1e8 / ethUsd.toNumber();
     unit = 2; //in ETH
   }
-    
+
   let buyer = partnerWallet.value;
   let seller = account;
   let sellerIsAdmin = 1;
@@ -54,17 +52,15 @@ async function createDeal(account){
     sellerIsAdmin = 0;
   }
 
-  //0x70997970C51812dc3A010C7d01b50e0d17dc79C8
-
   let feeAmount = value * 0.02;
-  let feeRole = 2; // 0 - 50/50   1 - buyer   2 - seller
+  let feeRole = 2; // 1 - 50/50   0 - buyer   2 - seller
   if(feeRoleBuyer.checked == true){
     feeRole = 0; //0
   }
   if(feeDiscount.checked == true){
     feeRole = 1; //1
   }
-  
+
   const body = JSON.stringify({
     buyer: buyer,
     seller: seller,
@@ -74,44 +70,54 @@ async function createDeal(account){
     fee: feeAmount,
     feeRole: feeRole,
   });
+  return body;
+}
 
+const getRes = async (url, body, jsonCall, failurCall) => {
   let res = -1;
+  try {
+    const resp = await fetch(url, { method: "post", body, headers });
+    if (resp.status < 200 || resp.status >= 300)
+      throw new Error("connect error");
 
-  await fetch("/fetch/createDeal", { method: "post", body, headers })
-    .then(async(resp) => {
-      console.log(resp);
-      if (resp.status < 200 || resp.status >= 300)
-        throw new Error("connect error");
-      return resp.json();
-    })
-    .then(async(json) => {
-      console.log(json);
-      if(json.code != 0)
-        CreateToast(true, json.msg)
-      else{
-        CreateToast(false, json.msg);
-        res = json.list[0];
-      }
-    })
-    .catch(async(err) => {
-      console.log(err);
-      CreateToast(true, err);
+    const json = await resp.json();
+    res = jsonCall(json);
+  } catch (err) {
+    failurCall(err);
+  }
+  return res;
+}
+
+const createDeal = async (account) => {
+  updateElementsID();
+  const body = await getBody(account);
+  const jsonCall = (json) => {
+    let res = -1;
+    if (json.code != 0)
+      CreateToast(true, json.msg);
+    else{
+      CreateToast(false, json.msg);
+      res = json.list[0];
+    }
+    return res;
+  }
+  const res = await getRes("/fetch/createDeal", body, jsonCall, (err) => {
+    console.log(err);
+    CreateToast(true, err);
   });
   return res;
 }
 
-function updateHistory(account, count = 5){
+const updateHistory = (account, count = 5) => {
   account = String(account).toLowerCase();
   updateElementsID();
   fetch(`/fetch/getDeals?account=${account}`, { headers })
     .then((resp) => {
-      console.log(resp);
       if (resp.status < 200 || resp.status >= 300)
         throw new Error("connect error");
       return resp.json();
     })
     .then((json) => {
-      console.log(json)
       while (historyList.firstChild) {
         historyList.removeChild(historyList.firstChild);
       }
@@ -158,103 +164,48 @@ function updateHistory(account, count = 5){
     });
 }
 
-async function updateDeal(account, id){
+const updateDeal = async (account, id) => {
   updateElementsID();
-  const value = parseInt(transactionAmount.value);
-  if(!ethers.utils.isAddress(partnerWallet.value) || partnerWallet.value == account)
-    throw "invalid partner address";
-  if(value <= 0)
-    throw "invalid value";
-  let unit = 0;
-  const ethUnit = etherUnit.options[etherUnit.selectedIndex].value;
-  if(ethUnit == "Wei")
-    unit = 0;
-  if(ethUnit == "Gwei")
-    unit = 1;
-  if(ethUnit == "Ether")
-    unit = 2;
+  let body = await getBody(account);
+  body = JSON.parse(body); body.id = id;
+  body = JSON.stringify(body);
 
-  let buyer = partnerWallet.value;
-  let seller = account;
-  let sellerIsAdmin = 1;
-  if(buyerSwitch.checked == true){
-    buyer = account;
-    seller = partnerWallet.value;
-    sellerIsAdmin = 0;
+  const jsonCall = (json) => {
+    let res = -1;
+    if (json.code != 0)
+      CreateToast(true, json.msg);
+    else{
+      CreateToast(false, json.msg);
+      res = json.list[0];
+    }
+    return res;
   }
-
-  let feeAmount = value * 0.02;
-  let feeRole = 2; // 0 - 50/50   1 - buyer   2 - seller
-  if(feeRoleBuyer.checked == true){
-    feeRole = 1;
-  }
-  if(feeDiscount.checked == true){
-    feeRole = 0;
-  }
-  
-  const body = JSON.stringify({
-    buyer: buyer,
-    seller: seller,
-    value: value,
-    unit: unit,
-    id: id,
-    sellerIsAdmin: sellerIsAdmin,
-    fee: feeAmount,
-    feeRole: feeRole,
-  });
-  let res = -1;
-
-  await fetch("/fetch/updateDeal", { method: "post", body, headers })
-    .then((resp) => {
-      console.log(resp);
-      if (resp.status < 200 || resp.status >= 300)
-        throw new Error("connect error");
-      return resp.json();
-    })
-    .then((json) => {
-      console.log(json);
-      if(json.code != 0)
-        CreateToast(true, json.msg);
-      else{
-        CreateToast(false, json.msg);
-        res = json.list[0];
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      CreateToast(true, err);
+  const res = await getRes("/fetch/updateDeal", body, jsonCall, (err) => {
+    console.log(err);
+    CreateToast(true, err);
   });
   return res;
 }
 
-async function getDealById(id){
+const getDealById = async(id) => {
   if(id <= 0)
     throw "invalid value";
   
   const body = JSON.stringify({
     id: id,
   });
-  let res = -1;
-
-  await fetch("/fetch/getDealById", { method: "post", body, headers })
-    .then((resp) => {
-      console.log(resp);
-      if (resp.status < 200 || resp.status >= 300)
-        throw new Error("connect error");
-      return resp.json();
-    })
-    .then((json) => {
-      console.log(json);
-      if(json.code == 0)
-        res = json.list[0];
-    })
-    .catch((err) => {
-      console.log(err);
-  });
+  const jsonCall = (json) => {
+    let res = -1;
+    console.log(json);
+    if(json.code == 0)
+      res = json.list[0];
+    return res;
+  }
+  const res = await getRes("/fetch/getDealById", body, jsonCall, (err) => { console.log(err);});
   return res;
 } 
 
-async function setTxId(id, txId){
+const setTxId = async (id, txId) => {
   if(id <= 0)
     throw "invalid value";
   
@@ -262,50 +213,33 @@ async function setTxId(id, txId){
     id: id,
     txId: txId,
   });
-  let res = -1;
 
-  await fetch("/fetch/updateTxId", { method: "post", body, headers })
-    .then((resp) => {
-      console.log(resp);
-      if (resp.status < 200 || resp.status >= 300)
-        throw new Error("connect error");
-      return resp.json();
-    })
-    .then((json) => {
-      console.log(json);
-      if(json.code == 0)
-        res = 0
-    })
-    .catch((err) => {
-      console.log(err);
-  });
+  const jsonCall = (json) => {
+    let res = -1;
+    if(json.code == 0)
+      res = 0
+    return res;
+  }
+  const res = getRes("/fetch/updateTxId", body, jsonCall, (err) => { console.log(err);});
   return res;
 }
 
-async function deleteDeal(id){
+const deleteDeal = async (id) => {
   if(id <= 0)
     throw "invalid value";
   
   const body = JSON.stringify({
     id: id,
   });
-  let res = -1;
 
-  await fetch("/fetch/deleteDeal", { method: "post", body, headers })
-    .then((resp) => {
-      console.log(resp);
-      if (resp.status < 200 || resp.status >= 300)
-        throw new Error("connect error");
-      return resp.json();
-    })
-    .then((json) => {
-      console.log(json);
-      if(json.code == 0)
-        res = 0
-    })
-    .catch((err) => {
-      console.log(err);
-  });
+  const jsonCall = (json) => {
+    let res = -1;
+    if(json.code == 0)
+      res = 0
+    return res;
+  }
+
+  const res = getRes("/fetch/deleteDeal", body, jsonCall, (err) => { console.log(err);});
   return res;
 }
 

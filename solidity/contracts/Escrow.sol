@@ -24,10 +24,11 @@ contract Escrow is AutomationCompatibleInterface {
     uint public hold;
     uint public limit;
 
-    event Created(address buyer, address seller, bytes32 TxId);
-    event BuyerConfim(bytes32 TxId);
-    event SellerConfim(bytes32 TxId);
-    event Finished(bytes32 TxId);
+    event Created(address indexed buyer, address indexed seller, bytes32 indexed TxId);
+    event BuyerConfim(bytes32 indexed TxId);
+    event SellerConfim(bytes32 indexed TxId);
+    event Finished(bytes32 indexed TxId);
+    event Conflict(bytes32 indexed TxId);
 
     modifier onlyPerson(address pers) {
         require(msg.sender == pers, "Don't have permission");
@@ -75,7 +76,7 @@ contract Escrow is AutomationCompatibleInterface {
         require(deals[TxId].status != 3, "Can't be cancelled already");
         if (deals[TxId].status == 2) {
             if (msg.sender == deals[TxId].seller) {
-                //seller отменил сделку, когда buyer уже отправил деньги
+                emit Conflict(TxId); //seller отменил сделку, когда buyer уже отправил деньги
             }
             payable(deals[TxId].buyer).transfer(deals[TxId].value + deals[TxId].Bfee);
         }
@@ -108,6 +109,10 @@ contract Escrow is AutomationCompatibleInterface {
 
     function setOwner(address newOwner) external onlyPerson(owner) {
         owner = newOwner;
+    }
+
+    function setLimit(uint newlimit) external onlyPerson(owner)  {
+        limit = newlimit;
     }
 
     function checkUpkeep(bytes calldata /* checkData */) external view override returns (bool upkeepNeeded, bytes memory /* performData */) {

@@ -95,8 +95,6 @@ function changeDeal(dealID, account){
     });
 }
 
-
-
 async function changeDealStatus(dealID, account, status){
     let answerDealById = await getDealById(dealID);
     if(answerDealById == -1)
@@ -109,7 +107,7 @@ async function changeDealStatus(dealID, account, status){
     try {
         let transaction = null;
         let current_value = -1;
-        console.log(transaction, txId, status);
+        console.log(answerDealById.status, status);
         if(status != answerDealById.status){
             switch(status){
                 case 1:
@@ -140,15 +138,15 @@ async function changeDealStatus(dealID, account, status){
                     break;
             }
             const tx = await transaction.wait();
-            console.log(tx);
             txId = tx.events[0].args.TxId;
+            // txId = tx.events[0].topics[tx.events[0].topics.length - 1];
             if(status == 1){
                 console.log("set tx");
-                setTxId(dealID, txId);
+                await setTxId(dealID, txId);
             }
             if(status == -1){
                 CreateToast(false, "Deal has been deleted");
-                deleteDeal(dealID);
+                await deleteDeal(dealID);
                 window.location.reload();
                 return;
             }
@@ -160,26 +158,26 @@ async function changeDealStatus(dealID, account, status){
     }
     console.log("End Change Deal----------")
 
-    fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers })
+    fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers }) 
     .then((resp) => {
         if (resp.status < 200 || resp.status >= 300)
             throw new Error("connect error");
         return resp.text();
     })
-    .then((html) => {
-        changeProgressState(status);
+    .then(async (html) => {
+        await changeProgressState(status);
         bodyInput.innerHTML = html;
 
         const approveDealBtn = document.getElementById("next-deal-step");
         if(approveDealBtn != null){
-            approveDealBtn.addEventListener('click', (evt) => {
-                changeDealStatus(dealID, account, status+1);
+            approveDealBtn.addEventListener('click', async (evt) => {
+                await changeDealStatus(dealID, account, status+1);
             });
         }
         const cancelDealBtn = document.getElementById("cancel-deal");
         if(cancelDealBtn != null){
-            cancelDealBtn.addEventListener('click', (evt) => {
-                changeDealStatus(dealID, account, -1);
+            cancelDealBtn.addEventListener('click', async (evt) => {
+                await changeDealStatus(dealID, account, -1);
             });
         }
         updateHistory(account);
@@ -188,7 +186,7 @@ async function changeDealStatus(dealID, account, status){
         console.log(err);
     });
 }
-//0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+
 function approveByPartner(dealID, account){
     // IDEA: сделать проверку по паре (id пользователя в сделке / txid сделки)
     fetch(`view/approveByPartner?dealid=${dealID}&account=${account}`, { headers })
@@ -197,9 +195,9 @@ function approveByPartner(dealID, account){
             throw new Error("connect error");
         return resp.text();
     })
-    .then((html) => {
+    .then(async (html) => {
         // console.log("set state 1");
-        changeProgressState(1);
+        await changeProgressState(1);
         bodyInput.innerHTML = html;
         const changeBtn = document.getElementById("change-deal-step");
         if(changeBtn != null){
@@ -216,11 +214,11 @@ function approveByPartner(dealID, account){
         }
 
         const cancelDealBtn = document.getElementById("cancel-deal");
-        console.log(cancelDealBtn);
         if(cancelDealBtn != null){
-            cancelDealBtn.addEventListener('click', (evt) => {
+            cancelDealBtn.addEventListener('click', async (evt) => {
                 CreateToast(false, "Deal has been deleted");
-                deleteDeal(dealID);
+                await deleteDeal(dealID);
+                window.location.reload();
             });
         }
 
