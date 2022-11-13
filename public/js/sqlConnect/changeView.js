@@ -6,6 +6,33 @@ const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
 let bodyTitle = document.getElementById("title");
 
+function showLoader() {
+    const loader = document.getElementById("load-section");
+    if (loader == null) console.error(`Element "Loader" is not found.`);
+    else {
+        try {
+            loader.classList.remove("end-animation");
+        } catch {};
+        loader.classList.add("start-animation")
+        loader.classList.add("op-1");
+        loader.classList.remove("op-0");
+    }
+    
+}
+function hiddenLoader() {
+    const loader = document.getElementById("load-section");
+    if (loader == null) {
+        console.error(`Element "Loader" is not found.`)
+    } else {
+        loader.classList.remove("start-animation")
+        loader.classList.add("end-animation");
+        loader.classList.add("op-0");
+        loader.classList.remove("op-1");
+        
+    }
+}
+
+
 function showCurrentDeal(dealID, account, status){
     if(status == 0){
         approveByPartner(dealID, account);
@@ -18,13 +45,12 @@ const updateConnectionBtn = (account) => {
     const button = document.getElementById("connectButton");
     if (button !== null && account != null) {
         button.remove();
-        const show = document.getElementById("show-account");
-        show.textContent = account;
+        const showLoader = document.getElementById("showLoader-account");
+        showLoader.textContent = account;
     }
 }
 
 let currentActiveCircle = 0;
-// console.log("curren active circle", currentActiveCircle);
 
 async function changeProgressState(state) {
     // console.log(currentActiveCircle, state);
@@ -96,9 +122,12 @@ function changeDeal(dealID, account){
 }
 
 async function changeDealStatus(dealID, account, status){
+    showLoader();
     let answerDealById = await getDealById(dealID);
-    if(answerDealById == -1)
+    if(answerDealById == -1) {
+        hiddenLoader();
         throw "Deal Not Found";
+    }
 
     let txId = "0";
     if(status != 0)
@@ -152,6 +181,7 @@ async function changeDealStatus(dealID, account, status){
             }
         }
     } catch (err) {
+        hiddenLoader();
         console.error(err);
         CreateToast(true, "Something went wrong :(");
         return;

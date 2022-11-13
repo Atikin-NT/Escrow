@@ -5,6 +5,16 @@ let MetaMaskWallet;
 let escrowProvider;
 let provider;
 
+function shortWallet(wallet, n, m) {
+  const newWallet = [];
+
+  for (let i = 0; i <  wallet.length; i++) {
+    newWallet.push(wallet[i].slice(0, n) + "..." + wallet[i].slice(wallet[i].length - m, wallet[i].length));
+  }
+
+  return newWallet;
+}
+
 const initialize = async () => {
   //   createTransactionSendButton.onclick = async () => {
   //     const buyer = createTransactionBuyer.value;
@@ -37,7 +47,7 @@ const initialize = async () => {
         document.getElementById("connectButton").remove();
       } 
       if (wallet != null && document.getElementById("show-account") != undefined) {
-        document.getElementById("show-account").innerText = wallet;
+        document.getElementById("show-account").innerText = shortWallet(wallet, 15, 6);
       }
     } else {
       onboardButton.innerText = "Connect";
