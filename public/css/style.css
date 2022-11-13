@@ -1,3 +1,8 @@
+body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
 body h2 {
   font-size: 2.5rem;
   margin: 0;
@@ -9,6 +14,81 @@ body h3 {
 .base-container {
   height: auto !important;
   max-width: 960px;
+}
+
+#create-container {
+  position: relative;
+}
+
+#load-section {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100% !important;
+  width: 100% !important;
+  background-color: grey;
+}
+
+.op-0 {
+  opacity: 0 !important;
+  z-index: -1;
+}
+
+.op-1 {
+  opacity: 50% !important;
+  z-index: 5;
+}
+
+.start-animation {
+  -webkit-animation: start 0s ease-in;
+          animation: start 0s ease-in;
+  transition: opacity 1s ease-in;
+}
+
+@-webkit-keyframes start {
+  from {
+    z-index: -1;
+  }
+  to {
+    z-index: 5;
+  }
+}
+
+@keyframes start {
+  from {
+    z-index: -1;
+  }
+  to {
+    z-index: 5;
+  }
+}
+.end-animation {
+  transition: opacity 1s ease-in;
+  -webkit-animation: end 3s ease-in;
+          animation: end 3s ease-in;
+}
+
+@-webkit-keyframes end {
+  from {
+    z-index: 5;
+  }
+  to {
+    z-index: -1;
+  }
+}
+
+@keyframes end {
+  from {
+    z-index: 5;
+  }
+  to {
+    z-index: -1;
+  }
+}
+.spinner-border {
+  margin: auto;
 }
 
 #main {

@@ -7,6 +7,9 @@ body {
     margin: 0;
   }
   // margin: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .base-container {
@@ -14,9 +17,53 @@ body {
   max-width: 960px;
 }
 
-// #inputLayout {
-//   min-width: 498px;
-// }
+#create-container {
+  position: relative;
+}
+
+#load-section {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100% !important;
+  width: 100% !important;
+  background-color: grey;
+}
+
+.op-0 {
+  opacity: 0 !important;
+  z-index: -1;
+}
+.op-1 {
+  opacity: 50% !important;
+  z-index: 5;
+}
+
+.start-animation {
+  animation: start 0s ease-in;
+  transition: opacity 1s ease-in;
+}
+@keyframes start {
+  from {z-index: -1;};
+  to {z-index: 5;};
+}
+
+.end-animation {
+  transition: opacity 1s ease-in;
+  animation: end 3s ease-in;
+}
+@keyframes end {
+  from {z-index: 5;};
+  to {z-index: -1;};
+}
+
+
+.spinner-border {
+  margin: auto;
+}
 
 #main {
   height: 100vh;
