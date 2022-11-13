@@ -100,6 +100,15 @@ async function createDeal(account){
   return res;
 }
 
+function shortWallet(wallet, n, m) {
+  if (n === undefined && m === undefined) {
+    n = wallet.length;
+    m = 0;
+  }
+  const newWallet = wallet.slice(0, n) + "..." + wallet.slice(wallet.length - m, wallet.length);
+  return newWallet;
+}
+
 function updateHistory(account, count = 5){
   account = String(account).toLowerCase();
   updateElementsID();
@@ -131,8 +140,8 @@ function updateHistory(account, count = 5){
         h6.classList.add("text-container", "my-0");
 
         let role = "buyer";
-        if(account == element.seller) {h6.innerHTML = element.buyer; role = "seller"; }
-        else h6.innerHTML = element.seller;
+        if(account == element.seller) {h6.innerHTML = shortWallet(element.buyer, 4, 5); role = "seller"; }
+        else h6.innerHTML = shortWallet(element.seller, 4, 5);
         div.appendChild(h6);
 
         let small = document.createElement("small");
@@ -140,7 +149,7 @@ function updateHistory(account, count = 5){
         small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status + 1}`;
         div.appendChild(small);
 
-        const unitList = ["Wei", "Gwei", "Ether", "USD"];
+        const unitList = ["Wei", "Gwei", "Eth", "USD"];
         let span = document.createElement("span");
         span.className = 'text-muted';
         span.innerHTML = `${element.value} ${unitList[element.unit]}`;
