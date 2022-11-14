@@ -32,7 +32,6 @@ function hiddenLoader() {
     }
 }
 
-
 function showCurrentDeal(dealID, account, status){
     if(status == 0){
         approveByPartner(dealID, account);
@@ -122,10 +121,8 @@ function changeDeal(dealID, account){
 }
 
 async function changeDealStatus(dealID, account, status){
-    showLoader();
     let answerDealById = await getDealById(dealID);
     if(answerDealById == -1) {
-        hiddenLoader();
         throw "Deal Not Found";
     }
 
@@ -133,6 +130,7 @@ async function changeDealStatus(dealID, account, status){
     if(status != 0)
         txId = answerDealById.txId;
     console.log("Change Deal----------");
+    // if (status != 4 && status != 1) showLoader();
     try {
         let transaction = null;
         let current_value = -1;
@@ -140,21 +138,26 @@ async function changeDealStatus(dealID, account, status){
         if(status != answerDealById.status){
             switch(status){
                 case 1:
+                    showLoader();
                     current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
                     transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
                     console.log(transaction, txId);
                     break;
                 case 2:
+                    showLoader();
                     current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
                     transaction = await escrowProvider.sendB(answerDealById.txId, {value: current_value});
                     break;
                 case 3:
+                    showLoader();
                     transaction = await escrowProvider.sendS(answerDealById.txId);
                     break;
                 case 4:
+                    showLoader();
                     transaction = await escrowProvider.approve(answerDealById.txId);
                     break;
                 case -1:
+                    showLoader();
                     if(answerDealById.status != 3){
                         transaction = await escrowProvider.cancel(answerDealById.txId);
                     }
@@ -179,6 +182,7 @@ async function changeDealStatus(dealID, account, status){
                 window.location.reload();
                 return;
             }
+            hiddenLoader();
         }
     } catch (err) {
         hiddenLoader();
