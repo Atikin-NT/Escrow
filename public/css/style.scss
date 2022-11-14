@@ -173,3 +173,19 @@ body {
     margin-left: 0.5rem;
   }
 }
+
+.btn-width {
+  width: 70px !important;
+}
+
+#buttonSection {
+  display: flex !important;
+  justify-content: end;
+  float: right;
+
+  button {
+    margin-left: 0.5rem;
+  }
+}
+
+

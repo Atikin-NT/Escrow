@@ -179,4 +179,17 @@ body h3 {
 #fee-container .fee-buyer,
 #fee-container .fee-seller {
   margin-left: 0.5rem;
+}
+
+.btn-width {
+  width: 70px !important;
+}
+
+#buttonSection {
+  display: flex !important;
+  justify-content: end;
+  float: right;
+}
+#buttonSection button {
+  margin-left: 0.5rem;
 }/*# sourceMappingURL=style.css.map */

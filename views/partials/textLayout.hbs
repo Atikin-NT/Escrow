@@ -3,7 +3,7 @@
     <div class="form-check">
         <label class="form-check-label" for="switchRole">My Role: </label>
         <div class="container-sm">
-            <label class="btn btn-outline-secondary" for="role-in-deal">{{role}}</label>
+            <label class="btn btn-outline-secondary btn-width" for="role-in-deal">{{role}}</label>
         </div>
         <div class="row g-3">
             <div class="col-12">
@@ -37,18 +37,24 @@
         <h5 class="mb-3 mt-3">Fee payment: <span class="fee">{{fee}} {{unit}}</span></h5>
         <h5 class="mb-3 mt-3">Fee role: <span class="fee">{{feeRole}}</span></h5>
         <hr class="my-4" />
-        {{#if change}}
-            <button class="w-100 btn btn-primary btn-lg" id="change-deal-step">Change</button>
-        {{/if}}
-        {{#if notEnd}}
-        {{#if showNextButton}}
-            <button class="w-100 btn btn-primary btn-lg" id="next-deal-step">{{btnName}}</button>
-        {{else}}
-            <h6>Waiting for your partner</h6>
-        {{/if}}
-        {{#if cancelBtn}}
-            <button class="w-100 btn btn-primary btn-lg" id="cancel-deal">Cancel</button>
-        {{/if}}
-        {{/if}}
+        <div id="buttonSection" class="container-sm">
+            {{#if notEnd}}
+                {{#if cancelBtn}}
+                    <button type="button" class="btn btn-danger btn-lg" id="cancel-deal">Cancel</button>
+                {{/if}}
+            {{/if}}
+            {{#if change}}
+            <button type="button" class="btn btn-primary btn-lg" id="change-deal-step">Change</button>
+            {{/if}}
+
+            {{#if notEnd}}
+                {{#if showNextButton}}
+                    <button type="button" class="btn btn-primary btn-lg" id="next-deal-step">{{btnName}}</button>
+                {{else}}
+
+                    <h6>Waiting for your partner</h6>
+                {{/if}}                
+            {{/if}}
+        </div>
     </div>
 </div>
