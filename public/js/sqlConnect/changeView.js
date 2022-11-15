@@ -44,7 +44,7 @@ const updateConnectionBtn = (account) => {
     const button = document.getElementById("connectButton");
     if (button !== null && account != null) {
         button.remove();
-        const showLoader = document.getElementById("showLoader-account");
+        const showLoader = document.getElementById("show-account");
         showLoader.textContent = account;
     }
 }
