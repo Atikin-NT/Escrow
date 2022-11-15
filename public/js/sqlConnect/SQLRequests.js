@@ -30,17 +30,13 @@ const getBody = async (account) => {
     throw "invalid value";
   let unit = 0;
   const ethUnit = etherUnit.options[etherUnit.selectedIndex].value;
-  if(ethUnit == "Wei")
-    unit = 0;
-  if(ethUnit == "Gwei")
-    unit = 1;
   if(ethUnit == "Ether")
-    unit = 2;
+    unit = 0;
   if(ethUnit == "USD"){
     const inUSD = value;
     let [gasInWei, ethUsd] = await getFeeData();
     value = inUSD * 1e8 / ethUsd.toNumber();
-    unit = 2; //in ETH
+    unit = 1; //in ETH
   }
 
   let buyer = partnerWallet.value;
@@ -155,10 +151,10 @@ function updateHistory(account, count = 5){
         small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status + 1}`;
         div.appendChild(small);
 
-        const unitList = ["Wei", "Gwei", "Eth", "USD"];
+        const unitList = ["Eth", "USD"];
         let span = document.createElement("span");
         span.className = 'text-muted';
-        span.innerHTML = `${element.value} ${unitList[element.unit]}`;
+        span.innerHTML = `${element.value} Ether`;
         
         li.appendChild(div);
         li.appendChild(span);

@@ -4,7 +4,6 @@ import { updateDeal, updateHistory, getDealById, setTxId, deleteDeal } from "./S
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
-let bodyTitle = document.getElementById("title");
 
 function showLoader() {
     const loader = document.getElementById("load-section");
@@ -52,7 +51,6 @@ const updateConnectionBtn = (account) => {
 let currentActiveCircle = 0;
 
 async function changeProgressState(state) {
-    // console.log(currentActiveCircle, state);
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
 
@@ -94,10 +92,8 @@ function changeDeal(dealID, account){
         return resp.text();
     })
     .then((html) => {
-        // console.log("set state 0");
         changeProgressState(0);
         bodyInput.innerHTML = html;
-        // bodyTitle.innerHTML = "Change Form";
         updateConnectionBtn(account);
         const changeDealFormClick = document.getElementById("create-deal-btn");
         changeDealFormClick.addEventListener('submit', async (evt) => {
@@ -112,6 +108,16 @@ function changeDeal(dealID, account){
             } catch (error) {
                 CreateToast(true, error);
             }
+        });
+        const buyerSwitch = document.getElementById("buyer-role");
+        const sellerSwitch = document.getElementById("seller-role");
+        const dealPartnerLabel = document.getElementById("deal-partner-label");
+        buyerSwitch.addEventListener('click', (evt) => { //we are buyer
+            dealPartnerLabel.innerHTML = "Seller address";
+        });
+    
+        sellerSwitch.addEventListener('click', (evt) => { //we are seller
+            dealPartnerLabel.innerHTML = "Buyer address";
         });
         updateHistory(account);
     })

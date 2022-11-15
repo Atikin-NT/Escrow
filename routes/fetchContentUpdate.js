@@ -11,10 +11,9 @@ const defaulDeal = {
     fee: 0,
     status: -1,
 };
-const unitList = ["Wei", "Gwei", "Ether"];
+const unitList = ["Ether", "USD"];
 const feeRoleList = ["Buyer", "50/50", "Seller"];
 //TODO: if something wrong send error resp status
-//2360
 
 async function changeDealView(req, res){
     const id = parseInt(req.query.dealid);
@@ -23,17 +22,19 @@ async function changeDealView(req, res){
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
     dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
     if(dbAnswer.status != 0) dbAnswer = defaulDeal;
+    let partnerRole = "Seller";
     let partner = dbAnswer.seller;
     let buyerCheck = "checked";
     let sellerCheck = "";
     if(dbAnswer.seller == account){
         partner = dbAnswer.buyer;
         buyerCheck = "";
+        partnerRole = "Buyer"
         sellerCheck = "checked";
     }
-    let unitListWithSelect = ["", "", "", ""];
+    let unitListWithSelect = ["", ""];
     let feeRoleList = ["", "", ""];
-    unitListWithSelect[dbAnswer.unit] = "selected";
+    unitListWithSelect[0] = "selected";
     feeRoleList[dbAnswer.feeRole] = "checked";
     res.render('partials/inputLayout', {
         layout : 'part',
@@ -41,10 +42,10 @@ async function changeDealView(req, res){
         buyerCheck: buyerCheck,
         sellerCheck: sellerCheck,
         partner: partner, 
-        value: dbAnswer.value, 
-        weiSelected: unitListWithSelect[0],
-        gweiSelected: unitListWithSelect[1],
-        etherSelected: unitListWithSelect[2],
+        partnerRole: partnerRole,
+        value: dbAnswer.value,
+        etherSelected: unitListWithSelect[0],
+        usdSelected: unitListWithSelect[1],
         discountChecked: feeRoleList[1],
         buyerFeeChecked: feeRoleList[0],
         sellerFeeChecked: feeRoleList[2],
