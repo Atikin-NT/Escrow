@@ -11,7 +11,7 @@ const defaulDeal = {
     fee: 0,
     status: -1,
 };
-const unitList = ["Ether", "USD"];
+const unitList = ["Ether"];
 const feeRoleList = ["Buyer", "50/50", "Seller"];
 //TODO: if something wrong send error resp status
 
@@ -34,7 +34,7 @@ async function changeDealView(req, res){
     }
     let unitListWithSelect = ["", ""];
     let feeRoleList = ["", "", ""];
-    unitListWithSelect[0] = "selected";
+    unitListWithSelect[dbAnswer.unit] = "selected";
     feeRoleList[dbAnswer.feeRole] = "checked";
     res.render('partials/inputLayout', {
         layout : 'part',

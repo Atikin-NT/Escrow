@@ -28,15 +28,12 @@ const getBody = async (account) => {
     throw "invalid partner address";
   if(value <= 0)
     throw "invalid value";
-  let unit = 0;
+  const unit = 0;
   const ethUnit = etherUnit.options[etherUnit.selectedIndex].value;
-  if(ethUnit == "Ether")
-    unit = 0;
   if(ethUnit == "USD"){
     const inUSD = value;
     let [gasInWei, ethUsd] = await getFeeData();
     value = inUSD * 1e8 / ethUsd.toNumber();
-    unit = 1; //in ETH
   }
 
   let buyer = partnerWallet.value;
@@ -57,7 +54,7 @@ const getBody = async (account) => {
     feeRole = 1; //1
   }
 
-  const body = JSON.stringify({
+  return {
     buyer: buyer,
     seller: seller,
     value: value,
@@ -65,8 +62,7 @@ const getBody = async (account) => {
     sellerIsAdmin: sellerIsAdmin,
     fee: feeAmount,
     feeRole: feeRole,
-  });
-  return body;
+  };
 }
 
 const getRes = async (url, body, jsonCall, failurCall) => {
@@ -86,7 +82,9 @@ const getRes = async (url, body, jsonCall, failurCall) => {
 
 const createDeal = async (account) => {
   updateElementsID();
-  const body = await getBody(account);
+  let body = await getBody(account);
+  body = JSON.stringify(body);
+
   const jsonCall = (json) => {
     let res = -1;
     if (json.code != 0)
@@ -127,7 +125,7 @@ function updateHistory(account, count = 5){
         historyList.removeChild(historyList.firstChild);
       }
       for(let i = json.list.length - 1; i >= 0 && i > json.list.length - count; i--){
-        let element = json.list[i];
+        const element = json.list[i];
         let li = document.createElement("li");
         li.addEventListener('click', (evt) => {
             showCurrentDeal(element.id, account, element.status);
@@ -154,7 +152,7 @@ function updateHistory(account, count = 5){
         const unitList = ["Eth", "USD"];
         let span = document.createElement("span");
         span.className = 'text-muted';
-        span.innerHTML = `${element.value} Ether`;
+        span.innerHTML = `${element.value} ${unitList[element.unit]}`;
         
         li.appendChild(div);
         li.appendChild(span);
@@ -171,8 +169,7 @@ function updateHistory(account, count = 5){
 
 const updateDeal = async (account, id) => {
   updateElementsID();
-  let body = await getBody(account);
-  body = JSON.parse(body); body.id = id;
+  let body = await getBody(account); body.id = id;
   body = JSON.stringify(body);
 
   const jsonCall = (json) => {
