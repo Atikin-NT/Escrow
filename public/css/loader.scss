@@ -133,23 +133,19 @@ html {
     }
 }
 
-// Center & dribbble
-body {
-    // min-height: 100vh;
-    // font-family: Roboto, Arial;
-    // color: #ADAFB6;
+// Center
+
+#load-section {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    // background: #F9FBFF;
-    .dribbble {
-        position: fixed;
-        display: block;
-        right: 20px;
-        bottom: 20px;
-        img {
-            display: block;
-            height: 28px;
-        }
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+  
+    height: 100%;
+    width: 100%;
+    background-color: grey;
+    .boxes {
+        margin: auto;
     }
-}
+  }

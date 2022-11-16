@@ -4,39 +4,53 @@
   height: calc(var(--size) * 2);
   width: calc(var(--size) * 3);
   position: relative;
-  transform-style: preserve-3d;
-  transform-origin: 50% 50%;
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+  -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
   margin-top: calc(var(--size) * 1.5 * -1);
-  transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
+  -webkit-transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
+          transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
 }
+
 .boxes .box {
   width: var(--size);
   height: var(--size);
   top: 0;
   left: 0;
   position: absolute;
-  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
 }
+
 .boxes .box:nth-child(1) {
-  transform: translate(100%, 0);
+  -webkit-transform: translate(100%, 0);
+          transform: translate(100%, 0);
   -webkit-animation: box1 var(--duration) linear infinite;
           animation: box1 var(--duration) linear infinite;
 }
+
 .boxes .box:nth-child(2) {
-  transform: translate(0, 100%);
+  -webkit-transform: translate(0, 100%);
+          transform: translate(0, 100%);
   -webkit-animation: box2 var(--duration) linear infinite;
           animation: box2 var(--duration) linear infinite;
 }
+
 .boxes .box:nth-child(3) {
-  transform: translate(100%, 100%);
+  -webkit-transform: translate(100%, 100%);
+          transform: translate(100%, 100%);
   -webkit-animation: box3 var(--duration) linear infinite;
           animation: box3 var(--duration) linear infinite;
 }
+
 .boxes .box:nth-child(4) {
-  transform: translate(200%, 0);
+  -webkit-transform: translate(200%, 0);
+          transform: translate(200%, 0);
   -webkit-animation: box4 var(--duration) linear infinite;
           animation: box4 var(--duration) linear infinite;
 }
+
 .boxes .box > div {
   --background: #5C8DF6;
   --top: auto;
@@ -54,21 +68,26 @@
   right: var(--right);
   bottom: var(--bottom);
   left: var(--left);
-  transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
+  -webkit-transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
+          transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
 }
+
 .boxes .box > div:nth-child(1) {
   --top: 0;
   --left: 0;
 }
+
 .boxes .box > div:nth-child(2) {
   --background: #145af2;
   --right: 0;
   --rotateY: 90deg;
 }
+
 .boxes .box > div:nth-child(3) {
   --background: #447cf5;
   --rotateX: -90deg;
 }
+
 .boxes .box > div:nth-child(4) {
   --background: #DBE3F4;
   --top: 0;
@@ -77,105 +96,144 @@
 }
 
 @-webkit-keyframes box1 {
-  0%, 50% {
-    transform: translate(100%, 0);
+  0%,
+  50% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0);
   }
   100% {
-    transform: translate(200%, 0);
+    -webkit-transform: translate(200%, 0);
+            transform: translate(200%, 0);
   }
 }
 
 @keyframes box1 {
-  0%, 50% {
-    transform: translate(100%, 0);
+  0%,
+  50% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0);
   }
   100% {
-    transform: translate(200%, 0);
+    -webkit-transform: translate(200%, 0);
+            transform: translate(200%, 0);
   }
 }
+
 @-webkit-keyframes box2 {
   0% {
-    transform: translate(0, 100%);
+    -webkit-transform: translate(0, 100%);
+            transform: translate(0, 100%);
   }
   50% {
-    transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
   }
   100% {
-    transform: translate(100%, 0);
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0);
   }
 }
+
 @keyframes box2 {
   0% {
-    transform: translate(0, 100%);
+    -webkit-transform: translate(0, 100%);
+            transform: translate(0, 100%);
   }
   50% {
-    transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
   }
   100% {
-    transform: translate(100%, 0);
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0);
   }
 }
+
 @-webkit-keyframes box3 {
-  0%, 50% {
-    transform: translate(100%, 100%);
+  0%,
+  50% {
+    -webkit-transform: translate(100%, 100%);
+            transform: translate(100%, 100%);
   }
   100% {
-    transform: translate(0, 100%);
+    -webkit-transform: translate(0, 100%);
+            transform: translate(0, 100%);
   }
 }
+
 @keyframes box3 {
-  0%, 50% {
-    transform: translate(100%, 100%);
+  0%,
+  50% {
+    -webkit-transform: translate(100%, 100%);
+            transform: translate(100%, 100%);
   }
   100% {
-    transform: translate(0, 100%);
+    -webkit-transform: translate(0, 100%);
+            transform: translate(0, 100%);
   }
 }
+
 @-webkit-keyframes box4 {
   0% {
-    transform: translate(200%, 0);
+    -webkit-transform: translate(200%, 0);
+            transform: translate(200%, 0);
   }
   50% {
-    transform: translate(200%, 100%);
+    -webkit-transform: translate(200%, 100%);
+            transform: translate(200%, 100%);
   }
   100% {
-    transform: translate(100%, 100%);
+    -webkit-transform: translate(100%, 100%);
+            transform: translate(100%, 100%);
   }
 }
+
 @keyframes box4 {
   0% {
-    transform: translate(200%, 0);
+    -webkit-transform: translate(200%, 0);
+            transform: translate(200%, 0);
   }
   50% {
-    transform: translate(200%, 100%);
+    -webkit-transform: translate(200%, 100%);
+            transform: translate(200%, 100%);
   }
   100% {
-    transform: translate(100%, 100%);
+    -webkit-transform: translate(100%, 100%);
+            transform: translate(100%, 100%);
   }
 }
+
 html {
   -webkit-font-smoothing: antialiased;
 }
 
 * {
-  box-sizing: border-box;
-}
-*:before, *:after {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
-body {
+*:before, *:after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#load-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: grey;
 }
-body .dribbble {
-  position: fixed;
-  display: block;
-  right: 20px;
-  bottom: 20px;
+
+#load-section .boxes {
+  margin: auto;
 }
-body .dribbble img {
-  display: block;
-  height: 28px;
-}/*# sourceMappingURL=loader.css.map */
+/*# sourceMappingURL=loader.css.map */
