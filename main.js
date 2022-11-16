@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
     buyerCheck: "checked",
     btnName: "Create",
     discountChecked: "checked",
+    partnerRole: "Seller",
   });
 });
 
