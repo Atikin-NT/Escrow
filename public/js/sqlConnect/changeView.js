@@ -52,27 +52,27 @@ let currentActiveCircle = -1;
 async function changeProgressState(newState) {
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
-    if (state - currentActiveCircle == 1) {
+    if (newState - currentActiveCircle == 1) {
         circles[currentActiveCircle + 1].classList.add("active");
         progress.classList.remove(`progress-${currentActiveCircle}`)
         progress.classList.add(`progress-${newState}`);
         currentActiveCircle++;
-    } else if (currentActiveCircle - state == 1) {
+    } else if (currentActiveCircle - newState == 1) {
         circles[currentActiveCircle].classList.remove("active");
         progress.classList.remove(`progress-${currentActiveCircle}`);
         progress.classList.add(`progress-${newState}`);
         currentActiveCircle--;
-    } else if (state > currentActiveCircle) {
+    } else if (newState > currentActiveCircle) {
         progress.classList.remove(`progress-${currentActiveCircle}`);
         progress.classList.add(`progress-${newState}`);
-        for (let i = currentActiveCircle + 1; i <= state; i++) {
+        for (let i = currentActiveCircle + 1; i <= newState; i++) {
             // console.log(i);
             circles[i].classList.add("active");
             currentActiveCircle++;
         }
-    } else if (state < currentActiveCircle) {
+    } else if (newState < currentActiveCircle) {
         progress.classList.remove(`progress-${currentActiveCircle}`);
-        for (let i = currentActiveCircle; i > state; i--) {
+        for (let i = currentActiveCircle; i > newState; i--) {
             circles[i].classList.remove("active");
             currentActiveCircle--;
         }
