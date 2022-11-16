@@ -99,7 +99,6 @@ async function changeDealStatus(req, res){
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();
     const newStatus = parseInt(req.query.status);
-    console.log(id, account, newStatus);
     let dbAnswer = defaulDeal;
     let title = "default";
     let showNextButton = true;
@@ -108,11 +107,10 @@ async function changeDealStatus(req, res){
     let cancelBtn = true;
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
-        console.log("answer.list[0].status = ", answer.list[0].status, " newStatus-1 = ", newStatus-1);
+        dbAnswer = answer.list[0];
         if(answer.code == 0){
             switch(newStatus){
                 case 1:
-                    dbAnswer = answer.list[0];
                     title = "Waiting when your partner will send Ethers";
                     btnName = "Send Ethers";
                     showNextButton = false;
