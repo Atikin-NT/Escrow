@@ -2,14 +2,14 @@ const { dbInsertData, dbGetDealsByAccount, dbDeleteData, dbUpdateDealStatus, dbU
 
 async function createDeal(req, res){
     answer = await dbInsertData(req.body.buyer, req.body.seller, 
-        req.body.value, req.body.unit, req.body.sellerIsAdmin,
+        req.body.value, req.body.sellerIsAdmin,
         req.body.fee, req.body.feeRole);
     res.send(answer);
 }
 
 async function updateDeal(req, res){
     answer = await dbUpdateData(req.body.buyer, req.body.seller, 
-        req.body.value, req.body.unit, req.body.id, req.body.sellerIsAdmin,
+        req.body.value, req.body.id, req.body.sellerIsAdmin,
         req.body.fee, req.body.feeRole);
     res.send(answer);
 }

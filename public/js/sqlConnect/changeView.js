@@ -4,7 +4,6 @@ import { updateDeal, updateHistory, getDealById, setTxId, deleteDeal } from "./S
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
-let bodyTitle = document.getElementById("title");
 
 function showLoader() {
     const loader = document.getElementById("load-section");
@@ -52,11 +51,8 @@ const updateConnectionBtn = (account) => {
 let currentActiveCircle = -1;
 
 async function changeProgressState(state) {
-    console.log(state, currentActiveCircle);
     let newState = state;
-    // if (state === "01") newState = "01";
 
-    // console.log(currentActiveCircle, state);
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
 
@@ -103,10 +99,8 @@ function changeDeal(dealID, account){
         return resp.text();
     })
     .then((html) => {
-        // console.log("set state 0");
         changeProgressState(-1);
         bodyInput.innerHTML = html;
-        // bodyTitle.innerHTML = "Change Form";
         updateConnectionBtn(account);
         const changeDealFormClick = document.getElementById("create-deal-btn");
         changeDealFormClick.addEventListener('submit', async (evt) => {
@@ -121,6 +115,16 @@ function changeDeal(dealID, account){
             } catch (error) {
                 CreateToast(true, error);
             }
+        });
+        const buyerSwitch = document.getElementById("buyer-role");
+        const sellerSwitch = document.getElementById("seller-role");
+        const dealPartnerLabel = document.getElementById("deal-partner-label");
+        buyerSwitch.addEventListener('click', (evt) => { //we are buyer
+            dealPartnerLabel.innerHTML = "Seller address";
+        });
+    
+        sellerSwitch.addEventListener('click', (evt) => { //we are seller
+            dealPartnerLabel.innerHTML = "Buyer address";
         });
         updateHistory(account);
     })
@@ -138,23 +142,19 @@ async function changeDealStatus(dealID, account, status){
     let txId = "0";
     if(status != 0)
         txId = answerDealById.txId;
-    console.log("Change Deal----------");
-    // if (status != 4 && status != 1) showLoader();
     try {
         let transaction = null;
         let current_value = -1;
-        console.log(answerDealById.status, status);
         if(status != answerDealById.status){
             switch(status){
                 case 1:
                     showLoader();
-                    current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
+                    current_value = ethers.utils.parseEther(String(answerDealById.value));
                     transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
-                    console.log(transaction, txId);
                     break;
                 case 2:
                     showLoader();
-                    current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
+                    current_value = ethers.utils.parseEther(String(answerDealById.value));
                     transaction = await escrowProvider.sendB(answerDealById.txId, {value: current_value});
                     break;
                 case 3:
@@ -180,7 +180,6 @@ async function changeDealStatus(dealID, account, status){
             }
             const tx = await transaction.wait();
             txId = tx.events[0].args.TxId;
-            // txId = tx.events[0].topics[tx.events[0].topics.length - 1];
             if(status == 1){
                 console.log("set tx");
                 await setTxId(dealID, txId);
@@ -199,7 +198,6 @@ async function changeDealStatus(dealID, account, status){
         CreateToast(true, "Something went wrong :(");
         return;
     }
-    console.log("End Change Deal----------")
 
     fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers }) 
     .then((resp) => {

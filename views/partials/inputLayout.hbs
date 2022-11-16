@@ -45,13 +45,13 @@
           for="deal-partner"
           class="form-label"
           id="deal-partner-label"
-        >Seller address</label>
+        >{{partnerRole}} address</label>
         <input
           type="text"
           name="buyer"
           class="form-control text-container"
           id="deal-partner"
-          placeholder="{{role}} address"
+          placeholder="{{partnerRole}} address"
           value="{{partner}}"
           required
         />
@@ -79,8 +79,6 @@
       <div class="col-3">
         <label for="unit" class="form-label">Unit</label>
         <select class="form-select" id="ether-unit" required>
-          <option {{weiSelected}}>Wei</option>
-          <option {{gweiSelected}}>Gwei</option>
           <option {{etherSelected}}>Ether</option>
           <option {{usdSelected}}>USD</option>
         </select>
