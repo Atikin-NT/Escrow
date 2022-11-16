@@ -16,8 +16,8 @@ contract Escrow is AutomationCompatibleInterface {
     }
 
     //buyerConf | sellerConf    = uint8 status
-    //      created             = 1
     //     0    |       0       = 0  
+    //       created            = 1
     //     1    |       0       = 2
     //     1    |       1       = 3
 
