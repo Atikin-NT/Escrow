@@ -135,23 +135,19 @@ async function changeDealStatus(dealID, account, status){
     let txId = "0";
     if(status != 0)
         txId = answerDealById.txId;
-    console.log("Change Deal----------");
-    // if (status != 4 && status != 1) showLoader();
     try {
         let transaction = null;
         let current_value = -1;
-        console.log(answerDealById.status, status);
         if(status != answerDealById.status){
             switch(status){
                 case 1:
                     showLoader();
-                    current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
+                    current_value = ethers.utils.parseEther(String(answerDealById.value));
                     transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
-                    console.log(transaction, txId);
                     break;
                 case 2:
                     showLoader();
-                    current_value = ethers.utils.hexlify(BigInt(answerDealById.value * Math.pow(10, answerDealById.unit * 9)));
+                    current_value = ethers.utils.parseEther(String(answerDealById.value));
                     transaction = await escrowProvider.sendB(answerDealById.txId, {value: current_value});
                     break;
                 case 3:
