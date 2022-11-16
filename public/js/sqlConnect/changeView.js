@@ -49,18 +49,9 @@ const updateConnectionBtn = (account) => {
 }
 
 let currentActiveCircle = -1;
-
-async function changeProgressState(state) {
-    let newState = state;
-
+async function changeProgressState(newState) {
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
-
-    // if (state === "01") {
-    //     progress.classList.remove(`progress-${currentActiveCircle}`)
-    //     progress.classList.add(`progress-${newState}`);
-    //     console.log("state = 01")
-    // } else 
     if (state - currentActiveCircle == 1) {
         circles[currentActiveCircle + 1].classList.add("active");
         progress.classList.remove(`progress-${currentActiveCircle}`)
