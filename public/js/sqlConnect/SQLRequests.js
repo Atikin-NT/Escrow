@@ -28,15 +28,11 @@ const getBody = async (account) => {
     throw "invalid partner address";
   if(value <= 0)
     throw "invalid value";
-  let unit = 0;
   const ethUnit = etherUnit.options[etherUnit.selectedIndex].value;
-  if(ethUnit == "Ether")
-    unit = 0;
   if(ethUnit == "USD"){
     const inUSD = value;
     let [gasInWei, ethUsd] = await getFeeData();
     value = inUSD * 1e8 / ethUsd.toNumber();
-    unit = 1; //in ETH
   }
 
   let buyer = partnerWallet.value;
@@ -51,17 +47,16 @@ const getBody = async (account) => {
   let feeAmount = value * 0.02;
   let feeRole = 2; // 1 - 50/50   0 - buyer   2 - seller
   if(feeRoleBuyer.checked == true){
-    feeRole = 0; //0
+    feeRole = 0;
   }
   if(feeDiscount.checked == true){
-    feeRole = 1; //1
+    feeRole = 1;
   }
 
   const body = JSON.stringify({
     buyer: buyer,
     seller: seller,
     value: value,
-    unit: unit,
     sellerIsAdmin: sellerIsAdmin,
     fee: feeAmount,
     feeRole: feeRole,

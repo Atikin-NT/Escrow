@@ -5,7 +5,6 @@ const defaulDeal = {
     seller: "0x0", 
     buyer: "0x0", 
     value: 0,
-    unit: 0,
     txid: -1,
     id: -1,
     fee: 0,
@@ -82,8 +81,7 @@ async function approveByPartnerView(req, res){
         role: role,
         seller: dbAnswer.seller, 
         buyer: dbAnswer.buyer, 
-        value: dbAnswer.value, 
-        unit: unitList[dbAnswer.unit],
+        value: dbAnswer.value,
         feeRole: feeRoleList[dbAnswer.feeRole],
         txid: dbAnswer.txid,
         id: dbAnswer.id,
@@ -122,7 +120,7 @@ async function changeDealStatus(req, res){
                         showNextButton = true;
                     }
                     if (answer.list[0].status == newStatus - 1){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txid, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer.status = newStatus;
                         }
@@ -132,7 +130,7 @@ async function changeDealStatus(req, res){
                     title = "Waiting when your partner will send Magic Box";
                     btnName = "Send Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txid, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
@@ -152,7 +150,7 @@ async function changeDealStatus(req, res){
                     title = "Waiting when your partner will approve Magic Box";
                     btnName = "Approve Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].seller == account){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txid, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
@@ -171,7 +169,7 @@ async function changeDealStatus(req, res){
                 case 4:
                     title = "ヾ(⌐■_■)ノ♪";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(id, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txid, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
@@ -198,8 +196,7 @@ async function changeDealStatus(req, res){
         role: role,
         seller: dbAnswer.seller, 
         buyer: dbAnswer.buyer, 
-        value: dbAnswer.value, 
-        unit: unitList[dbAnswer.unit],
+        value: dbAnswer.value,
         feeRole: feeRoleList[dbAnswer.feeRole],
         txid: dbAnswer.txid,
         id: dbAnswer.id,
