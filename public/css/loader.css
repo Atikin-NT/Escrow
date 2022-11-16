@@ -52,7 +52,7 @@
 }
 
 .boxes .box > div {
-  --background: #5C8DF6;
+  --background: #5c8df6;
   --top: auto;
   --right: auto;
   --bottom: auto;
@@ -89,7 +89,7 @@
 }
 
 .boxes .box > div:nth-child(4) {
-  --background: #DBE3F4;
+  --background: #dbe3f4;
   --top: 0;
   --left: 0;
   --translateZ: calc(var(--size) * 3 * -1);
@@ -225,15 +225,136 @@ html {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: grey;
 }
 
 #load-section .boxes {
+  margin: auto;
+}
+
+.bg-0 {
+  background-color: rgba(255, 255, 255, 0);
+  z-index: -1;
+}
+
+.bg-1 {
+  z-index: 5;
+  background-color: rgba(213, 213, 213, 0.5);
+}
+
+.start-animation-bg {
+  -webkit-animation: startBG 0s ease-in;
+          animation: startBG 0s ease-in;
+  -webkit-transition: all 1s ease-in;
+  transition: all 1s ease-in;
+}
+
+@-webkit-keyframes startBG {
+  from {
+    z-index: -1;
+  }
+  to {
+    z-index: 5;
+  }
+}
+
+@keyframes startBG {
+  from {
+    z-index: -1;
+  }
+  to {
+    z-index: 5;
+  }
+}
+
+.end-animation-bg {
+  -webkit-transition: all 1s ease-in;
+  transition: all 1s ease-in;
+  -webkit-animation: endBG 3s ease-in;
+          animation: endBG 3s ease-in;
+}
+
+@-webkit-keyframes endBG {
+  from {
+    z-index: 5;
+  }
+  to {
+    z-index: -1;
+  }
+}
+
+@keyframes endBG {
+  from {
+    z-index: 5;
+  }
+  to {
+    z-index: -1;
+  }
+}
+
+.op-0 {
+  opacity: 0;
+}
+
+.op-1 {
+  opacity: 1;
+}
+
+.start-animation-op {
+  -webkit-animation: startOP 0s ease-in;
+          animation: startOP 0s ease-in;
+  -webkit-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+}
+
+@-webkit-keyframes startOP {
+  from {
+    opacity: 0;
+  }
+  to {
+    z-index: 1;
+  }
+}
+
+@keyframes startOP {
+  from {
+    opacity: 0;
+  }
+  to {
+    z-index: 1;
+  }
+}
+
+.end-animation-op {
+  -webkit-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+  -webkit-animation: endOP 3s ease-in;
+          animation: endOP 3s ease-in;
+}
+
+@-webkit-keyframes endOP {
+  from {
+    z-index: 1;
+  }
+  to {
+    z-index: 0;
+  }
+}
+
+@keyframes endOP {
+  from {
+    z-index: 1;
+  }
+  to {
+    z-index: 0;
+  }
+}
+
+.spinner-border {
   margin: auto;
 }
 /*# sourceMappingURL=loader.css.map */

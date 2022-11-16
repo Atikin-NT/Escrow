@@ -31,7 +31,8 @@
   </head>
 
   <body class="bg-light">
-    {{> loader}}
+    <div class="wrapper">
+      {{> loader}}
     <div class="base-container container" id="create-container">
       <main id="main">
         {{> progressbar}}
@@ -79,6 +80,8 @@
       data-skip_prompt_cookie="g_state"
     >
     </div>
+    </div>
+    
   </body>
 
   <script

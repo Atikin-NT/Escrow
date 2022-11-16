@@ -7,27 +7,36 @@ let bodyInput = document.getElementById("inputBody");
 
 function showLoader() {
     const loader = document.getElementById("load-section");
-    if (loader == null) console.error(`Element "Loader" is not found.`);
+    const boxes = document.getElementById("boxesSection");
+    if (loader == null && boxes == null) console.error(`Element "Loader or Box" is not found.`);
     else {
         try {
-            loader.classList.remove("end-animation");
+            loader.classList.remove("end-animation-bg");
+            boxes.classList.remove("end-animation-op");
         } catch {};
-        loader.classList.add("start-animation")
-        loader.classList.add("op-1");
-        loader.classList.remove("op-0");
+        loader.classList.add("start-animation-bg");
+        boxes.classList.add("start-animation-op")
+        loader.classList.add("bg-1");
+        boxes.classList.add("op-1");
+        loader.classList.remove("bg-0");
+        boxes.classList.remove("op-0");
     }
     
 }
 function hiddenLoader() {
     const loader = document.getElementById("load-section");
-    if (loader == null) {
-        console.error(`Element "Loader" is not found.`)
+    const boxes = document.getElementById("boxesSection");
+    if (loader == null && boxes == null) {
+        console.error(`Element "Loader or Box" is not found.`);
     } else {
-        loader.classList.remove("start-animation")
-        loader.classList.add("end-animation");
-        loader.classList.add("op-0");
-        loader.classList.remove("op-1");
-        
+        loader.classList.remove("start-animation-bg");
+        boxes.classList.remove("start-animation-op");
+        loader.classList.add("end-animation-bg");
+        boxes.classList.add("end-animation-op");
+        loader.classList.add("bg-0");
+        boxes.classList.add("op-0");
+        loader.classList.remove("bg-1");
+        boxes.classList.remove("op-1");
     }
 }
 

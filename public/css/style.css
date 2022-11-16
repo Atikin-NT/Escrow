@@ -1,8 +1,5 @@
 body {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  position: relative;
+  height: 100%;
 }
 
 body h2 {
@@ -14,6 +11,13 @@ body h3 {
   margin: 0;
 }
 
+.wrapper {
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .base-container {
   height: auto !important;
   max-width: 960px;
@@ -21,70 +25,6 @@ body h3 {
 
 #create-container {
   position: relative;
-}
-
-.op-0 {
-  opacity: 0 !important;
-  z-index: -1;
-}
-
-.op-1 {
-  opacity: 50% !important;
-  z-index: 5;
-}
-
-.start-animation {
-  -webkit-animation: start 0s ease-in;
-          animation: start 0s ease-in;
-  -webkit-transition: opacity 1s ease-in;
-  transition: opacity 1s ease-in;
-}
-
-@-webkit-keyframes start {
-  from {
-    z-index: -1;
-  }
-  to {
-    z-index: 5;
-  }
-}
-
-@keyframes start {
-  from {
-    z-index: -1;
-  }
-  to {
-    z-index: 5;
-  }
-}
-
-.end-animation {
-  -webkit-transition: opacity 1s ease-in;
-  transition: opacity 1s ease-in;
-  -webkit-animation: end 3s ease-in;
-          animation: end 3s ease-in;
-}
-
-@-webkit-keyframes end {
-  from {
-    z-index: 5;
-  }
-  to {
-    z-index: -1;
-  }
-}
-
-@keyframes end {
-  from {
-    z-index: 5;
-  }
-  to {
-    z-index: -1;
-  }
-}
-
-.spinner-border {
-  margin: auto;
 }
 
 #main {
