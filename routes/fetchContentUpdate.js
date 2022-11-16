@@ -99,6 +99,7 @@ async function changeDealStatus(req, res){
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();
     const newStatus = parseInt(req.query.status);
+    console.log(id, account, newStatus);
     let dbAnswer = defaulDeal;
     let title = "default";
     let showNextButton = true;
@@ -120,7 +121,7 @@ async function changeDealStatus(req, res){
                         showNextButton = true;
                     }
                     if (answer.list[0].status == newStatus - 1){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txid, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txId, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer.status = newStatus;
                         }
@@ -130,7 +131,7 @@ async function changeDealStatus(req, res){
                     title = "Waiting when your partner will send Magic Box";
                     btnName = "Send Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txid, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txId, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
@@ -150,7 +151,7 @@ async function changeDealStatus(req, res){
                     title = "Waiting when your partner will approve Magic Box";
                     btnName = "Approve Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].seller == account){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txid, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txId, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;
@@ -169,7 +170,7 @@ async function changeDealStatus(req, res){
                 case 4:
                     title = "ヾ(⌐■_■)ノ♪";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txid, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txId, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer = answer.list[0];
                             dbAnswer.status = newStatus;

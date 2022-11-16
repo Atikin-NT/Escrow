@@ -147,10 +147,9 @@ function updateHistory(account, count = 5){
         small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status + 1}`;
         div.appendChild(small);
 
-        const unitList = ["Eth", "USD"];
         let span = document.createElement("span");
         span.className = 'text-muted';
-        span.innerHTML = `${element.value} ${unitList[element.unit]}`;
+        span.innerHTML = `${element.value} Ether`;
         
         li.appendChild(div);
         li.appendChild(span);

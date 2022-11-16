@@ -173,7 +173,6 @@ async function changeDealStatus(dealID, account, status){
             }
             const tx = await transaction.wait();
             txId = tx.events[0].args.TxId;
-            // txId = tx.events[0].topics[tx.events[0].topics.length - 1];
             if(status == 1){
                 console.log("set tx");
                 await setTxId(dealID, txId);
@@ -192,7 +191,6 @@ async function changeDealStatus(dealID, account, status){
         CreateToast(true, "Something went wrong :(");
         return;
     }
-    console.log("End Change Deal----------")
 
     fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers }) 
     .then((resp) => {

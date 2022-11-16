@@ -88,7 +88,7 @@ provider.on({
   const TxId = log.topics[3];
   console.log('Created: ', buyer, seller, TxId)
   const deal = await escrow.deals(TxId);
-  dbUpdateDealStatus(TxId, 1);
+  // dbUpdateDealStatus(TxId, 1);
 })
 
 provider.on({
@@ -99,7 +99,7 @@ provider.on({
   const TxId = log.topics[1];
   console.log('BuyerConfim: ',TxId);
   const deal = await escrow.deals(TxId);
-  dbUpdateDealStatus(TxId, 2);
+  // dbUpdateDealStatus(TxId, 2);
 })
 
 provider.on({
@@ -110,7 +110,7 @@ provider.on({
   const TxId = log.topics[1];
   console.log('SellerConfim: ',TxId);
   const deal = await escrow.deals(TxId);
-  dbUpdateDealStatus(TxId, 3);
+  // dbUpdateDealStatus(TxId, 3);
 })
 
 provider.on({
@@ -121,7 +121,7 @@ provider.on({
   const TxId = log.topics[1];
   console.log('Finished: ',TxId);
   const deal = await escrow.deals(TxId);
-  dbUpdateDealStatus(TxId, 4);
+  // dbUpdateDealStatus(TxId, 4);
 })
 
 provider.on({
