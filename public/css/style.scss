@@ -25,6 +25,8 @@ body {
   position: relative;
 }
 
+
+
 #main {
   height: 100%;
   min-width: 540px;
@@ -34,6 +36,7 @@ body {
   .deal-details {
     height: auto;
     margin: auto;
+    margin-top: 2.5rem !important;
     @media (min-width: 768px) {
       width: 100%;      
     }
@@ -44,6 +47,10 @@ body {
     }
     .form-check {
       padding-left: 0;
+      
+      .g-3 {
+        --bs-gutter-y: 0;
+      }
 
       .container-sm {
         padding-left: 0;
@@ -92,9 +99,22 @@ body {
   width: 80%;
 }
 
+hr.my-4 {
+  margin: 1rem 0 !important;
+}
+.textLayout-div {
+  margin-top: 1rem;
+}
+.textLayout-div.spec {
+  margin-top: 0 !important;
+}
+.form-label {
+  margin-bottom: 0;
+}
 .text-container {
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 0;
 
   @media (max-width: 425px) {
     font-size: 15px !important;
