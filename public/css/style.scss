@@ -6,10 +6,14 @@ body {
   h3 {
     margin: 0;
   }
-  // margin: 0;
+  // display: flex;
+  // position: absolute;
+  height: 100%;
+}
+.wrapper {
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  position: relative;
+  // flex-direction: column;
 }
 
 .base-container {
@@ -21,52 +25,10 @@ body {
   position: relative;
 }
 
-#load-section {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  left: 0;
 
-  height: 100% !important;
-  width: 100% !important;
-  background-color: grey;
-}
-
-.op-0 {
-  opacity: 0 !important;
-  z-index: -1;
-}
-.op-1 {
-  opacity: 50% !important;
-  z-index: 5;
-}
-
-.start-animation {
-  animation: start 0s ease-in;
-  transition: opacity 1s ease-in;
-}
-@keyframes start {
-  from {z-index: -1;};
-  to {z-index: 5;};
-}
-
-.end-animation {
-  transition: opacity 1s ease-in;
-  animation: end 3s ease-in;
-}
-@keyframes end {
-  from {z-index: 5;};
-  to {z-index: -1;};
-}
-
-
-.spinner-border {
-  margin: auto;
-}
 
 #main {
-  height: 100vh;
+  height: 100%;
   min-width: 540px;
   display: flex;
   flex-direction: column;
@@ -74,6 +36,7 @@ body {
   .deal-details {
     height: auto;
     margin: auto;
+    margin-top: 2.5rem !important;
     @media (min-width: 768px) {
       width: 100%;      
     }
@@ -82,16 +45,12 @@ body {
     #historyBody {
       margin-top: 0;
     }
-    // #inputBody {
-    //   width: 59%;
-    // }
-    // #historyBody {
-    //   width: 41%;
-    // }
-
-
     .form-check {
       padding-left: 0;
+      
+      .g-3 {
+        --bs-gutter-y: 0;
+      }
 
       .container-sm {
         padding-left: 0;
@@ -140,9 +99,22 @@ body {
   width: 80%;
 }
 
+hr.my-4 {
+  margin: 1rem 0 !important;
+}
+.textLayout-div {
+  margin-top: 1rem;
+}
+.textLayout-div.spec {
+  margin-top: 0 !important;
+}
+.form-label {
+  margin-bottom: 0;
+}
 .text-container {
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 0;
 
   @media (max-width: 425px) {
     font-size: 15px !important;

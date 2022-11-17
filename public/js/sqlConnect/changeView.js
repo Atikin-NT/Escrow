@@ -7,27 +7,36 @@ let bodyInput = document.getElementById("inputBody");
 
 function showLoader() {
     const loader = document.getElementById("load-section");
-    if (loader == null) console.error(`Element "Loader" is not found.`);
+    const boxes = document.getElementById("boxesSection");
+    if (loader == null && boxes == null) console.error(`Element "Loader or Box" is not found.`);
     else {
         try {
-            loader.classList.remove("end-animation");
+            loader.classList.remove("end-animation-bg");
+            boxes.classList.remove("end-animation-op");
         } catch {};
-        loader.classList.add("start-animation")
-        loader.classList.add("op-1");
-        loader.classList.remove("op-0");
+        loader.classList.add("start-animation-bg");
+        boxes.classList.add("start-animation-op")
+        loader.classList.add("bg-1");
+        boxes.classList.add("op-1");
+        loader.classList.remove("bg-0");
+        boxes.classList.remove("op-0");
     }
     
 }
 function hiddenLoader() {
     const loader = document.getElementById("load-section");
-    if (loader == null) {
-        console.error(`Element "Loader" is not found.`)
+    const boxes = document.getElementById("boxesSection");
+    if (loader == null && boxes == null) {
+        console.error(`Element "Loader or Box" is not found.`);
     } else {
-        loader.classList.remove("start-animation")
-        loader.classList.add("end-animation");
-        loader.classList.add("op-0");
-        loader.classList.remove("op-1");
-        
+        loader.classList.remove("start-animation-bg");
+        boxes.classList.remove("start-animation-op");
+        loader.classList.add("end-animation-bg");
+        boxes.classList.add("end-animation-op");
+        loader.classList.add("bg-0");
+        boxes.classList.add("op-0");
+        loader.classList.remove("bg-1");
+        boxes.classList.remove("op-1");
     }
 }
 
@@ -43,42 +52,40 @@ const updateConnectionBtn = (account) => {
     const button = document.getElementById("connectButton");
     if (button !== null && account != null) {
         button.remove();
-        const showLoader = document.getElementById("show-account");
-        showLoader.textContent = account;
+        const show = document.getElementById("show-account");
+        show.textContent = account;
     }
 }
 
-let currentActiveCircle = 0;
-
-async function changeProgressState(state) {
+let currentActiveCircle = -1;
+async function changeProgressState(newState) {
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
-
-    if (state - currentActiveCircle == 1) {
+    if (newState - currentActiveCircle == 1) {
         circles[currentActiveCircle + 1].classList.add("active");
         progress.classList.remove(`progress-${currentActiveCircle}`)
-        progress.classList.add(`progress-${state}`);
+        progress.classList.add(`progress-${newState}`);
         currentActiveCircle++;
-    } else if (currentActiveCircle - state == 1) {
+    } else if (currentActiveCircle - newState == 1) {
         circles[currentActiveCircle].classList.remove("active");
         progress.classList.remove(`progress-${currentActiveCircle}`);
-        progress.classList.add(`progress-${state}`);
+        progress.classList.add(`progress-${newState}`);
         currentActiveCircle--;
-    } else if (state > currentActiveCircle) {
+    } else if (newState > currentActiveCircle) {
         progress.classList.remove(`progress-${currentActiveCircle}`);
-        progress.classList.add(`progress-${state}`);
-        for (let i = currentActiveCircle + 1; i <= state; i++) {
-            console.log(i);
+        progress.classList.add(`progress-${newState}`);
+        for (let i = currentActiveCircle + 1; i <= newState; i++) {
+            // console.log(i);
             circles[i].classList.add("active");
             currentActiveCircle++;
         }
-    } else if (state < currentActiveCircle) {
+    } else if (newState < currentActiveCircle) {
         progress.classList.remove(`progress-${currentActiveCircle}`);
-        for (let i = currentActiveCircle; i > state; i--) {
+        for (let i = currentActiveCircle; i > newState; i--) {
             circles[i].classList.remove("active");
             currentActiveCircle--;
         }
-        progress.classList.add(`progress-${state}`);
+        progress.classList.add(`progress-${newState}`);
     }
     // console.log(currentActiveCircle);
 }
@@ -92,7 +99,7 @@ function changeDeal(dealID, account){
         return resp.text();
     })
     .then((html) => {
-        changeProgressState(0);
+        changeProgressState(-1);
         bodyInput.innerHTML = html;
         updateConnectionBtn(account);
         const changeDealFormClick = document.getElementById("create-deal-btn");
@@ -231,7 +238,7 @@ function approveByPartner(dealID, account){
     })
     .then(async (html) => {
         // console.log("set state 1");
-        await changeProgressState(1);
+        await changeProgressState(0);
         bodyInput.innerHTML = html;
         const changeBtn = document.getElementById("change-deal-step");
         if(changeBtn != null){

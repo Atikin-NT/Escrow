@@ -12,13 +12,13 @@
         // background-color: orange;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
-        margin-top: auto;
+        margin-top: 2rem;
         display: flex;
         flex-direction: column;
       }
     
       .progress-container {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
     
         display: flex;
         justify-content: space-between;
@@ -54,11 +54,11 @@
         transition: 0.4s ease;
       }
 
-      .progress-0 {
+      .progress--1 {
         width: 0;
       }
     
-      .progress-01 {
+      .progress-0 {
         width: calc(25%/2);
       }
 
@@ -82,8 +82,8 @@
         background-color: white;
         color: black;
         border-radius: 50%;
-        height: 2.5rem;
-        width: 2.5rem;
+        height: 2.2rem;
+        width: 2.2rem;
         border: 1px solid var(--line-border-empty);
         display: flex;
         align-items: center;

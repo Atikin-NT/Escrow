@@ -9,7 +9,7 @@ const ethers = require('ethers');
 openSQLite();
 
 const hostname = '127.0.0.1';
-const port = 5000;
+const port = 3000;
 
 const app = express();
 const hbs = exphbs.create({
@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
     buyerCheck: "checked",
     btnName: "Create",
     discountChecked: "checked",
+    partnerRole: "Seller",
   });
 });
 

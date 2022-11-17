@@ -21,7 +21,8 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/progressbar.css">
+    <link rel="stylesheet" href="/css/progressbar.css" />
+    <link rel="stylesheet" href="/css/loader.css">
 
     <script
       src="js/libs/ethers-5.2.umd.min.js"
@@ -30,38 +31,11 @@
   </head>
 
   <body class="bg-light">
-    <div id="load-section" class="op-0">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
+    <div class="wrapper">
+      {{> loader}}
     <div class="base-container container" id="create-container">
       <main id="main">
-        <div class="py-5 container">
-
-          <div class="progress-container">
-            <div id="progress" class="progress-0">
-              <div
-                class="progress-bar"
-                role="progressbar"
-              ></div>
-            </div>
-            <div class="circle active">1</div>
-            <div class="circle">2</div>
-            <div class="circle">3</div>
-            <div class="circle">4</div>
-            <div class="circle">5</div>
-          </div>
-
-          <div class="state-names">
-            <div class="name">Create form</div>
-            <div class="name">Send Ethers</div>
-            <div class="name">Send magic box</div>
-            <div class="name">Magic box receipt confirmation</div>
-            <div class="name">Deal Completed</div>
-          </div>
-        </div>
-
+        {{> progressbar}}
         <div class="row g-5 deal-details">
           <div id="inputBody" class="col-md-7">
             {{{body}}}
@@ -97,13 +71,17 @@
         </div>
       </main>
     </div>
- {{!-- ----------------------------------- --}}
+    {{! ----------------------------------- }}
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <div id="g_id_onload"
-        data-client_id="748097504037-h7g5a4cqoj65keosu0mbfv4rumm0hf6i.apps.googleusercontent.com"
-        data-login_uri="http://localhost:5000/profile"
-        data-skip_prompt_cookie="g_state">
+    <div
+      id="g_id_onload"
+      data-client_id="748097504037-h7g5a4cqoj65keosu0mbfv4rumm0hf6i.apps.googleusercontent.com"
+      data-login_uri="http://localhost:5000/profile"
+      data-skip_prompt_cookie="g_state"
+    >
     </div>
+    </div>
+    
   </body>
 
   <script

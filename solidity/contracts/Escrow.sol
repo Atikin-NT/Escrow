@@ -17,6 +17,7 @@ contract Escrow is AutomationCompatibleInterface {
 
     //buyerConf | sellerConf    = uint8 status
     //     0    |       0       = 0  
+    //       created            = 1
     //     1    |       0       = 2
     //     1    |       1       = 3
 
@@ -54,13 +55,13 @@ contract Escrow is AutomationCompatibleInterface {
         uint Bfee = 0;
         if (feeStyle == 0) Bfee = getFee(value);
         else if (feeStyle == 1) Bfee = getFee(value) / 2;
-        deals[TxId] = details(buyer, seller, value - Bfee, Bfee, 0);
+        deals[TxId] = details(buyer, seller, value - Bfee, Bfee, 1);
         emit Created(buyer, seller, TxId);
     }
 
     function sendB(bytes32 TxId) external payable onlyPerson(deals[TxId].buyer) {
         require(msg.value == deals[TxId].value + deals[TxId].Bfee, "Wrong money value");
-        require(deals[TxId].status == 0, "Money was already sent");
+        require(deals[TxId].status == 1, "Money was already sent");
         deals[TxId].status = 2;
         emit BuyerConfim(TxId);
     }
