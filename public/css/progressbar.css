@@ -8,87 +8,63 @@
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   margin-top: 2rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 }
-
 @media (max-width: 768px) {
   #main .container {
     padding-top: 3rem !important;
   }
 }
-
 #main .progress-container {
   font-size: 0.9rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   position: relative;
   width: 80%;
   margin: 0 auto;
   margin-bottom: 1rem;
 }
-
 #main .progress-container::before {
   content: "";
   background-color: var(--line-border-empty);
   position: absolute;
   top: 50%;
   left: 0;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
   height: 1px;
   width: 100%;
   z-index: -1;
-  -webkit-transition: 0.4s ease;
   transition: 0.4s ease;
 }
-
 #main #progress {
   background-color: var(--line-border-fill);
   position: absolute;
   top: 50%;
   left: 0;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
   height: 4px;
   z-index: -1;
-  -webkit-transition: 0.4s ease;
   transition: 0.4s ease;
 }
-
 #main .progress--1 {
   width: 0;
 }
-
 #main .progress-0 {
-  width: calc(25%/2);
+  width: 12.5%;
 }
-
 #main .progress-1 {
   width: 25% !important;
 }
-
 #main .progress-2 {
   width: 50% !important;
 }
-
 #main .progress-3 {
   width: 75% !important;
 }
-
 #main .progress-4 {
   width: 100% !important;
 }
-
 #main .circle {
   background-color: white;
   color: black;
@@ -96,39 +72,24 @@
   height: 2.2rem;
   width: 2.2rem;
   border: 1px solid var(--line-border-empty);
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-transition: 0.4s ease;
+  align-items: center;
+  justify-content: center;
   transition: 0.4s ease;
 }
-
 #main .circle.active {
   background-color: var(--line-border-fill);
   border-color: var(--line-border-fill);
   color: white;
 }
-
 #main .state-names {
   width: 90%;
-  min-width: calc(540px * 0.84);
-  display: -webkit-box;
-  display: -ms-flexbox;
+  min-width: 453.6px;
   display: flex;
   text-align: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   margin: 0 auto;
 }
-
 #main .name {
-  width: calc(80%/5);
-}
-/*# sourceMappingURL=progressbar.css.map */
+  width: 16%;
+}/*# sourceMappingURL=progressbar.css.map */
