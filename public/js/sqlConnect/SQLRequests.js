@@ -125,14 +125,16 @@ function updateHistory(account, count = 5){
       for(let i = json.list.length - 1; i >= 0 && i > json.list.length - count; i--){
         const element = json.list[i];
         let li = document.createElement("li");
+        li.className = "historyLi"
         li.addEventListener('click', (evt) => {
             showCurrentDeal(element.id, account, element.status);
         })
         li.classList.add('list-group-item', 'd-flex', 'justify-content-between');
-        if(i%2 == 1) li.classList.add('bg-light');
+        // if(i%2 == 1) li.classList.add('bg-light');
 
         let div = document.createElement("div");
         div.className = "history-div";
+        if (element.status == 4) div.classList.add("txt-success");
 
         let h6 = document.createElement("h6");
         h6.classList.add("text-container", "my-0");
@@ -143,12 +145,14 @@ function updateHistory(account, count = 5){
         div.appendChild(h6);
 
         let small = document.createElement("small");
-        small.className = 'text-muted';
+        small.classList.add("txt", element.status == 4 ? "txt-succsess" : "txt-muted");
         small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status + 1}`;
         div.appendChild(small);
 
         let span = document.createElement("span");
-        span.className = 'text-muted';
+        span.classList.add("txt", element.status == 4 ? "txt-success" : "txt-muted");
+        // if (element.status == 4) span.className = "txt-success";
+        // else span.className = 'text-muted';
         span.innerHTML = `${element.value} Ether`;
         
         li.appendChild(div);
