@@ -7,16 +7,8 @@
     "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage -t Create_deal",
     "start": "nodemon main.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Atikin-NT/Escrow.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Atikin-NT/Escrow/issues"
-  },
-  "homepage": "https://github.com/Atikin-NT/Escrow#readme",
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "ethers": "^5.7.0",
