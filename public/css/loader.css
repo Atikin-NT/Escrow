@@ -4,53 +4,39 @@
   height: calc(var(--size) * 2);
   width: calc(var(--size) * 3);
   position: relative;
-  -webkit-transform-style: preserve-3d;
-          transform-style: preserve-3d;
-  -webkit-transform-origin: 50% 50%;
-          transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
   margin-top: calc(var(--size) * 1.5 * -1);
-  -webkit-transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
-          transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
+  transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
 }
-
 .boxes .box {
   width: var(--size);
   height: var(--size);
   top: 0;
   left: 0;
   position: absolute;
-  -webkit-transform-style: preserve-3d;
-          transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
-
 .boxes .box:nth-child(1) {
-  -webkit-transform: translate(100%, 0);
-          transform: translate(100%, 0);
+  transform: translate(100%, 0);
   -webkit-animation: box1 var(--duration) linear infinite;
           animation: box1 var(--duration) linear infinite;
 }
-
 .boxes .box:nth-child(2) {
-  -webkit-transform: translate(0, 100%);
-          transform: translate(0, 100%);
+  transform: translate(0, 100%);
   -webkit-animation: box2 var(--duration) linear infinite;
           animation: box2 var(--duration) linear infinite;
 }
-
 .boxes .box:nth-child(3) {
-  -webkit-transform: translate(100%, 100%);
-          transform: translate(100%, 100%);
+  transform: translate(100%, 100%);
   -webkit-animation: box3 var(--duration) linear infinite;
           animation: box3 var(--duration) linear infinite;
 }
-
 .boxes .box:nth-child(4) {
-  -webkit-transform: translate(200%, 0);
-          transform: translate(200%, 0);
+  transform: translate(200%, 0);
   -webkit-animation: box4 var(--duration) linear infinite;
           animation: box4 var(--duration) linear infinite;
 }
-
 .boxes .box > div {
   --background: #5c8df6;
   --top: auto;
@@ -68,26 +54,21 @@
   right: var(--right);
   bottom: var(--bottom);
   left: var(--left);
-  -webkit-transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
-          transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
+  transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
 }
-
 .boxes .box > div:nth-child(1) {
   --top: 0;
   --left: 0;
 }
-
 .boxes .box > div:nth-child(2) {
   --background: #145af2;
   --right: 0;
   --rotateY: 90deg;
 }
-
 .boxes .box > div:nth-child(3) {
   --background: #447cf5;
   --rotateX: -90deg;
 }
-
 .boxes .box > div:nth-child(4) {
   --background: #dbe3f4;
   --top: 0;
@@ -96,142 +77,102 @@
 }
 
 @-webkit-keyframes box1 {
-  0%,
-  50% {
-    -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0);
+  0%, 50% {
+    transform: translate(100%, 0);
   }
   100% {
-    -webkit-transform: translate(200%, 0);
-            transform: translate(200%, 0);
+    transform: translate(200%, 0);
   }
 }
 
 @keyframes box1 {
-  0%,
-  50% {
-    -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0);
+  0%, 50% {
+    transform: translate(100%, 0);
   }
   100% {
-    -webkit-transform: translate(200%, 0);
-            transform: translate(200%, 0);
+    transform: translate(200%, 0);
   }
 }
-
 @-webkit-keyframes box2 {
   0% {
-    -webkit-transform: translate(0, 100%);
-            transform: translate(0, 100%);
+    transform: translate(0, 100%);
   }
   50% {
-    -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
+    transform: translate(0, 0);
   }
   100% {
-    -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0);
+    transform: translate(100%, 0);
   }
 }
-
 @keyframes box2 {
   0% {
-    -webkit-transform: translate(0, 100%);
-            transform: translate(0, 100%);
+    transform: translate(0, 100%);
   }
   50% {
-    -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
+    transform: translate(0, 0);
   }
   100% {
-    -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0);
+    transform: translate(100%, 0);
   }
 }
-
 @-webkit-keyframes box3 {
-  0%,
-  50% {
-    -webkit-transform: translate(100%, 100%);
-            transform: translate(100%, 100%);
+  0%, 50% {
+    transform: translate(100%, 100%);
   }
   100% {
-    -webkit-transform: translate(0, 100%);
-            transform: translate(0, 100%);
+    transform: translate(0, 100%);
   }
 }
-
 @keyframes box3 {
-  0%,
-  50% {
-    -webkit-transform: translate(100%, 100%);
-            transform: translate(100%, 100%);
+  0%, 50% {
+    transform: translate(100%, 100%);
   }
   100% {
-    -webkit-transform: translate(0, 100%);
-            transform: translate(0, 100%);
+    transform: translate(0, 100%);
   }
 }
-
 @-webkit-keyframes box4 {
   0% {
-    -webkit-transform: translate(200%, 0);
-            transform: translate(200%, 0);
+    transform: translate(200%, 0);
   }
   50% {
-    -webkit-transform: translate(200%, 100%);
-            transform: translate(200%, 100%);
+    transform: translate(200%, 100%);
   }
   100% {
-    -webkit-transform: translate(100%, 100%);
-            transform: translate(100%, 100%);
+    transform: translate(100%, 100%);
   }
 }
-
 @keyframes box4 {
   0% {
-    -webkit-transform: translate(200%, 0);
-            transform: translate(200%, 0);
+    transform: translate(200%, 0);
   }
   50% {
-    -webkit-transform: translate(200%, 100%);
-            transform: translate(200%, 100%);
+    transform: translate(200%, 100%);
   }
   100% {
-    -webkit-transform: translate(100%, 100%);
-            transform: translate(100%, 100%);
+    transform: translate(100%, 100%);
   }
 }
-
 html {
   -webkit-font-smoothing: antialiased;
 }
 
 * {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
-
 *:before, *:after {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 #load-section {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
 }
-
 #load-section .boxes {
   margin: auto;
 }
@@ -249,7 +190,6 @@ html {
 .start-animation-bg {
   -webkit-animation: startBG 0s ease-in;
           animation: startBG 0s ease-in;
-  -webkit-transition: all 1s ease-in;
   transition: all 1s ease-in;
 }
 
@@ -270,9 +210,7 @@ html {
     z-index: 5;
   }
 }
-
 .end-animation-bg {
-  -webkit-transition: all 1s ease-in;
   transition: all 1s ease-in;
   -webkit-animation: endBG 3s ease-in;
           animation: endBG 3s ease-in;
@@ -295,7 +233,6 @@ html {
     z-index: -1;
   }
 }
-
 .op-0 {
   opacity: 0;
 }
@@ -307,7 +244,6 @@ html {
 .start-animation-op {
   -webkit-animation: startOP 0s ease-in;
           animation: startOP 0s ease-in;
-  -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
 }
 
@@ -328,9 +264,7 @@ html {
     z-index: 1;
   }
 }
-
 .end-animation-op {
-  -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
   -webkit-animation: endOP 3s ease-in;
           animation: endOP 3s ease-in;
@@ -353,8 +287,6 @@ html {
     z-index: 0;
   }
 }
-
 .spinner-border {
   margin: auto;
-}
-/*# sourceMappingURL=loader.css.map */
+}/*# sourceMappingURL=loader.css.map */

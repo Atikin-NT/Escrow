@@ -98,7 +98,10 @@ body {
 .history-div {
   width: 80%;
 }
-
+.historyLi:hover {
+  cursor: pointer;
+  background-color: rgba(var(--bs-light-rgb),var(--bs-bg-opacity))!important;
+}
 hr.my-4 {
   margin: 1rem 0 !important;
 }
@@ -121,10 +124,20 @@ hr.my-4 {
   }
 }
 
-.text-muted {
+.txt {
   width: 20%;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.txt-muted {
+  --bs-text-opacity: 1;
+  color: #6c757d;
+}
+
+.txt-success {
+  --bs-text-opacity: 1;
+  color: rgba(25,135,84) !important;
 }
 
 .toast-body {
@@ -152,7 +165,7 @@ hr.my-4 {
 
 #buttonSection {
   display: flex !important;
-  justify-content: end;
+  justify-content: space-between;
   float: right;
 
   button {
@@ -160,4 +173,6 @@ hr.my-4 {
   }
 }
 
-
+#new-deal {
+  float: left;
+}
