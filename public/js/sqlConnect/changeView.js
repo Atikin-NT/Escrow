@@ -75,7 +75,6 @@ async function changeProgressState(newState) {
         progress.classList.remove(`progress-${currentActiveCircle}`);
         progress.classList.add(`progress-${newState}`);
         for (let i = currentActiveCircle + 1; i <= newState; i++) {
-            // console.log(i);
             circles[i].classList.add("active");
             currentActiveCircle++;
         }
@@ -87,13 +86,11 @@ async function changeProgressState(newState) {
         }
         progress.classList.add(`progress-${newState}`);
     }
-    // console.log(currentActiveCircle);
 }
 
 function changeDeal(dealID, account){
     fetch(`view/changeDealView?dealid=${dealID}&account=${account}`, { headers })
     .then((resp) => {
-        console.log(resp);
         if (resp.status < 200 || resp.status >= 300)
             throw new Error("connect error");
         return resp.text();
@@ -143,58 +140,51 @@ async function changeDealStatus(dealID, account, status){
     if(status != 0)
         txId = answerDealById.txId;
     try {
-        let transaction = null;
         let current_value = -1;
         if(status != answerDealById.status){
             switch(status){
                 case 1:
                     showLoader();
                     current_value = ethers.utils.parseEther(String(answerDealById.value));
-                    transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
+                    let transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
+                    const tx = await transaction.wait();
+                    txId = tx.events[0].args.TxId;
+                    await setTxId(dealID, txId);
                     break;
                 case 2:
                     showLoader();
                     current_value = ethers.utils.parseEther(String(answerDealById.value));
-                    transaction = await escrowProvider.sendB(answerDealById.txId, {value: current_value});
+                    await escrowProvider.sendB(answerDealById.txId, {value: current_value});
                     break;
                 case 3:
                     showLoader();
-                    transaction = await escrowProvider.sendS(answerDealById.txId);
+                    await escrowProvider.sendS(answerDealById.txId);
                     break;
                 case 4:
                     showLoader();
-                    transaction = await escrowProvider.approve(answerDealById.txId);
+                    await escrowProvider.approve(answerDealById.txId);
                     break;
                 case -1:
                     showLoader();
                     if(answerDealById.status != 3){
-                        transaction = await escrowProvider.cancel(answerDealById.txId);
+                        await escrowProvider.cancel(answerDealById.txId);
                     }
                     else{
-                        transaction = await escrowProvider.disapprove(answerDealById.txId);
+                        await escrowProvider.disapprove(answerDealById.txId);
                     }
+                    CreateToast(false, "Deal has been deleted");
+                    await deleteDeal(dealID);
+                    window.location.reload();
+                    return;
                     break;
                 default:
                     console.log("Unknown error");
                     break;
             }
-            const tx = await transaction.wait();
-            txId = tx.events[0].args.TxId;
-            if(status == 1){
-                console.log("set tx");
-                await setTxId(dealID, txId);
-            }
-            if(status == -1){
-                CreateToast(false, "Deal has been deleted");
-                await deleteDeal(dealID);
-                window.location.reload();
-                return;
-            }
             hiddenLoader();
         }
     } catch (err) {
         hiddenLoader();
-        console.error(err);
         CreateToast(true, "Something went wrong :(");
         return;
     }
@@ -229,7 +219,6 @@ async function changeDealStatus(dealID, account, status){
 }
 
 function approveByPartner(dealID, account){
-    // IDEA: сделать проверку по паре (id пользователя в сделке / txid сделки)
     fetch(`view/approveByPartner?dealid=${dealID}&account=${account}`, { headers })
     .then((resp) => {
         if (resp.status < 200 || resp.status >= 300)
@@ -237,7 +226,6 @@ function approveByPartner(dealID, account){
         return resp.text();
     })
     .then(async (html) => {
-        // console.log("set state 1");
         await changeProgressState(0);
         bodyInput.innerHTML = html;
         const changeBtn = document.getElementById("change-deal-step");
@@ -275,9 +263,3 @@ export {
     changeDeal,
     showCurrentDeal,
 };
-
-/*
-TODO: на бд добавить доп поле для проверки ключа (автор сделки и ее txid)
-
-TODO: добавить error html, если бд не смогла сделать какой-то запрос
-*/

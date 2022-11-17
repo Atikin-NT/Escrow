@@ -16,20 +16,6 @@ function shortWallet(wallet, n, m) {
 }
 
 const initialize = async () => {
-  //   createTransactionSendButton.onclick = async () => {
-  //     const buyer = createTransactionBuyer.value;
-  //     const seller = createTransactionSeller.value;
-  //     const value = createTransactionValue.value;
-  //     try {
-  //       const transaction = await escrowProvider.create(buyer, seller, value);
-  //       const tx = await transaction.wait();
-  //       TxId = tx.events[0].args.TxId;
-  //       createTransactionStatus.innerHTML = `Ok`;
-  //     } catch (err) {
-  //       console.error(err);
-  //       createTransactionStatus.innerHTML = `Error: ${err.data.message}`;
-  //     }
-  //   };
 
   const isMetaMaskInstalled = () => {
     const { ethereum } = window;

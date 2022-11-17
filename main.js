@@ -2,7 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const {router} = require('./routes/main.js');
-const {openSQLite, closeSQLite, dbUpdateDealStatus} = require('./lib/sqlite.js');
+const {openSQLite, closeSQLite} = require('./lib/sqlite.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
 
@@ -72,7 +72,7 @@ process.on('uncaughtException', (err, origin) => {
 });
 
 
-let provider = new ethers.providers.getDefaultProvider("goerli");
+let provider = new ethers.providers.AlchemyProvider("goerli");
 const address = "0xFdc1CED8924C45Bac7d8D7870631F079c117A0ac"; //localhost
 let escrow = new ethers.Contract(
   address,
@@ -89,7 +89,6 @@ provider.on({
   const TxId = log.topics[3];
   console.log('Created: ', buyer, seller, TxId)
   const deal = await escrow.deals(TxId);
-  // dbUpdateDealStatus(TxId, 1);
 })
 
 provider.on({
@@ -100,7 +99,6 @@ provider.on({
   const TxId = log.topics[1];
   console.log('BuyerConfim: ',TxId);
   const deal = await escrow.deals(TxId);
-  // dbUpdateDealStatus(TxId, 2);
 })
 
 provider.on({
@@ -111,7 +109,6 @@ provider.on({
   const TxId = log.topics[1];
   console.log('SellerConfim: ',TxId);
   const deal = await escrow.deals(TxId);
-  // dbUpdateDealStatus(TxId, 3);
 })
 
 provider.on({
@@ -122,7 +119,6 @@ provider.on({
   const TxId = log.topics[1];
   console.log('Finished: ',TxId);
   const deal = await escrow.deals(TxId);
-  // dbUpdateDealStatus(TxId, 4);
 })
 
 provider.on({

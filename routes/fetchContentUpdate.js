@@ -10,9 +10,7 @@ const defaulDeal = {
     fee: 0,
     status: -1,
 };
-const unitList = ["Ether"];
 const feeRoleList = ["Buyer", "50/50", "Seller"];
-//TODO: if something wrong send error resp status
 
 async function changeDealView(req, res){
     const id = parseInt(req.query.dealid);
@@ -70,8 +68,6 @@ async function approveByPartnerView(req, res){
         showNextButton = true
         title = 'Waiting for your approve';
     }
-    console.log(dbAnswer);
-    console.log(showNextButton, account);
     if(dbAnswer.status != 0) dbAnswer = defaulDeal;
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";

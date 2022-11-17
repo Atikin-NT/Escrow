@@ -195,7 +195,6 @@ const getDealById = async(id) => {
   });
   const jsonCall = (json) => {
     let res = -1;
-    console.log(json);
     if(json.code == 0)
       res = json.list[0];
     return res;
