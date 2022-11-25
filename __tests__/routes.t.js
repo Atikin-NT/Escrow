@@ -2,32 +2,11 @@ const request = require('supertest');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { router } = require('../routes/main.js');
-const {openSQLite, closeSQLite} = require('../lib/sqlite.js');
-openSQLite();
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use('/', router);
-
-process.on('SIGINT', () => {
-  console.log("SIGINT");
-  closeSQLite();
-  console.log("db close");
-  server.close();
-});
-
-process.on('uncaughtExceptionMonitor', (err, origin) => {
-  console.log('uncaughtExceptionMonitor');
-  closeSQLite();
-  console.log("db close");
-});
-
-process.on('uncaughtException', (err, origin) => {
-  console.log('uncaughtException');
-  console.log(err, origin);
-  process.exit(1);
-});
 
 describe('Create_deal', function () {
 

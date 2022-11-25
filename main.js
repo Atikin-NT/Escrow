@@ -2,11 +2,8 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const {router} = require('./routes/main.js');
-const {openSQLite, closeSQLite} = require('./lib/sqlite.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
-
-openSQLite();
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -50,25 +47,6 @@ app.post("/request", (req, res) => {
 
 var server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
-});
-
-process.on('SIGINT', () => {
-  console.log("SIGINT");
-  closeSQLite();
-  console.log("db close");
-  server.close();
-});
-
-process.on('uncaughtExceptionMonitor', (err, origin) => {
-  console.log('uncaughtExceptionMonitor');
-  closeSQLite();
-  console.log("db close");
-});
-
-process.on('uncaughtException', (err, origin) => {
-  console.log('uncaughtException');
-  console.log(err, origin);
-  process.exit(1);
 });
 
 
