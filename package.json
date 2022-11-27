@@ -9,6 +9,9 @@
   },
   "author": "",
   "license": "ISC",
+  "workspaces": [
+    "solidity"
+  ],
   "dependencies": {
     "@supabase/supabase-js": "^2.1.1",
     "cookie-parser": "^1.4.6",
@@ -22,6 +25,7 @@
     "nodemon": "^2.0.20",
     "sqlite": "^4.1.2",
     "sqlite3": "^5.1.1",
-    "supertest": "^6.2.4"
+    "supertest": "^6.2.4",
+    "dotenv": "^16.0.2"
   }
 }
