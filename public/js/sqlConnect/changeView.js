@@ -1,6 +1,6 @@
 import { MetaMaskWallet, escrowProvider } from "../web3/Web3Layer.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { updateDeal, updateHistory, getDealById, setTxId, deleteDeal } from "./SQLRequests.js";
+import { updateDeal, updateHistory, getDealById, setTxId, setTxHash, deleteDeal } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
@@ -147,9 +147,10 @@ async function changeDealStatus(dealID, account, status){
                     showLoader();
                     current_value = ethers.utils.parseEther(String(answerDealById.value));
                     let transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
-                    const tx = await transaction.wait();
-                    txId = tx.events[0].args.TxId;
-                    await setTxId(dealID, txId);
+                    await setTxHash(dealID, transaction.hash);
+                    // const tx = await transaction.wait();
+                    // txId = tx.events[0].args.TxId;
+                    // await setTxId(dealID, txId);
                     break;
                 case 2:
                     showLoader();

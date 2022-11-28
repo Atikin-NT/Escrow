@@ -222,7 +222,26 @@ const setTxId = async (id, txId) => {
       res = 0
     return res;
   }
-  const res = getRes("/fetch/updateTxId", body, jsonCall, (err) => { console.log(err);});
+  const res = await getRes("/fetch/updateTxId", body, jsonCall, (err) => { console.log(err);});
+  return res;
+}
+
+const setTxHash = async (id, txHash) => {
+  if(id <= 0)
+    throw "invalid value";
+  
+  const body = JSON.stringify({
+    id: id,
+    txHash: txHash,
+  });
+
+  const jsonCall = (json) => {
+    let res = -1;
+    if(json.code == 0)
+      res = 0
+    return res;
+  }
+  const res = await getRes("/fetch/updateTxHash", body, jsonCall, (err) => { console.log(err);});
   return res;
 }
 
@@ -241,8 +260,8 @@ const deleteDeal = async (id) => {
     return res;
   }
 
-  const res = getRes("/fetch/deleteDeal", body, jsonCall, (err) => { console.log(err);});
+  const res = await getRes("/fetch/deleteDeal", body, jsonCall, (err) => { console.log(err);});
   return res;
 }
 
-export { updateHistory, createDeal, updateDeal, getDealById, setTxId, deleteDeal };
+export { updateHistory, createDeal, updateDeal, getDealById, setTxId, setTxHash, deleteDeal };

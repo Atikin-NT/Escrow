@@ -1,7 +1,7 @@
 const { Router } = require("express");
-const {createDeal, deleteDeal, getDeals, updateDealStatus, updateDeal, getDealById, updateTxId} = require("./fetch.js");
-const {changeDealView, approveByPartnerView, changeDealStatus} = require("./fetchContentUpdate.js");
-const { SignIn } = require("./profile.js");
+const {createDeal, deleteDeal, getDeals, updateDealStatus, updateDeal, getDealById, updateTxId, updateTxHash} = require("../controllers/fetch.js");
+const {changeDealView, approveByPartnerView, changeDealStatus} = require("../controllers/view.js");
+const { SignIn } = require("../controllers/profile.js");
 
 
 const router = Router();
@@ -13,6 +13,7 @@ router.post("/fetch/updateDealStatus", updateDealStatus);
 router.post("/fetch/updateDeal", updateDeal);
 router.post("/fetch/getDealById", getDealById);
 router.post("/fetch/updateTxId", updateTxId);
+router.post("/fetch/updateTxHash", updateTxHash);
 
 router.get("/view/changeDealView", changeDealView);
 router.get("/view/approveByPartner", approveByPartnerView);

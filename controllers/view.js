@@ -1,4 +1,4 @@
-const { dbGetDealsByID, dbUpdateDealStatus } = require('../lib/sqlite.js');
+const { dbGetDealsByID, dbUpdateDealStatus, dbUpdateDealStatusById } = require('../lib/sqlite.js');
 const ethers = require('ethers');
 
 const defaulDeal = {
@@ -115,7 +115,7 @@ async function changeDealStatus(req, res){
                         showNextButton = true;
                     }
                     if (answer.list[0].status == newStatus - 1){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txId, newStatus)).code;
+                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatusById(dbAnswer.id, newStatus)).code;
                         if(changeDealStatusAnswer == 0){
                             dbAnswer.status = newStatus;
                         }
