@@ -197,8 +197,9 @@ async function changeDealStatus(dealID, account, status){
         return resp.text();
     })
     .then(async (html) => {
-        await changeProgressState(status);
         bodyInput.innerHTML = html;
+        status = document.getElementById("deal-status").value;
+        await changeProgressState(status);
 
         const approveDealBtn = document.getElementById("next-deal-step");
         if(approveDealBtn != null){

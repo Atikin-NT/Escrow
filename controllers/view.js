@@ -105,7 +105,12 @@ async function changeDealStatus(req, res){
         const answer = JSON.parse(await dbGetDealsByID(id));
         dbAnswer = answer.list[0];
         if(answer.code == 0){
-            switch(newStatus){
+            switch(answer.list[0].status){
+                case 0:
+                    title = "Waiting for your approve";
+                    dbAnswer = answer.list[0];
+                    showNextButton = false;
+                    break;
                 case 1:
                     title = "Waiting when your partner will send Ethers";
                     btnName = "Send Ethers";
@@ -114,51 +119,25 @@ async function changeDealStatus(req, res){
                         title = "Waiting when you will send Ethers";
                         showNextButton = true;
                     }
-                    if (answer.list[0].status == newStatus - 1){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatusById(dbAnswer.id, newStatus)).code;
-                        if(changeDealStatusAnswer == 0){
-                            dbAnswer.status = newStatus;
-                        }
-                    }
                 break;
                 case 2:
                     title = "Waiting when your partner will send Magic Box";
                     btnName = "Send Magic Box";
-                    if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txId, newStatus)).code;
-                        if(changeDealStatusAnswer == 0){
-                            dbAnswer = answer.list[0];
-                            dbAnswer.status = newStatus;
-                        }
+                    dbAnswer = answer.list[0];
+                    title = "Waiting when you will send Magic Box";
+                    if(answer.list[0].buyer == account){
+                        title = "Waiting when your partner will send Magic Box";
                         showNextButton = false;
-                    }
-                    else {
-                        dbAnswer = answer.list[0];
-                        title = "Waiting when you will send Magic Box";
-                        if(answer.list[0].buyer == account){
-                            title = "Waiting when your partner will send Magic Box";
-                            showNextButton = false;
-                        }
                     }
                 break;
                 case 3:
                     title = "Waiting when your partner will approve Magic Box";
                     btnName = "Approve Magic Box";
-                    if(answer.list[0].status == newStatus-1 && answer.list[0].seller == account){
-                        const changeDealStatusAnswer = JSON.parse(await dbUpdateDealStatus(dbAnswer.txId, newStatus)).code;
-                        if(changeDealStatusAnswer == 0){
-                            dbAnswer = answer.list[0];
-                            dbAnswer.status = newStatus;
-                            showNextButton = false;
-                        }
-                    }
-                    else {
-                        dbAnswer = answer.list[0];
-                        title = "Waiting when you will approve Magic Box";
-                        if(answer.list[0].seller == account){
-                            showNextButton = false;
-                            title = "Waiting when your partner will approve Magic Box";
-                        }
+                    dbAnswer = answer.list[0];
+                    title = "Waiting when you will approve Magic Box";
+                    if(answer.list[0].seller == account){
+                        showNextButton = false;
+                        title = "Waiting when your partner will approve Magic Box";
                     }
                 break;
                 case 4:
