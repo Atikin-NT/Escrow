@@ -135,7 +135,7 @@ async function changeDealStatus(dealID, account, status){
     if(answerDealById == -1) {
         throw "Deal Not Found";
     }
-
+    let transaction = "0";
     let txId = "0";
     if(status != 0)
         txId = answerDealById.txId;
@@ -146,24 +146,27 @@ async function changeDealStatus(dealID, account, status){
                 case 1:
                     showLoader();
                     current_value = ethers.utils.parseEther(String(answerDealById.value));
-                    let transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
+                    transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
                     await setTxHash(dealID, transaction.hash);
-                    // const tx = await transaction.wait();
+                    await transaction.wait();
                     // txId = tx.events[0].args.TxId;
                     // await setTxId(dealID, txId);
                     break;
                 case 2:
                     showLoader();
                     current_value = ethers.utils.parseEther(String(answerDealById.value));
-                    await escrowProvider.sendB(answerDealById.txId, {value: current_value});
+                    transaction = await escrowProvider.sendB(answerDealById.txId, {value: current_value});
+                    await transaction.wait()
                     break;
                 case 3:
                     showLoader();
-                    await escrowProvider.sendS(answerDealById.txId);
+                    transaction = await escrowProvider.sendS(answerDealById.txId);
+                    await transaction.wait()
                     break;
                 case 4:
                     showLoader();
-                    await escrowProvider.approve(answerDealById.txId);
+                    transaction = await escrowProvider.approve(answerDealById.txId);
+                    await transaction.wait()
                     break;
                 case -1:
                     showLoader();

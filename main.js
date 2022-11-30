@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const {router} = require('./routes/main.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
-const {setTxIdByHash } = require("./lib/sqlite");
+const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus } = require("./lib/sqlite");
 require("dotenv").config();
 
 const hostname = '127.0.0.1';
@@ -67,9 +67,9 @@ provider.on({
   const buyer = ethers.utils.hexStripZeros(log.topics[1]);
   const seller = ethers.utils.hexStripZeros(log.topics[2]);
   const TxId = log.topics[3];
-  await setTxIdByHash(txHash, TxId)
+  await setTxIdByHash(txHash, TxId);
   console.log('Created: ', buyer, seller, TxId)
-  const deal = await escrow.deals(TxId);
+  await dbUpdateDealStatus(TxId, 1);
 })
 
 provider.on({
@@ -79,7 +79,7 @@ provider.on({
   ]}, async (log, event) => {
   const TxId = log.topics[1];
   console.log('BuyerConfim: ',TxId);
-  const deal = await escrow.deals(TxId);
+  await dbUpdateDealStatus(TxId, 2);
 })
 
 provider.on({
@@ -89,7 +89,7 @@ provider.on({
   ]}, async (log, event) => {
   const TxId = log.topics[1];
   console.log('SellerConfim: ',TxId);
-  const deal = await escrow.deals(TxId);
+  await dbUpdateDealStatus(TxId, 3);
 })
 
 provider.on({
@@ -99,7 +99,10 @@ provider.on({
   ]}, async (log, event) => {
   const TxId = log.topics[1];
   console.log('Finished: ',TxId);
-  const deal = await escrow.deals(TxId);
+  const dbDeal = JSON.parse(await dbGetDealsByTxID(TxId));
+  if (dbDeal.list.length > 0){
+    await dbUpdateDealStatus(TxId, 4);
+  }
 })
 
 provider.on({
@@ -109,5 +112,4 @@ provider.on({
   ]}, async (log, event) => {
   const TxId = log.topics[1];
   console.log('Consflict: ',TxId);
-  const deal = await escrow.deals(TxId);
 })
