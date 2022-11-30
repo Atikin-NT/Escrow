@@ -1,5 +1,3 @@
-<script src="js/libs/ethers-5.2.umd.min.js" type="application/javascript"></script>
-
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -10,7 +8,7 @@
       content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
     />
     <meta name="generator" content="Hugo 0.101.0" />
-    <title>Profile</title>
+    <title>Escrow-service</title>
 
     <link
       rel="canonical"
@@ -23,101 +21,73 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/progressbar.css" />
+    <link rel="stylesheet" href="/css/loader.css">
 
+    <script
+      src="js/libs/ethers-5.2.umd.min.js"
+      type="application/javascript"
+    ></script>
   </head>
-  <body class="bg-light">
 
-    <div class="base-container container">
-      <main>
+  <body class="bg-light">
+    <div class="wrapper">
+    <div class="base-container container" id="create-container">
+      <main id="main">
         <div class="row g-5 deal-details">
-          <div class="col-4">
-            <div class="card">
-            <img src="https://avatars.githubusercontent.com/u/78862872?v=4" class="card-img-top" alt="...">
-            
-                <div class="card-body border-top color-border-muted pt-3 mt-3 d-none d-md-block">
-                    
-                    <h5 class="card-title">AveZorgen</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Rating 4.5/5</h6>
-                    <p class="card-text">Some info from user</p>
-                    <a href="#" class="btn btn-primary">Contact</a>
-                </div>
-            </div>
+          <div id="inputBody" class="col-md-7">
+            {{{body}}}
           </div>
-          
-          <div class="col-8">
-            <button
-              id="connectButton" 
-              type="button" 
-              class="btn btn-primary" 
-              disabled
-              >Connected</button>
+          <div id="historyBody" class="col-md-5">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
               <span class="text-primary">History</span>
             </h4>
 
             <ul class="list-group mb-3" id="history-list">
-              <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                  <h6
-                    class="my-0"
-                  >0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</h6>
-                  <small class="text-muted">pending</small>
-                </div>
-                <span class="text-muted">0.1 ETH</span>
-              </li>
-              <li
-                class="list-group-item d-flex justify-content-between bg-light"
-              >
-                <div class="text-success">
-                  <h6
-                    class="my-0"
-                  >0x70997970C51812dc3A010C7d01b50e0d17dc79C8</h6>
-                  <small class="text-muted">1 day ago</small>
-                </div>
-                <span class="text-success">0.005 ETH</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span>Total (ETH)</span>
-                <strong>0.105 ETH</strong>
-              </li>
+              <h6>There will be your history</h6>
             </ul>
-
-            <form class="card p-2" id="tmp">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Address" />
-                <button type="submit" class="btn btn-secondary">Filter</button>
-              </div>
-            </form>
-
-            <button
-              id="answerCreate-btn"
-              class="w-100 btn btn-primary btn-lg"
-            >Update history</button>
           </div>
+
           <div class="toast-container position-fixed bottom-0 end-0 p-3">
-              <div
-                id="liveToast"
-                class="toast"
-                role="alert"
-                aria-live="assertive"
-                aria-atomic="true"
-              >
-                <div class="toast-body">
-                  <div
-                    class="alert alert-success toast-body-div"
-                    role="alert"
-                    id="toast-msg"
-                  >
-                  </div>
+            <div
+              id="liveToast"
+              class="toast"
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+            >
+              <div class="toast-body">
+                <div
+                  class="alert alert-success toast-body-div"
+                  role="alert"
+                  id="toast-msg"
+                >
                 </div>
               </div>
             </div>
+          </div>
         </div>
       </main>
     </div>
-
-    <script src="js/libs/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    {{! ----------------------------------- }}
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div
+      id="g_id_onload"
+      data-client_id="748097504037-h7g5a4cqoj65keosu0mbfv4rumm0hf6i.apps.googleusercontent.com"
+      data-login_uri="http://localhost:5000/profile"
+      data-skip_prompt_cookie="g_state"
+    >
+    </div>
+    </div>
+    
   </body>
 
-  <script src="/js/pages/profilePage.js" type="module"></script>
+  <script
+    src="js/libs/bootstrap.bundle.min.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <script src="js/frontend/form-validation.js"></script>
+
+  <script src="js/pages/mainPage.js" type="module"></script>
 </html>

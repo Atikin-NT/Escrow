@@ -34,10 +34,6 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/profile', (req, res) => {
-  res.render('layouts/profile', {layout : 'profile'});
-});
-
 app.post("/request", (req, res) => {
   res.json([{
      name_recieved: req.body.name,
