@@ -36,6 +36,13 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/profile', (req, res) => {
+  res.render('partials/adminMainPage', {
+    title: "Статистика",
+    layout: "profile",
+  });
+});
+
 app.post("/request", (req, res) => {
   res.json([{
      name_recieved: req.body.name,

@@ -21,7 +21,7 @@ router.get("/view/inProgressView", changeDealStatus);
 
 router.post("/profile", SignIn);
 
-router.get('/profile', preloadProfilePage);
+router.get('/preloadProfilePage', preloadProfilePage);
 
 exports.router = router;
 
