@@ -54,12 +54,13 @@ const dealToHelp = async (dealID, account, status) => {
 
 const initialize = async () => {
     const acc = await provider.listAccounts();
+    console.log(acc);
     if (acc != undefined) {
-      await updateHistory(acc[0], 'dealsToHelp', dealToHelp);
+      await updateHistory(acc[0], {listner: dealToHelp});
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
-      await updateHistory(account, 'dealsToHelp', dealToHelp)
+      await updateHistory(account, {listner: dealToHelp})
     })
 }
 

@@ -1,17 +1,17 @@
 <div>
     <h4 class="mb-3">{{title}}</h4>
     <div class="form-check">
-        <h5 class="mb-3 mt-3">Завершенных сделок: <span>{{done_deals}}</span></h5>
-        <h5 class="mb-3 mt-3">Income: <span>{{total_amount}} ETH</span></h5>
-        <h5 class="mb-3 mt-3">Вызов гаранта: <span>{{garant_count}}</span></h5>
+        <h5 class="mb-3 mt-3">Завершенных сделок: <span id="done_deals">{{done_deals}}</span></h5>
+        <h5 class="mb-3 mt-3">Income: <span id="total_amount">{{total_amount}} ETH</span></h5>
+        <h5 class="mb-3 mt-3">Вызов гаранта: <span id="garant_count">{{garant_count}}</span></h5>
 
         <hr class="my-4" />
-        <h5 class="mb-3 mt-3">Открыто сделок: <span>{{total_deals_count}}</span></h5>
-        <h5 class="mb-3 mt-3">На сумму: <span>{{total_amount}} ETH</span></h5>
-        <h5 class="mb-3 mt-3">Ожидакемый доход: <span>{{fee_total_amount}}</span></h5>
+        <h5 class="mb-3 mt-3">Открыто сделок: <span id="total_deals_count">{{total_deals_count}}</span></h5>
+        <h5 class="mb-3 mt-3">На сумму: <span id="summary">{{total_amount}} ETH</span></h5>
+        <h5 class="mb-3 mt-3">Ожидакемый доход: <span id="fee_total_amount">{{fee_total_amount}}</span></h5>
 
         <hr class="my-4" />
-        <h5 class="mb-3 mt-3">Денег на смартконтракте: <span>{{sol_amount}} ETH</span></h5>
+        <h5 class="mb-3 mt-3">Денег на смартконтракте: <span id="sol_amount">{{sol_amount}} ETH</span></h5>
 
         <hr class="my-4" />
         <div id="buttonSection" class="container-sm">

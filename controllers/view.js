@@ -1,4 +1,5 @@
 const { dbGetDealsByID, dbUpdateDealStatus, dbUpdateDealStatusById } = require('../lib/sqlite.js');
+const { isAdmin } = require('../lib/adminInfo.js');
 const ethers = require('ethers');
 
 const defaulDeal = {
@@ -209,7 +210,10 @@ async function changeDealStatus(req, res){
 
 async function dealAdminView(req, res) {
     const id = parseInt(req.query.dealid);
-    // const admin = req.query.account.toLowerCase();
+    const address = req.query.account.toLowerCase();
+    const is_admin = isAdmin(address);
+    console.log("is_admin------------");
+    console.log(is_admin);
     const dbAnswer = (JSON.parse(await dbGetDealsByID(id))).list[0];
     res.render('partials/adminDealView', {
         layout : 'part',

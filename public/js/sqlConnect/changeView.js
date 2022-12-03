@@ -58,30 +58,33 @@ let currentActiveCircle = -1;
 async function changeProgressState(newState) {
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
-    if (newState - currentActiveCircle == 1) {
-        circles[currentActiveCircle + 1].classList.add("active");
-        progress.classList.remove(`progress-${currentActiveCircle}`)
-        progress.classList.add(`progress-${newState}`);
-        currentActiveCircle++;
-    } else if (currentActiveCircle - newState == 1) {
-        circles[currentActiveCircle].classList.remove("active");
-        progress.classList.remove(`progress-${currentActiveCircle}`);
-        progress.classList.add(`progress-${newState}`);
-        currentActiveCircle--;
-    } else if (newState > currentActiveCircle) {
-        progress.classList.remove(`progress-${currentActiveCircle}`);
-        progress.classList.add(`progress-${newState}`);
-        for (let i = currentActiveCircle + 1; i <= newState; i++) {
-            circles[i].classList.add("active");
+    console.log(circles, progress);
+    if(progress != null && circles != null){
+        if (newState - currentActiveCircle == 1) {
+            circles[currentActiveCircle + 1].classList.add("active");
+            progress.classList.remove(`progress-${currentActiveCircle}`)
+            progress.classList.add(`progress-${newState}`);
             currentActiveCircle++;
-        }
-    } else if (newState < currentActiveCircle) {
-        progress.classList.remove(`progress-${currentActiveCircle}`);
-        for (let i = currentActiveCircle; i > newState; i--) {
-            circles[i].classList.remove("active");
+        } else if (currentActiveCircle - newState == 1) {
+            circles[currentActiveCircle].classList.remove("active");
+            progress.classList.remove(`progress-${currentActiveCircle}`);
+            progress.classList.add(`progress-${newState}`);
             currentActiveCircle--;
+        } else if (newState > currentActiveCircle) {
+            progress.classList.remove(`progress-${currentActiveCircle}`);
+            progress.classList.add(`progress-${newState}`);
+            for (let i = currentActiveCircle + 1; i <= newState; i++) {
+                circles[i].classList.add("active");
+                currentActiveCircle++;
+            }
+        } else if (newState < currentActiveCircle) {
+            progress.classList.remove(`progress-${currentActiveCircle}`);
+            for (let i = currentActiveCircle; i > newState; i--) {
+                circles[i].classList.remove("active");
+                currentActiveCircle--;
+            }
+            progress.classList.add(`progress-${newState}`);
         }
-        progress.classList.add(`progress-${newState}`);
     }
 }
 

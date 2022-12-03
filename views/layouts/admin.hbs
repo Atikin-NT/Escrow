@@ -1,0 +1,85 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Hugo 0.101.0" />
+    <title>Escrow-service</title>
+
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.2/examples/checkout/"
+    />
+
+    <link
+      href="css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/progressbar.css" />
+    <link rel="stylesheet" href="/css/loader.css">
+
+    <script
+      src="js/libs/ethers-5.2.umd.min.js"
+      type="application/javascript"
+    ></script>
+  </head>
+
+  <body class="bg-light">
+    <div class="wrapper">
+    <div class="base-container container" id="create-container">
+      <main id="main">
+        <div class="row g-5 deal-details">
+          <div id="inputBody" class="col-md-7">
+            {{{body}}}
+          </div>
+          <div id="historyBody" class="col-md-5">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-primary">History</span>
+            </h4>
+
+            <ul class="list-group mb-3" id="history-list">
+              <h6>There will be your history</h6>
+            </ul>
+          </div>
+
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div
+              id="liveToast"
+              class="toast"
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+            >
+              <div class="toast-body">
+                <div
+                  class="alert alert-success toast-body-div"
+                  role="alert"
+                  id="toast-msg"
+                >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    </div>
+    
+  </body>
+
+  <script
+    src="js/libs/bootstrap.bundle.min.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <script src="js/frontend/form-validation.js"></script>
+
+  <script defer src="js/web3/Web3Layer.js" type="module"></script>
+  <script defer src="js/pages/adminPage.js" type="module"></script>
+</html>
