@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-import { updateHistory } from "../sqlConnect/SQLRequests.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { MetaMaskWallet } from "../web3/Web3Layer.js"
-=======
 import { updateHistory, getDealById } from "../sqlConnect/SQLRequests.js";
 import { provider, escrowProvider } from "../web3/Web3Layer.js";
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
->>>>>>> 8485f0670b866be8b93b538490692b8a683d2cd9
 
 const dealToHelp = async (dealID, account, status) => {
   let answerDealById = await getDealById(dealID);
