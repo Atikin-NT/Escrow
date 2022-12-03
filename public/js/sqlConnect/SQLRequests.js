@@ -1,6 +1,6 @@
 import { CreateToast } from "../frontend/Toasts.js";
 import { showCurrentDeal } from "../sqlConnect/changeView.js";
-import { escrowProvider, getFeeData } from "../web3/Web3Layer.js";
+import { getFeeData } from "../web3/Web3Layer.js";
 
 let buyerSwitch = document.getElementById("buyer-role");
 let partnerWallet = document.getElementById("deal-partner");
@@ -109,63 +109,61 @@ function shortWallet(wallet, n, m) {
   return newWallet;
 }
 
-function updateHistory(account, count = 5){
+const genList = (list, account, listener) => {
+  historyList.innerHTML = '';
+
+  for (let i = 0; i < list.length; i++) { 
+    const element = list[i];
+    const li = document.createElement("li");
+    li.className = "historyLi"
+    li.addEventListener('click', (evt) => { listener(element.id, account, element.status); });
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between');
+  
+    const div = document.createElement("div");
+    div.className = "history-div";
+    if (element.status == 4) div.classList.add("txt-success");
+  
+    const h6 = document.createElement("h6");
+    h6.classList.add("text-container", "my-0");
+  
+    let role = "buyer";
+    if (account == element.seller) {h6.innerHTML = shortWallet(element.buyer, 4, 5); role = "seller"; }
+    else h6.innerHTML = shortWallet(element.seller, 4, 5);
+    div.appendChild(h6);
+  
+    const small = document.createElement("small");
+    small.classList.add("txt", element.status == 4 ? "txt-succsess" : "txt-muted");
+    small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status + 1}`;
+    div.appendChild(small);
+  
+    const span = document.createElement("span");
+    span.classList.add("txt", element.status == 4 ? "txt-success" : "txt-muted");
+    span.innerHTML = `${element.value} Ether`;
+    
+    li.appendChild(div);
+    li.appendChild(span);
+    historyList.appendChild(li); 
+  }
+}
+
+async function updateHistory(account, fetchMethod = 'getDeals', listener = showCurrentDeal, count = 5){
   account = String(account).toLowerCase();
   updateElementsID();
-  fetch(`/fetch/getDeals?account=${account}`, { headers })
-    .then((resp) => {
-      if (resp.status < 200 || resp.status >= 300)
-        throw new Error("connect error");
-      return resp.json();
-    })
-    .then((json) => {
-      while (historyList.firstChild) {
-        historyList.removeChild(historyList.firstChild);
-      }
-      for(let i = json.list.length - 1; i >= 0 && i > json.list.length - count; i--){
-        const element = json.list[i];
-        let li = document.createElement("li");
-        li.className = "historyLi"
-        li.addEventListener('click', (evt) => {
-            showCurrentDeal(element.id, account, element.status);
-        })
-        li.classList.add('list-group-item', 'd-flex', 'justify-content-between');
-        // if(i%2 == 1) li.classList.add('bg-light');
+  try {
+    const resp = await fetch(`/fetch/${fetchMethod}?account=${account}&limit=${count}`, { headers })
+    if (resp.status < 200 || resp.status >= 300)
+      throw new Error("connect error");
 
-        let div = document.createElement("div");
-        div.className = "history-div";
-        if (element.status == 4) div.classList.add("txt-success");
+    const json = await resp.json();
 
-        let h6 = document.createElement("h6");
-        h6.classList.add("text-container", "my-0");
+    genList(json.list, account, listener);
 
-        let role = "buyer";
-        if(account == element.seller) {h6.innerHTML = shortWallet(element.buyer, 4, 5); role = "seller"; }
-        else h6.innerHTML = shortWallet(element.seller, 4, 5);
-        div.appendChild(h6);
-
-        let small = document.createElement("small");
-        small.classList.add("txt", element.status == 4 ? "txt-succsess" : "txt-muted");
-        small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status + 1}`;
-        div.appendChild(small);
-
-        let span = document.createElement("span");
-        span.classList.add("txt", element.status == 4 ? "txt-success" : "txt-muted");
-        // if (element.status == 4) span.className = "txt-success";
-        // else span.className = 'text-muted';
-        span.innerHTML = `${element.value} Ether`;
-        
-        li.appendChild(div);
-        li.appendChild(span);
-        historyList.appendChild(li);
-      }
-      if(json.code != 0)
-        CreateToast(true, json.msg);
-    })
-    .catch((err) => {
-      console.log(err);
-      CreateToast(true, err);
-    });
+    if(json.code != 0)
+      CreateToast(true, json.msg);
+  } catch (err) {
+    console.log(err);
+    CreateToast(true, err);
+  }
 }
 
 const updateDeal = async (account, id) => {

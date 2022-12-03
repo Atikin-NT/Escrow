@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const {router} = require('./routes/main.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
-const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus } = require("./lib/sqlite");
+const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus, setArbitrator } = require("./lib/sqlite");
 require("dotenv").config();
 
 const hostname = '127.0.0.1';
@@ -49,7 +49,7 @@ var server = app.listen(port, hostname, () => {
 
 const { API_URL } = process.env;
 let provider = new ethers.providers.JsonRpcProvider(API_URL);
-const address = "0xbE09D10b21D30d4c4A500054d7649A5B7F330d22";
+const address = "0x89173A9F2295a208763F8B5b6A8bd1121a0C0e31";
 provider.on({
   address: address, 
   topics: [
@@ -112,5 +112,7 @@ provider.on({
       ethers.utils.id("ArbitratorAsked(bytes32,address)")
   ]}, async (log, event) => {
   const TxId = log.topics[1];
+  const arbitrator = ethers.utils.hexStripZeros(log.topics[2]);
   console.log('ArbitratorAsked: ',TxId);
+  await setArbitrator(TxId, arbitrator);
 })

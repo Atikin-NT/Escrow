@@ -52,7 +52,7 @@ contract Escrow is AutomationCompatibleInterface, AccessControl {
         owner = msg.sender;
         hold = 0;
         limit = _limit;
-        _arbitratorReward = _arbitratorReward;
+        arbitratorReward = _arbitratorReward;
     }
 
     function getFee(uint value) internal pure returns(uint fee){

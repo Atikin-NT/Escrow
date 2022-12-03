@@ -1,6 +1,6 @@
 import { MetaMaskWallet, escrowProvider } from "../web3/Web3Layer.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { updateDeal, updateHistory, getDealById, setTxId, setTxHash, deleteDeal } from "./SQLRequests.js";
+import { updateDeal, updateHistory, getDealById, setTxHash, deleteDeal } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
@@ -41,11 +41,8 @@ function hiddenLoader() {
 }
 
 function showCurrentDeal(dealID, account, status){
-    if(status == 0){
-        approveByPartner(dealID, account);
-        return;
-    }
-    changeDealStatus(dealID, account, status);
+    if (status == 0) approveByPartner(dealID, account);
+    else changeDealStatus(dealID, account, status);
 }
 
 const updateConnectionBtn = (account) => {
@@ -172,14 +169,15 @@ async function changeDealStatus(dealID, account, status){
                     showLoader();
                     if(answerDealById.status != 3){
                         await escrowProvider.cancel(answerDealById.txId);
+                        CreateToast(false, "Deal has been deleted");
+                        await deleteDeal(dealID);
+                        window.location.reload();
+                        return;
                     }
                     else{
-                        await escrowProvider.disapprove(answerDealById.txId);
+                        transaction = await escrowProvider.askArbitrator(answerDealById.txId, '0xf952924197d795ee179aa06bf83aab3f604372de', {value: ethers.utils.parseEther('0.02')});
+                        await transaction.wait()
                     }
-                    CreateToast(false, "Deal has been deleted");
-                    await deleteDeal(dealID);
-                    window.location.reload();
-                    return;
                     break;
                 default:
                     console.log("Unknown error");
