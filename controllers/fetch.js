@@ -1,4 +1,4 @@
-const { dbInsertData, dbGetDealsByAccount, dbDeleteData, dbUpdateDealStatus, dbUpdateData, dbGetDealsByID, setTxId, setTxHash } = require('../lib/sqlite.js');
+const { dbInsertData, dbGetDealsByAccount, dbGetDealsToHelp, dbDeleteData, dbUpdateDealStatus, dbUpdateData, dbGetDealsByID, setTxId, setTxHash } = require('../lib/sqlite.js');
 
 async function createDeal(req, res){
     answer = await dbInsertData(req.body.buyer, req.body.seller, 
@@ -20,7 +20,12 @@ async function deleteDeal(req, res){
 }
 
 async function getDeals(req, res){
-    answer = await dbGetDealsByAccount(req.query.account);
+    answer = await dbGetDealsByAccount(req.query.account, req.query.limit);
+    res.send(answer);
+}
+
+async function dealsToHelp(req, res){
+    answer = await dbGetDealsToHelp(req.query.account, req.query.limit);
     res.send(answer);
 }
 
@@ -44,4 +49,4 @@ async function updateTxHash(req, res){
     res.send(answer);
 }
 
-module.exports = {createDeal, deleteDeal, getDeals, updateDealStatus, updateDeal, getDealById, updateTxId, updateTxHash};
+module.exports = {createDeal, deleteDeal, getDeals, dealsToHelp, updateDealStatus, updateDeal, getDealById, updateTxId, updateTxHash};

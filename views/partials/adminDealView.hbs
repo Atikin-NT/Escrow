@@ -1,10 +1,6 @@
 <div>
     <h4 class="mb-3">{{title}}</h4>
     <div class="form-check">
-        <label class="form-check-label" for="switchRole">My Role: </label>
-        <div class="container-sm">
-            <label class="btn btn-outline-secondary btn-width" for="role-in-deal">{{role}}</label>
-        </div>
         <div class="row g-3">
             <div class="col-12 textLayout-div spec">
                 <label for="deal-seller" class="form-label" id="deal-seller-label">Seller address</label>
@@ -27,33 +23,18 @@
             </div>
 
             <div style="display: none;">
-                <span id="deal-txid">{{txid}}</span>
                 <span id="deal-id">{{id}}</span>
-                <span id="deal-status">{{status}}</span>
             </div>
         </div>
 
         <hr class="my-4" />
-        <h5 class="mb-3 mt-3">Fee payment: <span class="fee">{{fee}} Ether</span></h5>
         <h5 class="mb-3 mt-3">Fee role: <span class="fee">{{feeRole}}</span></h5>
         <hr class="my-4" />
         <div id="buttonSection" class="container-sm">
-            <a type="button" class="btn btn-primary" id="new-deal" href="/">New deal</a>
+            <a type="button" class="btn btn-primary" id="to-stat" href="/profile">To statistic</a>
             <div>
-                {{#if notEnd}}
-                {{#if cancelBtn}}
-                    <button type="button" class="btn btn-danger" id="cancel-deal">{{btnDanger}}</button>
-                {{/if}}
-            {{/if}}
-            {{#if change}}
-            <button type="button" class="btn btn-primary" id="change-deal-step">Change</button>
-            {{/if}}
-
-            {{#if notEnd}}
-                {{#if showNextButton}}
-                    <button type="button" class="btn btn-primary" id="next-deal-step">{{btnName}}</button>
-                {{/if}}                
-            {{/if}}
+                <button type="button" class="btn btn-primary" id="buyer-right">Buyer</button>
+                <button type="button" class="btn btn-primary" id="seller-right">Seller</button>
             </div>
             
         </div>

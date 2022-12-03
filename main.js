@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const {router} = require('./routes/main.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
-const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus } = require("./lib/sqlite");
+const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus, setArbitrator } = require("./lib/sqlite");
 require("dotenv").config();
 
 const hostname = '127.0.0.1';
@@ -56,11 +56,7 @@ var server = app.listen(port, hostname, () => {
 
 const { API_URL } = process.env;
 let provider = new ethers.providers.JsonRpcProvider(API_URL);
-const address = "0xe789fb7660Da2907BEBE49F8AF8092366682bD60";
-let escrow = new ethers.Contract(
-  address,
-  [{"inputs":[{"internalType":"uint256","name":"_limit","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"BuyerConfim","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"Conflict","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":true,"internalType":"address","name":"seller","type":"address"},{"indexed":true,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"Created","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"Finished","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"SellerConfim","type":"event"},{"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"cancel","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"","type":"bytes"}],"name":"checkUpkeep","outputs":[{"internalType":"bool","name":"upkeepNeeded","type":"bool"},{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"seller","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint8","name":"feeStyle","type":"uint8"}],"name":"create","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"deals","outputs":[{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"seller","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"Bfee","type":"uint256"},{"internalType":"uint8","name":"status","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"disapprove","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"hold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"limit","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes","name":"","type":"bytes"}],"name":"performUpkeep","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"sendB","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"TxId","type":"bytes32"}],"name":"sendS","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newlimit","type":"uint256"}],"name":"setLimit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"setOwner","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"target","type":"address"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}],
-  provider);
+const address = "0x89173A9F2295a208763F8B5b6A8bd1121a0C0e31";
 provider.on({
   address: address, 
   topics: [
@@ -115,4 +111,15 @@ provider.on({
   ]}, async (log, event) => {
   const TxId = log.topics[1];
   console.log('Consflict: ',TxId);
+})
+
+provider.on({
+  address: address,
+  topics: [
+      ethers.utils.id("ArbitratorAsked(bytes32,address)")
+  ]}, async (log, event) => {
+  const TxId = log.topics[1];
+  const arbitrator = ethers.utils.hexStripZeros(log.topics[2]);
+  console.log('ArbitratorAsked: ',TxId);
+  await setArbitrator(TxId, arbitrator);
 })

@@ -88,6 +88,7 @@ async function approveByPartnerView(req, res){
         showNextButton: showNextButton,
         notEnd: true,
         cancelBtn: true,
+        btnDanger: 'Cancel'
     });
 }
 
@@ -101,6 +102,7 @@ async function changeDealStatus(req, res){
     let btnName = "";
     let notEnd = true;
     let cancelBtn = true;
+    let btnDanger = 'Cancel';
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
         dbAnswer = answer.list[0];
@@ -136,6 +138,7 @@ async function changeDealStatus(req, res){
                     }
                 break;
                 case 3:
+                    btnDanger = 'Ask Admin';
                     title = "Waiting when your partner will approve Magic Box";
                     btnName = "Approve Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].seller == account){
@@ -162,6 +165,16 @@ async function changeDealStatus(req, res){
                         dbAnswer = answer.list[0];
                     showNextButton = false;
                     notEnd = false;
+                break;
+                case -1:
+                    title = "Admin Asked";
+                    dbAnswer = answer.list[0];
+                    title = "Waiting when you will approve Magic Box";
+                    btnName = "Approve Magic Box";
+                    if(answer.list[0].seller == account){
+                        showNextButton = false;
+                        title = "Waiting when your partner will approve Magic Box";
+                    }
                 break;
                 default:
                     title = "Something went wrong :(";
@@ -190,11 +203,29 @@ async function changeDealStatus(req, res){
         showNextButton: showNextButton,
         notEnd: notEnd,
         cancelBtn: cancelBtn,
+        btnDanger: btnDanger
+    });
+}
+
+async function dealAdminView(req, res) {
+    const id = parseInt(req.query.dealid);
+    // const admin = req.query.account.toLowerCase();
+    const dbAnswer = (JSON.parse(await dbGetDealsByID(id))).list[0];
+    res.render('partials/adminDealView', {
+        layout : 'part',
+        title: `Deal ${dbAnswer.id}`,
+        buyer: dbAnswer.buyer, 
+        seller: dbAnswer.seller, 
+        value: dbAnswer.value,
+        feeRole: feeRoleList[dbAnswer.feeRole],
+        id: dbAnswer.id,
+        status: dbAnswer.status
     });
 }
 
 module.exports = { 
     changeDealView, 
     approveByPartnerView,
-    changeDealStatus
+    changeDealStatus,
+    dealAdminView
 };
