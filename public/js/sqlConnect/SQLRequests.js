@@ -150,7 +150,6 @@ async function updateHistory(account, fetchMethod = 'getDeals', listener = showC
   account = String(account).toLowerCase();
   updateElementsID();
   try {
-    fetchMethod = 'getDeals';
     const resp = await fetch(`/fetch/${fetchMethod}?account=${account}&limit=${count}`, { headers })
     if (resp.status < 200 || resp.status >= 300)
       throw new Error("connect error");

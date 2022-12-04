@@ -9,6 +9,7 @@ function set_statistic_info(data){
     const done_deals = document.getElementById("done_deals");
     const total_amount = document.getElementById("total_amount");
     const garant_count = document.getElementById("garant_count");
+    const admin_count = document.getElementById("admin_count");
     const total_deals_count = document.getElementById("total_deals_count");
     const summary = document.getElementById("summary");
     const fee_total_amount = document.getElementById("fee_total_amount");
@@ -17,6 +18,7 @@ function set_statistic_info(data){
     done_deals.innerText = data.dealsDoneCount;
     total_amount.innerText = data.totalAmount;
     garant_count.innerText = data.adminHelpDealCount;
+    admin_count.innerText = data.needYourHelp;
     total_deals_count.innerText = data.dealsCount;
     summary.innerText = data.openAmount;
     fee_total_amount.innerText = data.feeTotalAmount;
@@ -79,12 +81,12 @@ const initialize = async () => {
     const acc = await provider.listAccounts();
     let metaMaskAcc = acc[0];
     if (acc != undefined) {  //IDEA: а зачем тут проверка, можно свести к одному?
-      await updateHistory(metaMaskAcc, null, dealToHelp);
+      await updateHistory(metaMaskAcc, 'getDeals', dealToHelp);
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
         metaMaskAcc = account;
-      await updateHistory(account, null, dealToHelp);
+      await updateHistory(account, 'getDeals', dealToHelp);
     })
 
     fetch(`fetch/preloadAdminPage?account=${metaMaskAcc}`, { headers })

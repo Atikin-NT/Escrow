@@ -217,6 +217,9 @@ async function dealAdminView(req, res) {
     if(!isAdmin(address)){
         dbAnswer = defaulDeal;
     }
+    need_help = false;
+    if(dbAnswer.arbitrator != null && dbAnswer.arbitrator.toLowerCase() == address)
+        need_help = true;
     res.render('partials/adminDealView', {
         layout : 'part',
         title: `Deal ${dbAnswer.id}`,
@@ -226,7 +229,7 @@ async function dealAdminView(req, res) {
         feeRole: feeRoleList[dbAnswer.feeRole],
         id: dbAnswer.id,
         status: dbAnswer.status,
-        need_help: dbAnswer.need_admin_help
+        need_help: need_help,
     });
 }
 
