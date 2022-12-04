@@ -1,52 +1,50 @@
 const { dbInsertData, dbGetDealsByAccount, dbGetDealsToHelp, dbDeleteData, dbUpdateDealStatus, dbUpdateData, dbGetDealsByID, setTxId, setTxHash } = require('../lib/sqlite.js');
 
-async function createDeal(req, res){
+exports.createDeal = async (req, res) => {
     answer = await dbInsertData(req.body.buyer, req.body.seller, 
         req.body.value, req.body.sellerIsAdmin,
         req.body.fee, req.body.feeRole);
     res.send(answer);
 }
 
-async function updateDeal(req, res){
+exports.updateDeal = async (req, res) => {
     answer = await dbUpdateData(req.body.buyer, req.body.seller, 
         req.body.value, req.body.id, req.body.sellerIsAdmin,
         req.body.fee, req.body.feeRole);
     res.send(answer);
 }
 
-async function deleteDeal(req, res){
+exports.deleteDeal = async (req, res) => {
     answer = await dbDeleteData(req.body.id);
     res.send(answer);
 }
 
-async function getDeals(req, res){
+exports.getDeals = async (req, res) => {
     answer = await dbGetDealsByAccount(req.query.account, req.query.limit);
     res.send(answer);
 }
 
-async function dealsToHelp(req, res){
+exports.dealsToHelp = async (req, res) => {
     answer = await dbGetDealsToHelp(req.query.account, req.query.limit);
     res.send(answer);
 }
 
-async function updateDealStatus(req, res){
+exports.updateDealStatus = async (req, res) => {
     answer = await dbUpdateDealStatus(req.body.id, req.body.status);
     res.send(answer);
 }
 
-async function getDealById(req, res){
+exports.getDealById = async (req, res) => {
     answer = await dbGetDealsByID(req.body.id);
     res.send(answer);
 }
 
-async function updateTxId(req, res){
+exports.updateTxId = async (req, res) => {
     answer = await setTxId(req.body.id, req.body.txId);
     res.send(answer);
 }
 
-async function updateTxHash(req, res){
+exports.updateTxHash = async (req, res) => {
     answer = await setTxHash(req.body.id, req.body.txHash);
     res.send(answer);
 }
-
-module.exports = {createDeal, deleteDeal, getDeals, dealsToHelp, updateDealStatus, updateDeal, getDealById, updateTxId, updateTxHash};

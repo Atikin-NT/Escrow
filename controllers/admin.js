@@ -12,7 +12,7 @@ const { ethers } = require('ethers');
 const { createJsonAnswer } = require('../lib/createJsonAns.js');
 
 
-async function preloadAdminPage(req, res){
+exports.preloadAdminPage = async (req, res) => {
     const account = req.query.account.toLowerCase();
     let msg = 'not admin';
     let code = 403;
@@ -47,7 +47,3 @@ async function preloadAdminPage(req, res){
             }
         ]))
 }
-
-module.exports = {
-    preloadAdminPage
-};
