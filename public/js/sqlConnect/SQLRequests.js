@@ -148,17 +148,13 @@ const genList = (list, account, listener) => {
 
 async function updateHistory(account, fetchMethod = 'getDeals', listener = showCurrentDeal, count = 5){
   account = String(account).toLowerCase();
-  console.log(listener);
   updateElementsID();
   try {
-    fetchMethod = 'getDeals';  // BUG: почему нужна эта строчка? Без нее падает
-    console.log(`/fetch/${fetchMethod}?account=${account}&limit=${count}`);
     const resp = await fetch(`/fetch/${fetchMethod}?account=${account}&limit=${count}`, { headers })
     if (resp.status < 200 || resp.status >= 300)
       throw new Error("connect error");
 
     const json = await resp.json();
-    console.log(json);
 
     genList(json.list, account, listener);
 

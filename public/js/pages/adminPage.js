@@ -6,10 +6,10 @@ const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
 
 function set_statistic_info(data){
-    data = JSON.parse(data);
     const done_deals = document.getElementById("done_deals");
     const total_amount = document.getElementById("total_amount");
     const garant_count = document.getElementById("garant_count");
+    const admin_count = document.getElementById("admin_count");
     const total_deals_count = document.getElementById("total_deals_count");
     const summary = document.getElementById("summary");
     const fee_total_amount = document.getElementById("fee_total_amount");
@@ -18,15 +18,15 @@ function set_statistic_info(data){
     done_deals.innerText = data.dealsDoneCount;
     total_amount.innerText = data.totalAmount;
     garant_count.innerText = data.adminHelpDealCount;
+    admin_count.innerText = data.needYourHelp;
     total_deals_count.innerText = data.dealsCount;
-    summary.innerText = data.dealsDoneCount;
+    summary.innerText = data.openAmount;
     fee_total_amount.innerText = data.feeTotalAmount;
     sol_amount.innerText = data.sol_amount;
 }
 
 const dealToHelp = async (dealID, account, status) => {
   let answerDealById = await getDealById(dealID);
-  console.log(`view/dealAdminView?dealid=${dealID}&account=${account}`);
   fetch(`view/dealAdminView?dealid=${dealID}&account=${account}`, { headers }) 
   .then((resp) => {
       if (resp.status < 200 || resp.status >= 300)
@@ -34,7 +34,6 @@ const dealToHelp = async (dealID, account, status) => {
       return resp.text();
   })
   .then(async (html) => {
-    console.log(html);
       bodyInput.innerHTML = html;
       document.getElementById('buyer-right').addEventListener('click', async (evt) => {
         const tx = await escrowProvider.disapprove(answerDealById.txId);
@@ -56,23 +55,22 @@ const initialize = async () => {
     const acc = await provider.listAccounts();
     let metaMaskAcc = acc[0];
     if (acc != undefined) {  //IDEA: а зачем тут проверка, можно свести к одному?
-      await updateHistory(acc[0], null, dealToHelp);
+      await updateHistory(metaMaskAcc, 'dealsToHelp', dealToHelp);
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
         metaMaskAcc = account;
-      await updateHistory(account, null, dealToHelp);
+      await updateHistory(account, 'dealsToHelp', dealToHelp);
     })
 
-    console.log(`fetch/preloadAdminPage?account=${metaMaskAcc}`);
     fetch(`fetch/preloadAdminPage?account=${metaMaskAcc}`, { headers })
     .then((resp) => {
         if (resp.status < 200 || resp.status >= 300)
             throw new Error("connect error");
-        return resp.text();
+        return resp.json();
     })
     .then(async (json) => {
-        set_statistic_info(json);
+        set_statistic_info(json.list[0]);
     })
     .catch((err) => {
         console.log(err);

@@ -58,7 +58,6 @@ let currentActiveCircle = -1;
 async function changeProgressState(newState) {
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
-    console.log(circles, progress);
     if(progress != null && circles != null){
         if (newState - currentActiveCircle == 1) {
             circles[currentActiveCircle + 1].classList.add("active");
@@ -201,6 +200,7 @@ async function changeDealStatus(dealID, account, status){
         return resp.text();
     })
     .then(async (html) => {
+        if (status == -1) status = 3;
         await changeProgressState(status);
         bodyInput.innerHTML = html;
 

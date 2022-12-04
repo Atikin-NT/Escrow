@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
-  res.render('partials/adminMainPage', {
+  res.render('partials/profileMainPage', {
     title: "Статистика",
     layout: "profile",
   });

@@ -2,36 +2,50 @@ const {
     isAdmin,
     getDealsDoneCount, 
     getTotalAmount,
+    getOpenAmount,
     getFeeTotalAmount,
     getDealsCount,
-    getAdminHelpDealCount
+    getAdminHelpDealCount,
+    getNeedsYourHelpCount
 } = require("../lib/adminInfo.js");
 const { ethers } = require('ethers');
-// import { escrowProvider } from "../web3/Web3Layer.js";
+const { createJsonAnswer } = require('../lib/createJsonAns.js');
 
 
 async function preloadAdminPage(req, res){
-    console.log("preloadAdminPage");
-    account = req.query.account;
+    const account = req.query.account.toLowerCase();
+    let msg = 'not admin';
+    let code = 403;
     if(!ethers.utils.isAddress(account)){
-        return 0;
+        msg = 'bad account';
+        code = 601;
     }
-    if(isAdmin(account) == 0){
-        return res.json({code: 0, error: "not admin"});
-    }
-
-    // transaction = await escrowProvider.hold();
-    // sol_amount = await transaction.wait();
-    sol_amount = 0;
-    console.log(sol_amount);
-    return res.json({
-        dealsDoneCount: await getDealsDoneCount(),
-        totalAmount: await getTotalAmount(),
-        feeTotalAmount: await getFeeTotalAmount(),
-        dealsCount: await getDealsCount(),
-        adminHelpDealCount: await getAdminHelpDealCount(),
-        sol_amount: sol_amount
-    });
+    if((await isAdmin(account)) == 0)
+        res.status(code).send(createJsonAnswer(code, msg, [
+            {
+                dealsDoneCount: 0,
+                totalAmount: 0,
+                feeTotalAmount: 0,
+                dealsCount: 0,
+                openAmount: 0,
+                adminHelpDealCount: 0,
+                needYourHelp: 0,
+                sol_amount: 0
+            }
+        ]))
+    else 
+        res.send(createJsonAnswer(0, "The deal has been inserted", [
+            {
+                dealsDoneCount: await getDealsDoneCount(),
+                totalAmount: await getTotalAmount(),
+                feeTotalAmount: await getFeeTotalAmount(),
+                dealsCount: await getDealsCount(),
+                openAmount: await getOpenAmount(),
+                adminHelpDealCount: await getAdminHelpDealCount(),
+                needYourHelp: await getNeedsYourHelpCount(account),
+                sol_amount: 0
+            }
+        ]))
 }
 
 module.exports = {
