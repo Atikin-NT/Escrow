@@ -1,4 +1,4 @@
-const { dbGetDealsByID, dbUpdateDealStatus, dbUpdateDealStatusById } = require('../lib/sqlite.js');
+const { dbGetDealsByID } = require('../lib/sqlite.js');
 const { isAdmin } = require('../lib/adminInfo.js');
 const ethers = require('ethers');
 
@@ -15,7 +15,7 @@ const defaulDeal = {
 };
 const feeRoleList = ["Buyer", "50/50", "Seller"];
 
-async function changeDealView(req, res){
+exports.changeDealView = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();
     let dbAnswer = defaulDeal;
@@ -58,7 +58,7 @@ async function changeDealView(req, res){
     });
 }
 
-async function approveByPartnerView(req, res){
+exports.approveByPartnerView = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();
     let dbAnswer = defaulDeal;
@@ -95,7 +95,7 @@ async function approveByPartnerView(req, res){
     });
 }
 
-async function changeDealStatus(req, res){
+exports.changeDealStatus = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();
     const newStatus = parseInt(req.query.status);
@@ -210,7 +210,7 @@ async function changeDealStatus(req, res){
     });
 }
 
-async function dealAdminView(req, res) {
+exports.dealAdminView = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const address = req.query.account.toLowerCase();
     const dbAnswer = (JSON.parse(await dbGetDealsByID(id))).list[0];
@@ -232,10 +232,3 @@ async function dealAdminView(req, res) {
         need_help: need_help,
     });
 }
-
-module.exports = { 
-    changeDealView, 
-    approveByPartnerView,
-    changeDealStatus,
-    dealAdminView
-};

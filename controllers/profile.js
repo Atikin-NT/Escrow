@@ -8,7 +8,7 @@ const { ethers } = require('ethers');
 const { createJsonAnswer } = require('../lib/createJsonAns.js');
 
 
-async function preloadProfilePage(req, res){
+exports.preloadProfilePage = async (req, res) => {
     const account = req.query.account.toLowerCase();
     if(!ethers.utils.isAddress(account))
         res.status(601).send(createJsonAnswer(601, 'bad account', [
@@ -29,7 +29,3 @@ async function preloadProfilePage(req, res){
             }
         ]))
 }
-
-module.exports = {
-    preloadProfilePage
-};

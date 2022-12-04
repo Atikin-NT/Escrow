@@ -59,18 +59,22 @@ const dealToHelp = async (dealID, account) => {
   })
   .then(async (html) => {
       bodyInput.innerHTML = html;
-      document.getElementById('buyer-right').addEventListener('click', async (evt) => {
-        const tx = await escrowProvider.disapprove(answerDealById.txId);
-        await tx.wait();
-        solveDealByAdmin(dealID, account, 0);
-        updateHistory(account, 'dealsToHelp', dealToHelp)
-      })
-      document.getElementById('seller-right').addEventListener('click', async (evt) => {
-        const tx = await escrowProvider.approve(answerDealById.txId);
-        await tx.wait();
-        solveDealByAdmin(dealID, account, 1);
-        updateHistory(account, 'dealsToHelp', dealToHelp)
-      })
+      const buyerbtn = document.getElementById('buyer-right');
+      const sellerbtn = document.getElementById('buyer-right');
+      if(buyerbtn != null && sellerbtn != null){
+        document.getElementById('buyer-right').addEventListener('click', async (evt) => {
+          const tx = await escrowProvider.disapprove(answerDealById.txId);
+          await tx.wait();
+          solveDealByAdmin(dealID, account, 0);
+          updateHistory(account, 'dealsToHelp', dealToHelp)
+        })
+        document.getElementById('seller-right').addEventListener('click', async (evt) => {
+          const tx = await escrowProvider.approve(answerDealById.txId);
+          await tx.wait();
+          solveDealByAdmin(dealID, account, 1);
+          updateHistory(account, 'dealsToHelp', dealToHelp)
+        })
+      }
   })
   .catch((err) => {
       console.log(err);

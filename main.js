@@ -1,7 +1,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
-const {router} = require('./routes/main.js');
+const fetchRoutes = require('./routes/fetch.js');
+const viewRoutes = require('./routes/view.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
 const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus, setArbitrator } = require("./lib/sqlite");
@@ -24,7 +25,8 @@ app.use(express.static(__dirname + '/public/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use('/', router);
+app.use(fetchRoutes);
+app.use(viewRoutes);
 
 app.get('/', (req, res) => {
   res.render('partials/inputLayout', {
