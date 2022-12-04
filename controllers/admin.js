@@ -29,7 +29,6 @@ async function preloadAdminPage(req, res){
                 dealsCount: 0,
                 openAmount: 0,
                 adminHelpDealCount: 0,
-                needYourHelp: 0,
                 sol_amount: 0
             }
         ]))
@@ -42,7 +41,6 @@ async function preloadAdminPage(req, res){
                 dealsCount: await getDealsCount(),
                 openAmount: await getOpenAmount(),
                 adminHelpDealCount: await getAdminHelpDealCount(),
-                needYourHelp: await getNeedsYourHelpCount(account),
                 sol_amount: 0
             }
         ]))

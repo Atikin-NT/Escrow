@@ -10,6 +10,8 @@ const defaulDeal = {
     id: -1,
     fee: 0,
     status: -1,
+    need_admin_help: false,
+    feeRole: 0
 };
 const feeRoleList = ["Buyer", "50/50", "Seller"];
 
@@ -212,6 +214,9 @@ async function dealAdminView(req, res) {
     const id = parseInt(req.query.dealid);
     const address = req.query.account.toLowerCase();
     const dbAnswer = (JSON.parse(await dbGetDealsByID(id))).list[0];
+    if(!isAdmin(address)){
+        dbAnswer = defaulDeal;
+    }
     res.render('partials/adminDealView', {
         layout : 'part',
         title: `Deal ${dbAnswer.id}`,
@@ -220,7 +225,8 @@ async function dealAdminView(req, res) {
         value: dbAnswer.value,
         feeRole: feeRoleList[dbAnswer.feeRole],
         id: dbAnswer.id,
-        status: dbAnswer.status
+        status: dbAnswer.status,
+        need_help: dbAnswer.need_admin_help
     });
 }
 
