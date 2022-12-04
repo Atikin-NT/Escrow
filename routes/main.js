@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const {createDeal, deleteDeal, getDeals, dealsToHelp, updateDealStatus, updateDeal, getDealById, updateTxId, updateTxHash} = require("../controllers/fetch.js");
+const {createDeal, deleteDeal, getDeals, dealsToHelp, updateDealStatus, updateDeal, getDealById, updateTxId, updateTxHash, solveDeal} = require("../controllers/fetch.js");
 const {changeDealView, approveByPartnerView, changeDealStatus, dealAdminView} = require("../controllers/view.js");
 const { preloadAdminPage } = require("../controllers/admin.js");
 const { preloadProfilePage } = require("../controllers/profile.js");
@@ -24,6 +24,8 @@ router.get("/view/dealAdminView", dealAdminView);
 
 router.get('/fetch/preloadAdminPage', preloadAdminPage);
 router.get('/fetch/preloadProfilePage', preloadProfilePage);
+
+router.post("/admin/solveDealByAdmin", solveDeal);
 
 exports.router = router;
 

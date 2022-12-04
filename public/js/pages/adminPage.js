@@ -25,7 +25,31 @@ function set_statistic_info(data){
     sol_amount.innerText = data.sol_amount;
 }
 
-const dealToHelp = async (dealID, account, status) => {
+function solveDealByAdmin(dealID, account, priory){
+  const body = JSON.stringify({
+    dealID: dealID,
+    account: account,
+    priory: priory
+  });
+  fetch('/admin/solveDealByAdmin', { method: "post", body: body, headers: headers }) 
+  .then((resp) => {
+      if (resp.status < 200 || resp.status >= 300)
+          throw new Error("connect error");
+      return resp.json();
+  })
+  .then(async (json) => {
+    console.log(json);
+    if(json.code == 0)
+      CreateToast(false, "Конфликт разрешен");
+    else
+      CreateToast(true, "Конфликт не разрешен");
+  })
+  .catch((err) => {
+      console.log(err);
+  });
+}
+
+const dealToHelp = async (dealID, account) => {
   let answerDealById = await getDealById(dealID);
   fetch(`view/dealAdminView?dealid=${dealID}&account=${account}`, { headers }) 
   .then((resp) => {
@@ -38,11 +62,13 @@ const dealToHelp = async (dealID, account, status) => {
       document.getElementById('buyer-right').addEventListener('click', async (evt) => {
         const tx = await escrowProvider.disapprove(answerDealById.txId);
         await tx.wait();
+        solveDealByAdmin(dealID, account, 0);
         updateHistory(account, 'dealsToHelp', dealToHelp)
       })
       document.getElementById('seller-right').addEventListener('click', async (evt) => {
         const tx = await escrowProvider.approve(answerDealById.txId);
         await tx.wait();
+        solveDealByAdmin(dealID, account, 1);
         updateHistory(account, 'dealsToHelp', dealToHelp)
       })
   })
@@ -55,12 +81,12 @@ const initialize = async () => {
     const acc = await provider.listAccounts();
     let metaMaskAcc = acc[0];
     if (acc != undefined) {  //IDEA: а зачем тут проверка, можно свести к одному?
-      await updateHistory(metaMaskAcc, 'dealsToHelp', dealToHelp);
+      await updateHistory(metaMaskAcc, 'getDeals', dealToHelp);
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
         metaMaskAcc = account;
-      await updateHistory(account, 'dealsToHelp', dealToHelp);
+      await updateHistory(account, 'getDeals', dealToHelp);
     })
 
     fetch(`fetch/preloadAdminPage?account=${metaMaskAcc}`, { headers })
