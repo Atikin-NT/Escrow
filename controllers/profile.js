@@ -5,27 +5,18 @@ const {
     getOpenDealsAmount
 } = require("../lib/userinfo.js");
 const { ethers } = require('ethers');
-const { createJsonAnswer } = require('../lib/createJsonAns.js');
 
-
-exports.preloadProfilePage = async (req, res) => {
-    const account = req.query.account.toLowerCase();
-    if(!ethers.utils.isAddress(account))
-        res.status(601).send(createJsonAnswer(601, 'bad account', [
-            {
-                done_deals: 0,
-                user_total_amount: 0,
-                total_deals_count: 0,
-                user_now_amount: 0
-            }
-        ]))
+exports.pageLoad = async (req, res) => {
+    const address = '0x' + req.params.address.toLowerCase();
+    if(!ethers.utils.isAddress(address))
+        res.status(601).send('<h1>Bad address</h1>');
     else 
-        res.send(createJsonAnswer(0, "The deal has been inserted", [
-            {
-                done_deals: await getDoneDealsCount(account),
-                user_total_amount: await getUserTotalAmount(account),
-                total_deals_count: await getOpenDealsCount(account),
-                user_now_amount: await getOpenDealsAmount(account)
-            }
-        ]))
+        res.render('partials/profileMainPage', {
+            title: "Статистика",
+            layout: "profile",
+            done_deals: await getDoneDealsCount(address),
+            user_total_amount: await getUserTotalAmount(address),
+            total_deals_count: await getOpenDealsCount(address),
+            user_now_amount: await getOpenDealsAmount(address)
+        }); //лучше не бегать много раз, а создать табличку по адресам (до полутора секунд)
 }

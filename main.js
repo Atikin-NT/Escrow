@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const fetchRoutes = require('./routes/fetch.js');
 const viewRoutes = require('./routes/view.js');
+const profileRoutes = require('./routes/profile.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
 const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus, setArbitrator } = require("./lib/sqlite");
@@ -27,6 +28,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(fetchRoutes);
 app.use(viewRoutes);
+app.use(profileRoutes);
 
 app.get('/', (req, res) => {
   res.render('partials/inputLayout', {
@@ -35,13 +37,6 @@ app.get('/', (req, res) => {
     btnName: "Create",
     discountChecked: "checked",
     partnerRole: "Seller",
-  });
-});
-
-app.get('/profile', (req, res) => {
-  res.render('partials/profileMainPage', {
-    title: "Статистика",
-    layout: "profile",
   });
 });
 

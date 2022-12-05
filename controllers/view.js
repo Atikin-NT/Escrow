@@ -228,3 +228,52 @@ exports.dealAdminView = async (req, res) => {
         need_help: need_help,
     });
 }
+
+exports.dealViewOnly = async (req, res) => {
+    const id = parseInt(req.query.dealid);
+    const account = req.query.account.toLowerCase();
+    let dbAnswer = defaulDeal;
+    let title = "default";
+    if(id != undefined && id != null && id >= 0){
+        const answer = JSON.parse(await dbGetDealsByID(id));
+        dbAnswer = answer.list[0];
+        if(answer.code == 0){
+            switch(dbAnswer.status){
+                case 1:
+                    title = '"Waiting when buyer will send Ethers'
+                break;
+                case 2:
+                    title = "Waiting when seller will send Magic Box";
+                break;
+                case 3:
+                    title = "Waiting when buyer will approve Magic Box";
+                break;
+                case 4:
+                    title = "ヾ(⌐■_■)ノ♪";
+                break;
+                default:
+                    title = "Something went wrong :(";
+            }
+        }
+    }
+    let role = (dbAnswer.seller == account) ? "Seller" : "Buyer";
+    res.render('partials/textLayout', {
+        layout : 'part',
+        title: title,
+        role: role,
+        seller: dbAnswer.seller, 
+        buyer: dbAnswer.buyer, 
+        value: dbAnswer.value,
+        feeRole: feeRoleList[dbAnswer.feeRole],
+        txid: dbAnswer.txid,
+        id: dbAnswer.id,
+        fee: dbAnswer.fee,
+        status: dbAnswer.status,
+        change: false,
+        btnName: "",
+        showNextButton: false,
+        notEnd: false,
+        cancelBtn: false,
+        btnDanger: ""
+    });
+}
