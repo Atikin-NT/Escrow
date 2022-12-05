@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/progressbar.css" />
     <link rel="stylesheet" href="/css/loader.css">
+    <link rel="stylesheet" href="/css/header.css">
 
     <script
       src="js/libs/ethers-5.2.umd.min.js"
@@ -33,44 +34,45 @@
   <body class="bg-light">
     <div class="wrapper">
       {{> loader}}
-    <div class="base-container container" id="create-container">
-      <main id="main">
-        {{> progressbar}}
-        <div class="row g-5 deal-details">
-          <div id="inputBody" class="col-md-7">
-            {{{body}}}
-          </div>
-          <div id="historyBody" class="col-md-5">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-              <span class="text-primary">History</span>
-            </h4>
+      {{> header}}
+      <div class="base-container container" id="create-container">
+        <main id="main">
+          {{> progressbar}}
+          <div class="row g-5 deal-details">
+            <div id="inputBody" class="col-md-7">
+              {{{body}}}
+            </div>
+            <div id="historyBody" class="col-md-5">
+              <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-primary">History</span>
+              </h4>
 
-            <ul class="list-group mb-3" id="history-list">
-              <h6>There will be your history</h6>
-            </ul>
-          </div>
+              <ul class="list-group mb-3" id="history-list">
+                <h6>There will be your history</h6>
+              </ul>
+            </div>
 
-          <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div
-              id="liveToast"
-              class="toast"
-              role="alert"
-              aria-live="assertive"
-              aria-atomic="true"
-            >
-              <div class="toast-body">
-                <div
-                  class="alert alert-success toast-body-div"
-                  role="alert"
-                  id="toast-msg"
-                >
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+              <div
+                id="liveToast"
+                class="toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="toast-body">
+                  <div
+                    class="alert alert-success toast-body-div"
+                    role="alert"
+                    id="toast-msg"
+                  >
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
     </div>
     
   </body>

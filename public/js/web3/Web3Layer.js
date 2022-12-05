@@ -32,7 +32,7 @@ const initialize = async () => {
         document.getElementById("connectButton").remove();
       } 
       if (wallet != null && document.getElementById("show-account") != undefined) {
-        document.getElementById("show-account").innerText = shortWallet(wallet, 15, 6);
+        document.getElementById("show-account").innerText = shortWallet(wallet, 5, 6);
       }
     } else {
       onboardButton.innerText = "Connect";
