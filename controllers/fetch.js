@@ -2,14 +2,14 @@ const { dbInsertData, dbGetDealsByAccount, dbGetDealsToHelp, dbDeleteData, dbUpd
 const { solveDealByAdmin } = require("../lib/adminInfo.js");
 
 exports.createDeal = async (req, res) => {
-    answer = await dbInsertData(req.body.buyer, req.body.seller, 
+    answer = await dbInsertData(req.body.buyer.toLowerCase(), req.body.seller.toLowerCase(), 
         req.body.value, req.body.sellerIsAdmin,
         req.body.fee, req.body.feeRole);
     res.send(answer);
 }
 
 exports.updateDeal = async (req, res) => {
-    answer = await dbUpdateData(req.body.buyer, req.body.seller, 
+    answer = await dbUpdateData(req.body.buyer.toLowerCase(), req.body.seller.toLowerCase(), 
         req.body.value, req.body.id, req.body.sellerIsAdmin,
         req.body.fee, req.body.feeRole);
     res.send(answer);
@@ -21,12 +21,12 @@ exports.deleteDeal = async (req, res) => {
 }
 
 exports.getDeals = async (req, res) => {
-    answer = await dbGetDealsByAccount(req.query.account, req.query.limit);
+    answer = await dbGetDealsByAccount(req.query.account.toLowerCase(), req.query.limit);
     res.send(answer);
 }
 
 exports.dealsToHelp = async (req, res) => {
-    answer = await dbGetDealsToHelp(req.query.account, req.query.limit);
+    answer = await dbGetDealsToHelp(req.query.account.toLowerCase(), req.query.limit);
     res.send(answer);
 }
 
@@ -51,6 +51,6 @@ exports.updateTxHash = async (req, res) => {
 }
 
 exports.solveDeal= async (req, res) => {
-    answer = await solveDealByAdmin(req.body.dealID, req.body.account, req.body.priory);
+    answer = await solveDealByAdmin(req.body.dealID, req.body.account.toLowerCase(), req.body.priory);
     res.send(answer);
 }

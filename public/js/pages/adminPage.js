@@ -25,86 +25,65 @@ function set_statistic_info(data){
     sol_amount.innerText = data.sol_amount;
 }
 
-function solveDealByAdmin(dealID, account, priory){
-  const body = JSON.stringify({
-    dealID: dealID,
-    account: account,
-    priory: priory
-  });
-  fetch('/admin/solveDealByAdmin', { method: "post", body: body, headers: headers }) 
-  .then((resp) => {
-      if (resp.status < 200 || resp.status >= 300)
-          throw new Error("connect error");
-      return resp.json();
-  })
-  .then(async (json) => {
-    console.log(json);
-    if(json.code == 0)
-      CreateToast(false, "Конфликт разрешен");
-    else
-      CreateToast(true, "Конфликт не разрешен");
-  })
-  .catch((err) => {
-      console.log(err);
-  });
+const thisUpdateHistory = async (account) => updateHistory(account, 'dealsToHelp', dealToHelp, 10);
+
+const solveViewRes = async (dealID, account) => {
+  try {
+    const resp = await fetch(`view/dealAdminView?dealid=${dealID}&account=${account}`, { headers });
+    const html = await resp.text();
+    bodyInput.innerHTML = html;
+  }
+  catch (err) { console.log(err); }
+
+  const buyerbtn = document.getElementById('buyer-right');
+  const sellerbtn = document.getElementById('seller-right');
+  if (buyerbtn == null || sellerbtn == null) CreateToast(false, "Конфликт разрешен");
+  else CreateToast(true, "Конфликт не разрешен");
+  await thisUpdateHistory(account);
 }
 
 const dealToHelp = async (dealID, account) => {
   let answerDealById = await getDealById(dealID);
-  fetch(`view/dealAdminView?dealid=${dealID}&account=${account}`, { headers }) 
-  .then((resp) => {
-      if (resp.status < 200 || resp.status >= 300)
-          throw new Error("connect error");
-      return resp.text();
-  })
-  .then(async (html) => {
-      bodyInput.innerHTML = html;
-      const buyerbtn = document.getElementById('buyer-right');
-      const sellerbtn = document.getElementById('buyer-right');
-      if(buyerbtn != null && sellerbtn != null){
-        document.getElementById('buyer-right').addEventListener('click', async (evt) => {
-          const tx = await escrowProvider.disapprove(answerDealById.txId);
-          await tx.wait();
-          solveDealByAdmin(dealID, account, 0);
-          updateHistory(account, 'dealsToHelp', dealToHelp)
-        })
-        document.getElementById('seller-right').addEventListener('click', async (evt) => {
-          const tx = await escrowProvider.approve(answerDealById.txId);
-          await tx.wait();
-          solveDealByAdmin(dealID, account, 1);
-          updateHistory(account, 'dealsToHelp', dealToHelp)
-        })
-      }
-  })
-  .catch((err) => {
-      console.log(err);
-  });
+  try {
+    const resp = await fetch(`view/dealAdminView?dealid=${dealID}&account=${account}`, { headers });
+    const html = await resp.text();
+    bodyInput.innerHTML = html;
+  }
+  catch (err) { console.log(err); }
+
+  const buyerbtn = document.getElementById('buyer-right');
+  const sellerbtn = document.getElementById('seller-right');
+  if(buyerbtn != null && sellerbtn != null){
+    buyerbtn.addEventListener('click', async (evt) => {
+      const tx = await escrowProvider.disapprove(answerDealById.txId);
+      await tx.wait();
+      await solveViewRes(dealID, account);
+    })
+    sellerbtn.addEventListener('click', async (evt) => {
+      const tx = await escrowProvider.approve(answerDealById.txId);
+      await tx.wait();
+      await solveViewRes(dealID, account);
+    })
+  }
 }
 
 const initialize = async () => {
     const acc = await provider.listAccounts();
     let metaMaskAcc = acc[0];
     if (acc != undefined) {  //IDEA: а зачем тут проверка, можно свести к одному?
-      await updateHistory(metaMaskAcc, 'getDeals', dealToHelp);
+      await thisUpdateHistory(metaMaskAcc);
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
         metaMaskAcc = account;
-      await updateHistory(account, 'getDeals', dealToHelp);
+      await thisUpdateHistory(metaMaskAcc);
     })
 
-    fetch(`fetch/preloadAdminPage?account=${metaMaskAcc}`, { headers })
-    .then((resp) => {
-        if (resp.status < 200 || resp.status >= 300)
-            throw new Error("connect error");
-        return resp.json();
-    })
-    .then(async (json) => {
-        set_statistic_info(json.list[0]);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+    try {
+      const resp = await fetch(`fetch/preloadAdminPage?account=${metaMaskAcc}`, { headers });
+      const json = await resp.json();
+      set_statistic_info(json.list[0]);
+    } catch (err) { console.log(err); }
 
     const withdraw = document.getElementById("withdraw-eth");
     withdraw.addEventListener('click', async (evt) => {

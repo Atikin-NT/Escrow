@@ -214,12 +214,8 @@ exports.dealAdminView = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const address = req.query.account.toLowerCase();
     const dbAnswer = (JSON.parse(await dbGetDealsByID(id))).list[0];
-    if(!isAdmin(address)){
-        dbAnswer = defaulDeal;
-    }
-    need_help = false;
-    if(dbAnswer.arbitrator != null && dbAnswer.arbitrator.toLowerCase() == address)
-        need_help = true;
+    if(!isAdmin(address)) dbAnswer = defaulDeal;
+    need_help = (dbAnswer.arbitrator == address) && (dbAnswer.status == 3);
     res.render('partials/adminDealView', {
         layout : 'part',
         title: `Deal ${dbAnswer.id}`,

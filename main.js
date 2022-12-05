@@ -130,5 +130,5 @@ provider.on({
   const TxId = log.topics[1];
   const arbitrator = ethers.utils.hexStripZeros(log.topics[2]);
   console.log('ArbitratorAsked: ',TxId);
-  await setArbitrator(TxId, arbitrator);
+  await setArbitrator(TxId, arbitrator.toLocaleLowerCase());
 })
