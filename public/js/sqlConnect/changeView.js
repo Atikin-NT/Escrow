@@ -94,7 +94,7 @@ function changeDeal(dealID, account){
             throw new Error("connect error");
         return resp.text();
     })
-    .then((html) => {
+    .then(async (html) => {
         changeProgressState(-1);
         bodyInput.innerHTML = html;
         updateConnectionBtn(account);
@@ -122,7 +122,7 @@ function changeDeal(dealID, account){
         sellerSwitch.addEventListener('click', (evt) => { //we are seller
             dealPartnerLabel.innerHTML = "Buyer address";
         });
-        updateHistory(account);
+        await updateHistory(account);
     })
     .catch((err) => {
         console.log(err);
@@ -216,7 +216,7 @@ async function changeDealStatus(dealID, account, status){
                 await changeDealStatus(dealID, account, -1);
             });
         }
-        updateHistory(account);
+        await updateHistory(account);
     })
     .catch((err) => {
         console.log(err);
@@ -256,7 +256,7 @@ function approveByPartner(dealID, account){
             });
         }
 
-        updateHistory(account);
+        await updateHistory(account);
     })
     .catch((err) => {
         console.log(err);
