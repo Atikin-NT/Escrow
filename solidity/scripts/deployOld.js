@@ -5,12 +5,12 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
+const {ARB_REW_ETH, FEE_PP} = require("../../lib/utils.js");
 
 async function main() {
-    const feePercent = 2;
-    const arbitratorReward = hre.ethers.utils.parseEther("0.02");
+    const arbitratorReward = hre.ethers.utils.parseEther(String(ARB_REW_ETH));
     const Escrow = await hre.ethers.getContractFactory("Escrow");
-    const escrow = await Escrow.deploy(arbitratorReward, feePercent);
+    const escrow = await Escrow.deploy(arbitratorReward, FEE_PP);
     await escrow.deployed();
     console.log(`deployed at ${escrow.address}`);
 

@@ -1,14 +1,14 @@
 const { ethers, upgrades } = require("hardhat");
+const {ARB_REW_ETH, FEE_PP} = require("../../lib/utils.js");
 
 async function main() {
     const [owner, buyer, seller, arbitrator] = await ethers.getSigners();
     console.log(owner.address, buyer.address, seller.address)
 
-    const feePercent = 2;
-    const arbitratorReward = hre.ethers.utils.parseEther("0.02");
+    const arbitratorReward = hre.ethers.utils.parseEther(String(ARB_REW_ETH));
     const Escrow = await ethers.getContractFactory("Escrow");
     let ob = await owner.getBalance();
-    const escrow = await upgrades.deployProxy(Escrow, [arbitratorReward, feePercent, owner.address]);
+    const escrow = await upgrades.deployProxy(Escrow, [arbitratorReward, FEE_PP, owner.address]);
     await escrow.deployed();
     console.log(`deployed at ${escrow.address}`);
     console.log(ethers.utils.formatEther((ob).sub(await owner.getBalance())))

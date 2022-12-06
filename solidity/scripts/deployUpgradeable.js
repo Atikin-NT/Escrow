@@ -1,11 +1,11 @@
 const { ethers, upgrades } = require("hardhat");
+const {ARB_REW_ETH, FEE_PP} = require("../../lib/utils.js");
 
 async function main() {
     const [ owner ] = await ethers.getSigners();
-    const feePercent = 2;
-    const arbitratorReward = hre.ethers.utils.parseEther("0.02");
+    const arbitratorReward = hre.ethers.utils.parseEther(String(ARB_REW_ETH));
     const Escrow = await ethers.getContractFactory("Escrow");
-    const escrow = await upgrades.deployProxy(Escrow, [arbitratorReward, feePercent, owner.address]); //760856
+    const escrow = await upgrades.deployProxy(Escrow, [arbitratorReward, FEE_PP, owner.address]); //760856
     await escrow.deployed();
     console.log(`deployed at ${escrow.address}`);
     //0x82F22d0bACE16Be4184fe2Ea105F7fE335297F99
