@@ -1,6 +1,7 @@
 const { dbGetDealsByID } = require('../lib/sqlite.js');
 const { isAdmin } = require('../lib/adminInfo.js');
 const ethers = require('ethers');
+const { DEAL_STATUS } = require("../lib/utils.js")
 
 const defaulDeal = {
     seller: "0x0", 
@@ -9,7 +10,7 @@ const defaulDeal = {
     txid: -1,
     id: -1,
     fee: 0,
-    status: -1,
+    status: DEAL_STATUS.TO_DEL,
     need_admin_help: false,
     feeRole: 0
 };
@@ -21,7 +22,7 @@ exports.changeDealView = async (req, res) => {
     let dbAnswer = defaulDeal;
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
     dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
-    if(dbAnswer.status != 0) dbAnswer = defaulDeal;
+    if(dbAnswer.status != DEAL_STATUS.CREATE) dbAnswer = defaulDeal;
     let partnerRole = "Seller";
     let partner = dbAnswer.seller;
     let buyerCheck = "checked";
@@ -66,12 +67,12 @@ exports.approveByPartnerView = async (req, res) => {
     let title = 'Waiting for approved by your partner';
     if(id != undefined && id != null && id >= 0 && ethers.utils.isAddress(account))
         dbAnswer = JSON.parse(await dbGetDealsByID(id)).list[0];
-    if(dbAnswer.status == 0 && 
+    if(dbAnswer.status == DEAL_STATUS.CREATE && 
         ((account == dbAnswer.seller && dbAnswer.sellerIsAdmin == 0) || (account == dbAnswer.buyer && dbAnswer.sellerIsAdmin == 1))){
         showNextButton = true
         title = 'Waiting for your approve';
     }
-    if(dbAnswer.status != 0) dbAnswer = defaulDeal;
+    if(dbAnswer.status != DEAL_STATUS.CREATE) dbAnswer = defaulDeal;
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
     res.render('partials/textLayout', {
@@ -111,7 +112,7 @@ exports.changeDealStatus = async (req, res) => {
         dbAnswer = answer.list[0];
         if(answer.code == 0){
             switch(newStatus){
-                case 1:
+                case DEAL_STATUS.CREATE_B:
                     title = "Waiting when your partner will send Ethers";
                     btnName = "Send Ethers";
                     showNextButton = false;
@@ -123,7 +124,7 @@ exports.changeDealStatus = async (req, res) => {
                         dbAnswer.status = newStatus;
                     }
                 break;
-                case 2:
+                case DEAL_STATUS.BUYER_CONF:
                     title = "Waiting when your partner will send Magic Box";
                     btnName = "Send Magic Box";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
@@ -140,7 +141,7 @@ exports.changeDealStatus = async (req, res) => {
                         }
                     }
                 break;
-                case 3:
+                case DEAL_STATUS.SELLER_CONF:
                     btnDanger = 'Ask Admin';
                     title = "Waiting when your partner will approve Magic Box";
                     btnName = "Approve Magic Box";
@@ -158,7 +159,7 @@ exports.changeDealStatus = async (req, res) => {
                         }
                     }
                 break;
-                case 4:
+                case DEAL_STATUS.FINISHED:
                     title = "ヾ(⌐■_■)ノ♪";
                     if(answer.list[0].status == newStatus-1 && answer.list[0].buyer == account){
                         dbAnswer = answer.list[0];
@@ -169,7 +170,7 @@ exports.changeDealStatus = async (req, res) => {
                     showNextButton = false;
                     notEnd = false;
                 break;
-                case -1:
+                case DEAL_STATUS.TO_DEL:
                     title = "Admin Asked";
                     dbAnswer = answer.list[0];
                     title = "Waiting when you will approve Magic Box";
@@ -215,7 +216,7 @@ exports.dealAdminView = async (req, res) => {
     const address = req.query.account.toLowerCase();
     const dbAnswer = (JSON.parse(await dbGetDealsByID(id))).list[0];
     if(!isAdmin(address)) dbAnswer = defaulDeal;
-    need_help = (dbAnswer.arbitrator == address) && (dbAnswer.status == 3);
+    need_help = (dbAnswer.arbitrator == address) && (dbAnswer.status == DEAL_STATUS.SELLER_CONF);
     res.render('partials/adminDealView', {
         layout : 'part',
         title: `Deal ${dbAnswer.id}`,
@@ -239,16 +240,16 @@ exports.dealViewOnly = async (req, res) => {
         dbAnswer = answer.list[0];
         if(answer.code == 0){
             switch(dbAnswer.status){
-                case 1:
+                case DEAL_STATUS.CREATE_B:
                     title = '"Waiting when buyer will send Ethers'
                 break;
-                case 2:
+                case DEAL_STATUS.BUYER_CONF:
                     title = "Waiting when seller will send Magic Box";
                 break;
-                case 3:
+                case DEAL_STATUS.SELLER_CONF:
                     title = "Waiting when buyer will approve Magic Box";
                 break;
-                case 4:
+                case DEAL_STATUS.FINISHED:
                     title = "ヾ(⌐■_■)ノ♪";
                 break;
                 default:

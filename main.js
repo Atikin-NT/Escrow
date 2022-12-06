@@ -7,6 +7,7 @@ const profileRoutes = require('./routes/profile.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
 const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus, setArbitrator } = require("./lib/sqlite");
+const { DEAL_STATUS } = require("./lib/utils.js")
 require("dotenv").config();
 
 const hostname = '127.0.0.1';
@@ -72,7 +73,7 @@ provider.on({
   const TxId = log.topics[3];
   await setTxIdByHash(txHash, TxId);
   console.log('Created: ', buyer, seller, TxId)
-  await dbUpdateDealStatus(TxId, 1);
+  await dbUpdateDealStatus(TxId, DEAL_STATUS.CREATE_B);
 })
 
 provider.on({
@@ -82,7 +83,7 @@ provider.on({
   ]}, async (log, event) => {
   const TxId = log.topics[1];
   console.log('BuyerConfim: ',TxId);
-  await dbUpdateDealStatus(TxId, 2);
+  await dbUpdateDealStatus(TxId, DEAL_STATUS.BUYER_CONF);
 })
 
 provider.on({
@@ -92,7 +93,7 @@ provider.on({
   ]}, async (log, event) => {
   const TxId = log.topics[1];
   console.log('SellerConfim: ',TxId);
-  await dbUpdateDealStatus(TxId, 3);
+  await dbUpdateDealStatus(TxId, DEAL_STATUS.SELLER_CONF);
 })
 
 provider.on({
@@ -104,7 +105,7 @@ provider.on({
   console.log('Finished: ',TxId);
   const dbDeal = JSON.parse(await dbGetDealsByTxID(TxId));
   if (dbDeal.list.length > 0){
-    await dbUpdateDealStatus(TxId, 4);
+    await dbUpdateDealStatus(TxId, DEAL_STATUS.FINISHED);
   }
 })
 
