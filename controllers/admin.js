@@ -10,6 +10,7 @@ const {
 } = require("../lib/adminInfo.js");
 const { ethers } = require('ethers');
 const { createJsonAnswer } = require('../lib/createJsonAns.js');
+const { ESCROW } = require("../lib/utils.js")
 
 
 exports.preloadAdminPage = async (req, res) => {
@@ -33,17 +34,28 @@ exports.preloadAdminPage = async (req, res) => {
                 sol_amount: 0
             }
         ]))
-    else 
+    else {
+        const responses = await Promise.all([
+            getDealsDoneCount(), 
+            getTotalAmount(), 
+            getFeeTotalAmount(), 
+            getDealsCount(), 
+            getOpenAmount(), 
+            getAdminHelpDealCount(), 
+            getNeedsYourHelpCount(account), 
+            ESCROW.hold()
+        ]);
         res.send(createJsonAnswer(0, "The deal has been inserted", [
             {
-                dealsDoneCount: await getDealsDoneCount(),
-                totalAmount: await getTotalAmount(),
-                feeTotalAmount: await getFeeTotalAmount(),
-                dealsCount: await getDealsCount(),
-                openAmount: await getOpenAmount(),
-                adminHelpDealCount: await getAdminHelpDealCount(),
-                needYourHelp: await getNeedsYourHelpCount(account),
-                sol_amount: 0
+                dealsDoneCount: responses[0],
+                totalAmount: responses[1],
+                feeTotalAmount: responses[2],
+                dealsCount: responses[3],
+                openAmount: responses[4],
+                adminHelpDealCount: responses[5],
+                needYourHelp: responses[6],
+                sol_amount: ethers.utils.formatEther(responses[7])
             }
         ]))
+    }
 }

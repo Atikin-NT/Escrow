@@ -7,8 +7,7 @@ const profileRoutes = require('./routes/profile.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
 const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus, setArbitrator } = require("./lib/sqlite");
-const { DEAL_STATUS } = require("./lib/utils.js")
-require("dotenv").config();
+const { DEAL_STATUS, PROVIDER, ESCROW_ADDRESS } = require("./lib/utils.js")
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -59,11 +58,8 @@ var server = app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-const { API_URL } = process.env;
-let provider = new ethers.providers.JsonRpcProvider(API_URL);
-const address = "0x89173A9F2295a208763F8B5b6A8bd1121a0C0e31";
-provider.on({
-  address: address, 
+PROVIDER.on({
+  address: ESCROW_ADDRESS, 
   topics: [
       ethers.utils.id("Created(address,address,bytes32)")
   ]}, async (log, event) => {
@@ -76,8 +72,8 @@ provider.on({
   await dbUpdateDealStatus(TxId, DEAL_STATUS.CREATE_B);
 })
 
-provider.on({
-  address: address,
+PROVIDER.on({
+  address: ESCROW_ADDRESS,
   topics: [
       ethers.utils.id("BuyerConfim(bytes32)")
   ]}, async (log, event) => {
@@ -86,8 +82,8 @@ provider.on({
   await dbUpdateDealStatus(TxId, DEAL_STATUS.BUYER_CONF);
 })
 
-provider.on({
-  address: address,
+PROVIDER.on({
+  address: ESCROW_ADDRESS,
   topics: [
       ethers.utils.id("SellerConfim(bytes32)")
   ]}, async (log, event) => {
@@ -96,8 +92,8 @@ provider.on({
   await dbUpdateDealStatus(TxId, DEAL_STATUS.SELLER_CONF);
 })
 
-provider.on({
-  address: address,
+PROVIDER.on({
+  address: ESCROW_ADDRESS,
   topics: [
       ethers.utils.id("Finished(bytes32)")
   ]}, async (log, event) => {
@@ -109,8 +105,8 @@ provider.on({
   }
 })
 
-provider.on({
-  address: address,
+PROVIDER.on({
+  address: ESCROW_ADDRESS,
   topics: [
       ethers.utils.id("Conflict(bytes32)")
   ]}, async (log, event) => {
@@ -118,8 +114,8 @@ provider.on({
   console.log('Consflict: ',TxId);
 })
 
-provider.on({
-  address: address,
+PROVIDER.on({
+  address: ESCROW_ADDRESS,
   topics: [
       ethers.utils.id("ArbitratorAsked(bytes32,address)")
   ]}, async (log, event) => {

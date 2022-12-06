@@ -10,13 +10,20 @@ exports.pageLoad = async (req, res) => {
     const address = '0x' + req.params.address.toLowerCase();
     if(!ethers.utils.isAddress(address))
         res.status(601).send('<h1>Bad address</h1>');
-    else 
+    else {
+        const responses = await Promise.all([
+            getDoneDealsCount(address),
+            getUserTotalAmount(address),
+            getOpenDealsCount(address),
+            getOpenDealsAmount(address)
+        ])
         res.render('partials/profileMainPage', {
             title: "Статистика",
             layout: "profile",
-            done_deals: await getDoneDealsCount(address),
-            user_total_amount: await getUserTotalAmount(address),
-            total_deals_count: await getOpenDealsCount(address),
-            user_now_amount: await getOpenDealsAmount(address)
-        }); //лучше не бегать много раз, а создать табличку по адресам (до полутора секунд)
+            done_deals: responses[0],
+            user_total_amount: responses[1],
+            total_deals_count: responses[2],
+            user_now_amount: responses[3]
+        });
+    }
 }
