@@ -2,18 +2,16 @@
 
 pragma solidity >=0.8.9 <0.9.0;
 
-import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
 // Author: @avezorgen
-contract Escrow is AutomationCompatibleInterface, AccessControl {
+contract Escrow is AccessControlUpgradeable {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant ARBITRATOR_ROLE = keccak256("ARBITRATOR_ROLE");
 
-    address public owner;
     uint public hold;
-    uint public limit;
     uint public arbitratorReward;
+    uint8 public FP;
 
     struct details {
         address buyer;
@@ -45,18 +43,22 @@ contract Escrow is AutomationCompatibleInterface, AccessControl {
         _;
     }
 
-    constructor(uint _limit, uint _arbitratorReward) {
-        _grantRole(ADMIN_ROLE, msg.sender);
-        _grantRole(ARBITRATOR_ROLE, msg.sender);
+    function initialize(
+        uint256 _arbitratorReward,
+        uint8 _feePercent,
+        address _owner
+    ) public initializer {
+        _setupRole(DEFAULT_ADMIN_ROLE, _owner);
+        _grantRole(ADMIN_ROLE, _owner);
+        _grantRole(ARBITRATOR_ROLE, _owner);
         _setRoleAdmin(ARBITRATOR_ROLE, ADMIN_ROLE);
-        owner = msg.sender;
+        setAReward(_arbitratorReward);
+        setFeePercent(_feePercent);
         hold = 0;
-        limit = _limit;
-        arbitratorReward = _arbitratorReward;
     }
 
-    function getFee(uint value) internal pure returns(uint fee){
-        fee = value / 1e2 * 2;
+    function getFee(uint value) internal view returns(uint fee){
+        fee = value / 1e2 * FP;
     }
 
     function create(address buyer, address seller, uint value, uint8 feeStyle) external {
@@ -90,7 +92,7 @@ contract Escrow is AutomationCompatibleInterface, AccessControl {
         require(deals[TxId].status != 3, "Can't be cancelled already");
         if (deals[TxId].status == 2) {
             if (msg.sender == deals[TxId].seller) {
-                emit Conflict(TxId); //seller отменил сделку, когда buyer уже отправил деньги
+                emit Conflict(TxId);
             }
             payable(deals[TxId].buyer).transfer(deals[TxId].value + deals[TxId].Bfee);
         }
@@ -133,25 +135,15 @@ contract Escrow is AutomationCompatibleInterface, AccessControl {
         hold = 0;
     }
 
-    function setLimit(uint newlimit) external {
+    function setFeePercent(uint8 newFP) public {
         require(hasRole(ADMIN_ROLE, msg.sender));
-        limit = newlimit;
+        require(newFP < 100);
+        FP = newFP;
     }
 
-    function setAReward(uint newReward) external {
+    function setAReward(uint newReward) public {
         require(hasRole(ADMIN_ROLE, msg.sender));
         arbitratorReward = newReward;
-    }
-
-    function checkUpkeep(bytes calldata /* checkData */) external view override returns (bool upkeepNeeded, bytes memory /* performData */) {
-        upkeepNeeded = hold > limit;
-    }
-
-    function performUpkeep(bytes calldata /* performData */) external override {
-        if (hold > limit) {
-            payable(owner).transfer(hold);
-            hold = 0;
-        }
     }
     
     receive() external payable {
