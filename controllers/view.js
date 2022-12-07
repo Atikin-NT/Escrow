@@ -110,7 +110,7 @@ exports.changeDealStatus = async (req, res) => {
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
         dbAnswer = answer.list[0];
-        if(answer.code == 0){
+        if(answer.code == 0 && (account == dbAnswer.buyer || account == dbAnswer.seller)){
             switch(newStatus){
                 case DEAL_STATUS.CREATE_B:
                     title = "Waiting when your partner will send Ethers";
@@ -186,7 +186,7 @@ exports.changeDealStatus = async (req, res) => {
                     showNextButton = false;
                     break;
             }
-        }
+        } else dbAnswer = defaulDeal;
     }
     let role = "Buyer";
     if(dbAnswer.seller == account) role = "Seller";
@@ -214,9 +214,8 @@ exports.changeDealStatus = async (req, res) => {
 exports.dealAdminView = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const address = req.query.account.toLowerCase();
-    const dbAnswer = (JSON.parse(await dbGetDealsByID(id))).list[0];
-    if(!isAdmin(address)) dbAnswer = defaulDeal;
-    need_help = (dbAnswer.arbitrator == address) && (dbAnswer.status == DEAL_STATUS.SELLER_CONF);
+    const dbAnswer = (await isAdmin(address)) ? (JSON.parse(await dbGetDealsByID(id))).list[0] : defaulDeal;
+    const need_help = (dbAnswer.arbitrator == address) && (dbAnswer.status == DEAL_STATUS.SELLER_CONF);
     res.render('partials/adminDealView', {
         layout : 'part',
         title: `Deal ${dbAnswer.id}`,

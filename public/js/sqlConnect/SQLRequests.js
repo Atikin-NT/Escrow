@@ -63,10 +63,11 @@ const getBody = async (account) => {
   };
 }
 
-const getRes = async (url, body, jsonCall, failurCall) => {
+const getRes = async (url, body, jsonCall, failurCall) => { 
+  let method = (body) ? "post" : "get";
   let res = -1;
   try {
-    const resp = await fetch(url, { method: "post", body, headers });
+    const resp = await fetch(url, { method: method, body, headers });
     if (resp.status < 200 || resp.status >= 300)
       throw new Error("connect error");
 
@@ -192,16 +193,16 @@ const getDealById = async(id) => {
   if(id <= 0)
     throw "invalid value";
   
-  const body = JSON.stringify({
-    id: id,
-  });
+  // const body = JSON.stringify({
+  //   id: id,
+  // });
   const jsonCall = (json) => {
     let res = -1;
     if(json.code == 0)
       res = json.list[0];
     return res;
   }
-  const res = await getRes("/fetch/getDealById", body, jsonCall, (err) => { console.log(err);});
+  const res = await getRes(`/fetch/getDealById?id=${id}`, null, jsonCall, (err) => { console.log(err);});
   return res;
 } 
 

@@ -35,7 +35,7 @@ exports.updateDealStatus = async (req, res) => {
 }
 
 exports.getDealById = async (req, res) => {
-    answer = await dbGetDealsByID(req.body.id);
+    answer = await dbGetDealsByID(req.query.id);
     res.send(answer);
 }
 
