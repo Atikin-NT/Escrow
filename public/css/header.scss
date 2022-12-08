@@ -9,14 +9,21 @@
     height: 100%;
 }
 
+#header-content,
+.row {
+    --bs-gutter-x: 0;
+}
+
 
 #left-part {
     display: flex;
     justify-content: start;
+    padding: 0 !important;
 }
 #right-part{
     display: flex;
     justify-content: end;
+    padding: 0 !important;
 }
 
 
@@ -45,12 +52,31 @@
     }
 }
 
-#right-part span{
+.title {
+    color: black;
+    text-decoration: none;
+}
+.title:hover {
+    color: black;;
+}
+
+#right-part .item{
     display: flex;
     justify-content: center;
     align-items: center;
 
-    margin-right: 2rem;
+    margin-right: 1rem;
 }
 
+.sandwich {
+    height: 2.5rem;
+    width: 3.5rem;
+}
+
+.line {
+    width: 80%;
+    height: 1px;
+    background-color: grey;
+    border-radius: 50px;
+}
 
