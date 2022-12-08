@@ -51,6 +51,16 @@ const updateConnectionBtn = (account) => {
         button.remove();
         const show = document.getElementById("show-account");
         show.textContent = account;
+    } else if (button == null && account == null) {
+        console.log(button);
+        const btn = document.createElement("button");
+        btn.id = "connectButton";
+        btn.type = "button";
+        btn.classList.add("btn", "btn-pimary");
+        btn.textContent = "Connect";
+
+        document.getElementById("spanConnectButton").append("btn");
+        console.log(btn);
     }
 }
 
@@ -267,4 +277,5 @@ export {
     approveByPartner, 
     changeDeal,
     showCurrentDeal,
+    updateConnectionBtn
 };

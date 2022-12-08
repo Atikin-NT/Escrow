@@ -24,6 +24,7 @@ const initialize = async () => {
   const isMetaMaskConnected = () => MetaMaskWallet && MetaMaskWallet.length > 0;
 
   const updateConnectionBtn = (wallet) => {
+    const button = document.getElementById("connectButton");
     if (!isMetaMaskInstalled()) {
       onboardButton.innerText = "Please install MetaMask";
       onboardButton.disabled = false;
@@ -35,9 +36,17 @@ const initialize = async () => {
         document.getElementById("show-account").innerText = shortWallet(wallet, 5, 6);
       }
     } else {
-      onboardButton.innerText = "Connect";
-      onboardButton.onclick = onClickConnect;
-      onboardButton.disabled = false;
+      if (document.getElementById("connectButton") == null) {
+        const btn = document.createElement("button");
+        btn.id = "connectButton";
+        btn.type = "button";
+        btn.classList.add("btn", "btn-primary");
+        btn.textContent = "Connect";
+
+        document.getElementById("spanConnectButton").append(btn);
+      }
+
+      document.getElementById("connectButton").onclick = onClickConnect;
     }
   };
 
@@ -46,6 +55,12 @@ const initialize = async () => {
     const signer = provider.getSigner();
     escrowProvider = escrowProvider.connect(signer);
     updateConnectionBtn(MetaMaskWallet);
+
+    console.log(MetaMaskWallet != null && MetaMaskWallet > 0);
+    if (MetaMaskWallet != null && MetaMaskWallet > 0) {
+      const profBtn = document.getElementById("profile-button");
+      profBtn.href = "/" + MetaMaskWallet[0];
+    }
   };
 
   const onClickConnect = async () => {
@@ -72,8 +87,10 @@ const initialize = async () => {
     }
     ethereum.on("accountsChanged", handleNewAccounts);
   }
-
+  
   updateConnectionBtn();
+
+  
 };
 
 window.addEventListener("DOMContentLoaded", initialize);
