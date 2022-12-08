@@ -37,6 +37,9 @@
         <h5 class="mb-3 mt-3">Fee payment: <span class="fee">{{fee}} Ether</span></h5>
         <h5 class="mb-3 mt-3">Fee role: <span class="fee">{{feeRole}}</span></h5>
         <hr class="my-4" />
+        {{#if telegramShow}}
+            <h6 class="mb-3 mt-3">The dispute was created. To proceed with your deal please chat with the admin <span>http://t.me/kuropatov</span></h6>
+        {{/if}}
         <div id="buttonSection" class="container-sm">
             <a type="button" class="btn btn-primary" id="new-deal" href="/">New deal</a>
             <div>

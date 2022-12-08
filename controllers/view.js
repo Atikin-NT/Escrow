@@ -106,6 +106,7 @@ exports.changeDealStatus = async (req, res) => {
     let btnName = "";
     let notEnd = true;
     let cancelBtn = true;
+    let telegramShow = false;
     let btnDanger = 'Cancel';
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
@@ -175,10 +176,12 @@ exports.changeDealStatus = async (req, res) => {
                     dbAnswer = answer.list[0];
                     title = "Waiting when you will approve Magic Box";
                     btnName = "Approve Magic Box";
+                    telegramShow = true;
                     if(answer.list[0].seller == account){
                         showNextButton = false;
                         title = "Waiting when your partner will approve Magic Box";
                     }
+
                 break;
                 default:
                     title = "Something went wrong :(";
@@ -207,7 +210,8 @@ exports.changeDealStatus = async (req, res) => {
         showNextButton: showNextButton,
         notEnd: notEnd,
         cancelBtn: cancelBtn,
-        btnDanger: btnDanger
+        btnDanger: btnDanger,
+        telegramShow: telegramShow
     });
 }
 
