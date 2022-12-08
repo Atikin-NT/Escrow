@@ -43,7 +43,7 @@ const initialize = async () => {
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
-      await updateHistory(account)
+      await updateHistory(account[0])
     })
 }
 

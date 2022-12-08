@@ -34,11 +34,7 @@ const solveViewRes = async (dealID, account) => {
     bodyInput.innerHTML = html;
   }
   catch (err) { console.log(err); }
-
-  const buyerbtn = document.getElementById('buyer-right');
-  const sellerbtn = document.getElementById('seller-right');
-  if (buyerbtn == null || sellerbtn == null) CreateToast(false, "Конфликт разрешен");
-  else CreateToast(true, "Конфликт не разрешен");
+  CreateToast(false, "Конфликт разрешен");
   await thisUpdateHistory(account);
 }
 
@@ -53,18 +49,16 @@ const dealToHelp = async (dealID, account) => {
 
   const buyerbtn = document.getElementById('buyer-right');
   const sellerbtn = document.getElementById('seller-right');
-  if(buyerbtn != null && sellerbtn != null){
-    buyerbtn.addEventListener('click', async (evt) => {
-      const tx = await escrowProvider.disapprove(answerDealById.txId);
-      await tx.wait();
-      await solveViewRes(dealID, account);
-    })
-    sellerbtn.addEventListener('click', async (evt) => {
-      const tx = await escrowProvider.approve(answerDealById.txId);
-      await tx.wait();
-      await solveViewRes(dealID, account);
-    })
-  }
+  buyerbtn?.addEventListener('click', async (evt) => {
+    const tx = await escrowProvider.disapprove(answerDealById.txId);
+    await tx.wait();
+    await solveViewRes(dealID, account);
+  })
+  sellerbtn?.addEventListener('click', async (evt) => {
+    const tx = await escrowProvider.approve(answerDealById.txId);
+    await tx.wait();
+    await solveViewRes(dealID, account);
+  })
 }
 
 const initialize = async () => {
@@ -75,7 +69,7 @@ const initialize = async () => {
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
-        metaMaskAcc = account;
+      metaMaskAcc = account[0];
       await thisUpdateHistory(metaMaskAcc);
     })
 

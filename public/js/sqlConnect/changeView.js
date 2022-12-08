@@ -148,8 +148,6 @@ async function changeDealStatus(dealID, account, status){
                     transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
                     await setTxHash(dealID, transaction.hash);
                     await transaction.wait();
-                    // txId = tx.events[0].args.TxId;
-                    // await setTxId(dealID, txId);
                     break;
                 case 2:
                     showLoader();
@@ -205,17 +203,13 @@ async function changeDealStatus(dealID, account, status){
         bodyInput.innerHTML = html;
 
         const approveDealBtn = document.getElementById("next-deal-step");
-        if(approveDealBtn != null){
-            approveDealBtn.addEventListener('click', async (evt) => {
-                await changeDealStatus(dealID, account, status+1);
-            });
-        }
+        approveDealBtn?.addEventListener('click', async (evt) => {
+            await changeDealStatus(dealID, account, status+1);
+        });
         const cancelDealBtn = document.getElementById("cancel-deal");
-        if(cancelDealBtn != null){
-            cancelDealBtn.addEventListener('click', async (evt) => {
-                await changeDealStatus(dealID, account, -1);
-            });
-        }
+        cancelDealBtn?.addEventListener('click', async (evt) => {
+            await changeDealStatus(dealID, account, -1);
+        });
         await updateHistory(account);
     })
     .catch((err) => {
@@ -234,27 +228,21 @@ function approveByPartner(dealID, account){
         await changeProgressState(0);
         bodyInput.innerHTML = html;
         const changeBtn = document.getElementById("change-deal-step");
-        if(changeBtn != null){
-            changeBtn.addEventListener('click', (evt) => {
-                changeDeal(dealID, account);
-            });
-        }
+        changeBtn?.addEventListener('click', (evt) => {
+            changeDeal(dealID, account);
+        });
 
         const approveDealBtn = document.getElementById("next-deal-step");
-        if(approveDealBtn != null){
-            approveDealBtn.addEventListener('click', (evt) => {
-                changeDealStatus(dealID, account, 1);
-            });
-        }
+        approveDealBtn?.addEventListener('click', (evt) => {
+            changeDealStatus(dealID, account, 1);
+        });
 
         const cancelDealBtn = document.getElementById("cancel-deal");
-        if(cancelDealBtn != null){
-            cancelDealBtn.addEventListener('click', async (evt) => {
-                CreateToast(false, "Deal has been deleted");
-                await deleteDeal(dealID);
-                window.location.reload();
-            });
-        }
+        cancelDealBtn?.addEventListener('click', async (evt) => {
+            CreateToast(false, "Deal has been deleted");
+            await deleteDeal(dealID);
+            window.location.reload();
+        });
 
         await updateHistory(account);
     })

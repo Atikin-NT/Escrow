@@ -158,6 +158,7 @@ exports.changeDealStatus = async (req, res) => {
                             showNextButton = false;
                             title = "Waiting when your partner will approve Magic Box";
                         }
+                        if (answer.list[0].arbitrator) telegramShow = true;
                     }
                 break;
                 case DEAL_STATUS.FINISHED:

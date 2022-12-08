@@ -148,7 +148,7 @@ const genList = (list, account, listener) => {
 }
 
 async function updateHistory(account, fetchMethod = 'getDeals', listener = showCurrentDeal, count = 5){
-  account = String(account).toLowerCase();
+    account = account.toLowerCase();
   updateElementsID();
   try {
     const resp = await fetch(`/fetch/${fetchMethod}?account=${account}&limit=${count}`, { headers })
