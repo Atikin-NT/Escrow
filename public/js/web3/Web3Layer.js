@@ -56,7 +56,6 @@ const initialize = async () => {
     escrowProvider = escrowProvider.connect(signer);
     updateConnectionBtn(MetaMaskWallet);
 
-    console.log(MetaMaskWallet != null && MetaMaskWallet > 0);
     if (MetaMaskWallet != null && MetaMaskWallet > 0) {
       const profBtn = document.getElementById("profile-button");
       profBtn.href = "/" + MetaMaskWallet[0];
