@@ -1,0 +1,7 @@
+.historySection {
+  display: flex;
+  justify-content: space-between;
+}
+.historySection button {
+  height: 95%;
+}/*# sourceMappingURL=history.css.map */

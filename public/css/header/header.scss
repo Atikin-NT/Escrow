@@ -8,13 +8,9 @@
 #header-content {
     height: 100%;
 }
-
-#header-content,
 .row {
-    --bs-gutter-x: 0;
+    margin-right: 0;
 }
-
-
 #left-part {
     display: flex;
     justify-content: start;

@@ -2,6 +2,8 @@ import { CreateToast } from "../frontend/Toasts.js";
 import { updateHistory, getDealById } from "../sqlConnect/SQLRequests.js";
 import { provider, escrowProvider } from "../web3/Web3Layer.js";
 
+
+
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
 
@@ -25,7 +27,7 @@ function set_statistic_info(data){
     sol_amount.innerText = data.sol_amount;
 }
 
-const thisUpdateHistory = async (account) => updateHistory(account, 'dealsToHelp', dealToHelp, 10);
+const thisUpdateHistory = async (account, sort = false) => updateHistory(account, 'dealsToHelp', dealToHelp, 10, sort);
 
 const solveViewRes = async (dealID, account) => {
   try {
@@ -61,6 +63,7 @@ const dealToHelp = async (dealID, account) => {
   })
 }
 
+let sort = false
 const initialize = async () => {
     const acc = await provider.listAccounts();
     let metaMaskAcc = acc[0];
@@ -85,7 +88,10 @@ const initialize = async () => {
         await transaction.wait();
     });
 
-
+    document.getElementById("sortList").onchange = await function() {
+      sort = !sort;
+      thisUpdateHistory(metaMaskAcc, sort);
+    }
 }
 
 window.addEventListener("DOMContentLoaded", initialize);
