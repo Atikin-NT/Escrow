@@ -245,6 +245,9 @@ exports.dealViewOnly = async (req, res) => {
         dbAnswer = answer.list[0];
         if(answer.code == 0){
             switch(dbAnswer.status){
+                case DEAL_STATUS.CREATE:
+                    title = 'Waiting for approves by partners'
+                break;
                 case DEAL_STATUS.CREATE_B:
                     title = '"Waiting when buyer will send Ethers'
                 break;
