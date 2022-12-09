@@ -110,11 +110,14 @@ function shortWallet(wallet, n, m) {
   return newWallet;
 }
 
-const genList = (list, account, listener) => {
+const genList = (list, account, listener, sort) => {
   historyList.innerHTML = '';
+  console.log(sort);
+  let tmpArr = [];
 
   for (let i = 0; i < list.length; i++) { 
     const element = list[i];
+    console.log(element.need_admin_help);
     const li = document.createElement("li");
     li.className = "historyLi"
     li.addEventListener('click', (evt) => { listener(element.id, account, element.status); });
@@ -122,8 +125,11 @@ const genList = (list, account, listener) => {
   
     const div = document.createElement("div");
     div.className = "history-div";
-    if (element.status == 4) div.classList.add("txt-success");
-  
+    //----\
+    if (element.status == 4) div.classList.add("text-success");
+    else if (element.arbitrator != null) div.classList.add("text-danger");
+    //----/
+    
     const h6 = document.createElement("h6");
     h6.classList.add("text-container", "my-0");
   
@@ -133,31 +139,50 @@ const genList = (list, account, listener) => {
     div.appendChild(h6);
   
     const small = document.createElement("small");
-    small.classList.add("txt", element.status == 4 ? "txt-succsess" : "txt-muted");
+    //----\
+    small.classList.add("txt");
+    if (element.status == 4) small.classList.add("text-success");
+    else if (element.arbitrator != null) small.classList.add("text-danger");
+    else small.classList.add("txt-muted");
+    //----/
     small.innerHTML = `id: ${element.id}, role: ${role}, status: ${element.status + 1}`;
     div.appendChild(small);
   
     const span = document.createElement("span");
-    span.classList.add("txt", element.status == 4 ? "txt-success" : "txt-muted");
+    //----\
+    span.classList.add("txt");
+    if (element.status == 4) span.classList.add("text-success");
+    else if (element.arbitrator != null) span.classList.add("text-danger");
+    else span.classList.add("txt-muted");
+    //----/
     span.innerHTML = `${element.value} Ether`;
     
     li.appendChild(div);
     li.appendChild(span);
-    historyList.appendChild(li); 
+
+    if (sort && element.arbitrator == null) {
+      tmpArr.push(li);
+    }else {
+      historyList.appendChild(li); 
+    }
+  }
+  if (sort) {
+    while (tmpArr.length != 0) {
+      historyList.appendChild(tmpArr.shift());
+    }
   }
 }
 
-async function updateHistory(account, fetchMethod = 'getDeals', listener = showCurrentDeal, count = 5){
-    account = account.toLowerCase();
+async function updateHistory(account, fetchMethod = 'getDeals', listener = showCurrentDeal, count = 5, sort){
+  account = account.toLowerCase();
   updateElementsID();
   try {
     const resp = await fetch(`/fetch/${fetchMethod}?account=${account}&limit=${count}`, { headers })
-    if (resp.status < 200 || resp.status >= 300)
-      throw new Error("connect error");
+    if (resp.status < 200 || resp.status >= 300) throw new Error("connect error");
 
     const json = await resp.json();
-
-    genList(json.list, account, listener);
+    console.log(json);
+    genList(json.list, account, listener, sort);
 
     if(json.code != 0)
       CreateToast(true, json.msg);
