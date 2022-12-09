@@ -173,6 +173,7 @@ exports.changeDealStatus = async (req, res) => {
                     notEnd = false;
                 break;
                 case DEAL_STATUS.TO_DEL:
+                    btnDanger = 'Ask Admin';
                     title = "Admin Asked";
                     dbAnswer = answer.list[0];
                     title = "Waiting when you will approve Magic Box";

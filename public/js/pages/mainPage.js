@@ -38,7 +38,7 @@ const initialize = async () => {
         dealPartnerLabel.innerHTML = "Buyer address";
     });
     const acc = await provider.listAccounts();
-    if (acc != undefined) {
+    if (acc[0] != undefined) {
       await updateHistory(acc[0]);
     }
     const {ethereum} = window;

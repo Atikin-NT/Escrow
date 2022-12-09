@@ -64,8 +64,8 @@ const dealToHelp = async (dealID, account) => {
 const initialize = async () => {
     const acc = await provider.listAccounts();
     let metaMaskAcc = acc[0];
-    if (acc != undefined) {  //IDEA: а зачем тут проверка, можно свести к одному?
-      await thisUpdateHistory(metaMaskAcc);
+    if (metaMaskAcc == undefined) {
+      window.location.replace("/");
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
@@ -76,6 +76,10 @@ const initialize = async () => {
     try {
       const resp = await fetch(`fetch/preloadAdminPage?account=${metaMaskAcc}`, { headers });
       const json = await resp.json();
+      if (json.code != 0){
+        window.location.replace("/");
+      }
+      await thisUpdateHistory(metaMaskAcc);
       set_statistic_info(json.list[0]);
     } catch (err) { console.log(err); }
 
