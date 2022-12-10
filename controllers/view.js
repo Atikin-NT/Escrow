@@ -111,7 +111,7 @@ exports.changeDealStatus = async (req, res) => {
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
         dbAnswer = answer.list[0];
-        if(answer.code == 0 && (account == dbAnswer.buyer || account == dbAnswer.seller)){
+        if(answer.code == 0 && dbAnswer && (account == dbAnswer.buyer || account == dbAnswer.seller)){
             switch(newStatus){
                 case DEAL_STATUS.CREATE_B:
                     title = "Waiting when your partner will send Ethers";
@@ -243,7 +243,7 @@ exports.dealViewOnly = async (req, res) => {
     if(id != undefined && id != null && id >= 0){
         const answer = JSON.parse(await dbGetDealsByID(id));
         dbAnswer = answer.list[0];
-        if(answer.code == 0){
+        if(answer.code == 0 && dbAnswer){
             switch(dbAnswer.status){
                 case DEAL_STATUS.CREATE:
                     title = 'Waiting for approves by partners'
