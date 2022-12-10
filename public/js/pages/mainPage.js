@@ -1,4 +1,4 @@
-import { createDeal, updateHistory } from "../sqlConnect/SQLRequests.js";
+import { createDeal, updateHistory, updateEthUsd } from "../sqlConnect/SQLRequests.js";
 //Create Deal
 const createDealFormClick = document.getElementById("create-deal-btn");
 const transactionAmount = document.getElementById("transaction-amount");
@@ -51,6 +51,7 @@ const initialize = async () => {
     ethereum.on("accountsChanged", async (account) => {
       await updateHistory(account[0])
     })
+    updateEthUsd();
 }
 
 window.addEventListener("DOMContentLoaded", initialize);

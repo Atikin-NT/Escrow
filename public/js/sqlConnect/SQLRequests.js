@@ -1,7 +1,7 @@
 import { CreateToast } from "../frontend/Toasts.js";
 import { showCurrentDeal } from "../sqlConnect/changeView.js";
 import { getFeeData } from "../web3/Web3Layer.js";
-const myStorage = window.localStorage;
+const myStorage = window.sessionStorage;
 
 let buyerSwitch = document.getElementById("buyer-role");
 let partnerWallet = document.getElementById("deal-partner");
