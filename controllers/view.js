@@ -45,6 +45,7 @@ exports.changeDealView = async (req, res) => {
         partner: partner, 
         partnerRole: partnerRole,
         value: dbAnswer.value,
+        usdValue: value,
         etherSelected: unitListWithSelect[0],
         usdSelected: unitListWithSelect[1],
         discountChecked: feeRoleList[1],
@@ -55,7 +56,7 @@ exports.changeDealView = async (req, res) => {
         fee: dbAnswer.fee,
         status: dbAnswer.status,
         btnName: "Save",
-        notEnd: true,
+        notEnd: true
     });
 }
 

@@ -2,8 +2,6 @@ import { CreateToast } from "../frontend/Toasts.js";
 import { updateHistory, getDealById } from "../sqlConnect/SQLRequests.js";
 import { provider, escrowProvider } from "../web3/Web3Layer.js";
 
-
-
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
 
@@ -74,6 +72,7 @@ const initialize = async () => {
     ethereum.on("accountsChanged", async (account) => {
       metaMaskAcc = account[0];
       await thisUpdateHistory(metaMaskAcc);
+      // if (answer == 403) window.location.replace("/");
     })
 
     try {
@@ -92,7 +91,7 @@ const initialize = async () => {
         await transaction.wait();
     });
 
-    document.getElementById("sortList").onchange = await function() {
+    document.getElementById("sortList").onchange = function() {
       sort = !sort;
       thisUpdateHistory(metaMaskAcc, sort);
     }

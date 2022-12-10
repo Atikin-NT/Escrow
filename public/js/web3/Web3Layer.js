@@ -86,10 +86,7 @@ const initialize = async () => {
     }
     ethereum.on("accountsChanged", handleNewAccounts);
   }
-  
   updateConnectionBtn();
-
-  
 };
 
 window.addEventListener("DOMContentLoaded", initialize);

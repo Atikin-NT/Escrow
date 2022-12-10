@@ -84,6 +84,8 @@ const createDeal = async (account) => {
   let body = await getBody(account);
   body = JSON.stringify(body);
 
+  console.log(body);
+
   const jsonCall = (json) => {
     let res = -1;
     if (json.code != 0)
@@ -112,12 +114,11 @@ function shortWallet(wallet, n, m) {
 
 const genList = (list, account, listener, sort) => {
   historyList.innerHTML = '';
-  console.log(sort);
+  // console.log(sort);
   let tmpArr = [];
 
   for (let i = 0; i < list.length; i++) { 
     const element = list[i];
-    console.log(element.need_admin_help);
     const li = document.createElement("li");
     li.className = "historyLi"
     li.addEventListener('click', (evt) => { listener(element.id, account, element.status); });
@@ -181,11 +182,12 @@ async function updateHistory(account, fetchMethod = 'getDeals', listener = showC
     if (resp.status < 200 || resp.status >= 300) throw new Error("connect error");
 
     const json = await resp.json();
-    console.log(json);
-    genList(json.list, account, listener, sort);
 
-    if(json.code != 0)
+    if(json.code != 0) {
       CreateToast(true, json.msg);
+      // if (json.code == 403) return 403;
+    }
+    genList(json.list, account, listener, sort);
   } catch (err) {
     console.log(err);
     CreateToast(true, err);
