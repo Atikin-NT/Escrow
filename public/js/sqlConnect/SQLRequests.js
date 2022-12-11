@@ -1,6 +1,7 @@
 import { CreateToast } from "../frontend/Toasts.js";
 import { showCurrentDeal } from "../sqlConnect/changeView.js";
 import { getFeeData } from "../web3/Web3Layer.js";
+const myStorage = window.sessionStorage;
 
 let buyerSwitch = document.getElementById("buyer-role");
 let partnerWallet = document.getElementById("deal-partner");
@@ -114,7 +115,6 @@ function shortWallet(wallet, n, m) {
 
 const genList = (list, account, listener, sort) => {
   historyList.innerHTML = '';
-  // console.log(sort);
   let tmpArr = [];
 
   for (let i = 0; i < list.length; i++) { 
@@ -220,9 +220,6 @@ const getDealById = async(id) => {
   if(id <= 0)
     throw "invalid value";
   
-  // const body = JSON.stringify({
-  //   id: id,
-  // });
   const jsonCall = (json) => {
     let res = -1;
     if(json.code == 0)
@@ -290,4 +287,15 @@ const deleteDeal = async (id) => {
   return res;
 }
 
-export { updateHistory, createDeal, updateDeal, getDealById, setTxId, setTxHash, deleteDeal };
+const updateEthUsd = async () => {
+  const [gasInWei, ethUsd] = await getFeeData();
+  myStorage.setItem("ethUsd", ethUsd.toString());
+}
+
+const ETHtoUSD = async (eth) => { 
+  if (!myStorage.getItem('ethUsd')) await updateEthUsd();
+  const ethUsd = Number(myStorage.getItem('ethUsd'));
+  return ethUsd * eth / 1e8; 
+}
+
+export { updateHistory, createDeal, updateDeal, getDealById, setTxId, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD };

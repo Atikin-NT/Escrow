@@ -1,6 +1,6 @@
 import { MetaMaskWallet, escrowProvider } from "../web3/Web3Layer.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { updateDeal, updateHistory, getDealById, setTxHash, deleteDeal } from "./SQLRequests.js";
+import { updateDeal, updateHistory, getDealById, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
@@ -40,9 +40,26 @@ function hiddenLoader() {
     }
 }
 
-function showCurrentDeal(dealID, account, status){
-    if (status == 0) approveByPartner(dealID, account);
-    else changeDealStatus(dealID, account, status);
+const sellerReceive = async () => {
+    const value = Number(document.getElementById("transaction-amount").value) * 0.98;
+    const index = document.getElementById("ether-unit").selectedIndex ?? 1;
+    const res = index == 0 ? await ETHtoUSD(value) : value;
+    CreateToast(false, `Seller will receive ${res} USD`);
+}
+
+async function showCurrentDeal(dealID, account, status){
+    const answerDealById = await getDealById(dealID); //not need here if status == 0
+    const sellerGet = answerDealById.value - answerDealById.fee
+    if (status == 0)
+        await approveByPartner(dealID, account);
+    else {
+        if (answerDealById == -1) throw "Deal Not Found";
+        if (status != answerDealById.status) await blockChainCall(status, dealID, answerDealById);
+        await changeDealStatusView(dealID, account, status);
+    }
+    updateHistory(account);
+    updateEthUsd();
+    CreateToast(false, `Seller will receive ${await ETHtoUSD(sellerGet)} USD`);
 }
 
 const updateConnectionBtn = (account) => {
@@ -117,7 +134,7 @@ function changeDeal(dealID, account){
             }
             try {
                 const createID = await updateDeal(MetaMaskWallet[0], dealID);
-                approveByPartner(createID, MetaMaskWallet[0]);
+                showCurrentDeal(createID, MetaMaskWallet[0], 0);
             } catch (error) {
                 CreateToast(true, error);
             }
@@ -125,6 +142,8 @@ function changeDeal(dealID, account){
         const buyerSwitch = document.getElementById("buyer-role");
         const sellerSwitch = document.getElementById("seller-role");
         const dealPartnerLabel = document.getElementById("deal-partner-label");
+        const transactionAmount = document.getElementById("transaction-amount");
+        const unit = document.getElementById("ether-unit");
         buyerSwitch.addEventListener('click', (evt) => { //we are buyer
             dealPartnerLabel.innerHTML = "Seller address";
         });
@@ -132,138 +151,126 @@ function changeDeal(dealID, account){
         sellerSwitch.addEventListener('click', (evt) => { //we are seller
             dealPartnerLabel.innerHTML = "Buyer address";
         });
-        await updateHistory(account);
+
+        transactionAmount?.addEventListener('change', sellerReceive)
+        unit?.addEventListener('change', sellerReceive)
     })
     .catch((err) => {
         console.log(err);
     });
 }
 
-async function changeDealStatus(dealID, account, status){
-    let answerDealById = await getDealById(dealID);
-    if(answerDealById == -1) {
-        throw "Deal Not Found";
-    }
-    let transaction = "0";
-    let txId = "0";
-    if(status != 0)
-        txId = answerDealById.txId;
+async function blockChainCall(status, dealID, answerDealById) {
     try {
+        let transaction = "0";
         let current_value = -1;
-        if(status != answerDealById.status){
-            switch(status){
-                case 1:
-                    showLoader();
-                    current_value = ethers.utils.parseEther(String(answerDealById.value));
-                    transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
-                    await setTxHash(dealID, transaction.hash);
-                    await transaction.wait();
-                    break;
-                case 2:
-                    showLoader();
-                    current_value = ethers.utils.parseEther(String(answerDealById.value));
-                    transaction = await escrowProvider.sendB(answerDealById.txId, {value: current_value});
+        switch(status){
+            case 1:
+                showLoader();
+                current_value = ethers.utils.parseEther(String(answerDealById.value));
+                transaction = await escrowProvider.create(answerDealById.buyer, answerDealById.seller, current_value, answerDealById.feeRole);
+                await setTxHash(dealID, transaction.hash);
+                await transaction.wait();
+                break;
+            case 2:
+                showLoader();
+                current_value = ethers.utils.parseEther(String(answerDealById.value));
+                transaction = await escrowProvider.sendB(answerDealById.txId, {value: current_value});
+                await transaction.wait()
+                break;
+            case 3:
+                showLoader();
+                transaction = await escrowProvider.sendS(answerDealById.txId);
+                await transaction.wait()
+                break;
+            case 4:
+                showLoader();
+                transaction = await escrowProvider.approve(answerDealById.txId);
+                await transaction.wait()
+                break;
+            case -1:
+                showLoader();
+                if(answerDealById.status != 3){
+                    await escrowProvider.cancel(answerDealById.txId);
+                    CreateToast(false, "Deal has been deleted");
+                    await deleteDeal(dealID);
+                    window.location.reload();
+                    return;
+                }
+                else{
+                    transaction = await escrowProvider.askArbitrator(answerDealById.txId, '0xf952924197d795ee179aa06bf83aab3f604372de', {value: ethers.utils.parseEther('0.02')});
                     await transaction.wait()
-                    break;
-                case 3:
-                    showLoader();
-                    transaction = await escrowProvider.sendS(answerDealById.txId);
-                    await transaction.wait()
-                    break;
-                case 4:
-                    showLoader();
-                    transaction = await escrowProvider.approve(answerDealById.txId);
-                    await transaction.wait()
-                    break;
-                case -1:
-                    showLoader();
-                    if(answerDealById.status != 3){
-                        await escrowProvider.cancel(answerDealById.txId);
-                        CreateToast(false, "Deal has been deleted");
-                        await deleteDeal(dealID);
-                        window.location.reload();
-                        return;
-                    }
-                    else{
-                        transaction = await escrowProvider.askArbitrator(answerDealById.txId, '0xf952924197d795ee179aa06bf83aab3f604372de', {value: ethers.utils.parseEther('0.02')});
-                        await transaction.wait()
-                    }
-                    break;
-                default:
-                    console.log("Unknown error");
-                    break;
-            }
-            hiddenLoader();
+                }
+                break;
+            default:
+                console.log("Unknown error");
+                break;
         }
+        hiddenLoader();
     } catch (err) {
         hiddenLoader();
         CreateToast(true, "Something went wrong :(");
-        return;
     }
+}
 
-    fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers }) 
-    .then((resp) => {
-        if (resp.status < 200 || resp.status >= 300)
-            throw new Error("connect error");
-        return resp.text();
-    })
-    .then(async (html) => {
+async function changeDealStatusView(dealID, account, status) {
+    try {
+        const resp = await fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers });
+        if (resp.status < 200 || resp.status >= 300) throw new Error("connect error");
+    
         if (status == -1) status = 3;
         await changeProgressState(status);
-        bodyInput.innerHTML = html;
 
-        const approveDealBtn = document.getElementById("next-deal-step");
-        approveDealBtn?.addEventListener('click', async (evt) => {
-            await changeDealStatus(dealID, account, status+1);
-        });
-        const cancelDealBtn = document.getElementById("cancel-deal");
-        cancelDealBtn?.addEventListener('click', async (evt) => {
-            await changeDealStatus(dealID, account, -1);
-        });
-        await updateHistory(account);
-    })
-    .catch((err) => {
+        const html = await resp.text();
+        bodyInput.innerHTML = html;
+    } catch (err) {
         console.log(err);
+    }
+
+    const approveDealBtn = document.getElementById("next-deal-step");
+    approveDealBtn?.addEventListener('click', (evt) => {
+        showCurrentDeal(dealID, account, status+1);
+    });
+    const cancelDealBtn = document.getElementById("cancel-deal");
+    cancelDealBtn?.addEventListener('click', (evt) => {
+        showCurrentDeal(dealID, account, -1);
     });
 }
 
-function approveByPartner(dealID, account){
-    fetch(`view/approveByPartner?dealid=${dealID}&account=${account}`, { headers })
-    .then((resp) => {
-        if (resp.status < 200 || resp.status >= 300)
-            throw new Error("connect error");
-        return resp.text();
-    })
-    .then(async (html) => {
+async function approveByPartner(dealID, account){
+    try {
+        const resp = await fetch(`view/approveByPartner?dealid=${dealID}&account=${account}`, { headers });
+        if (resp.status < 200 || resp.status >= 300) throw new Error("connect error");
+
         await changeProgressState(0);
+
+        const html = await resp.text();
         bodyInput.innerHTML = html;
-        const changeBtn = document.getElementById("change-deal-step");
-        changeBtn?.addEventListener('click', (evt) => {
-            changeDeal(dealID, account);
-        });
-
-        const approveDealBtn = document.getElementById("next-deal-step");
-        approveDealBtn?.addEventListener('click', (evt) => {
-            changeDealStatus(dealID, account, 1);
-        });
-
-        const cancelDealBtn = document.getElementById("cancel-deal");
-        cancelDealBtn?.addEventListener('click', async (evt) => {
-            CreateToast(false, "Deal has been deleted");
-            await deleteDeal(dealID);
-            window.location.reload();
-        });
-
-        await updateHistory(account);
-    })
-    .catch((err) => {
+    } catch (err) {
         console.log(err);
+    }
+
+    const changeBtn = document.getElementById("change-deal-step");
+    changeBtn?.addEventListener('click', (evt) => {
+        changeDeal(dealID, account);
+        updateHistory(account);
+    });
+
+    const approveDealBtn = document.getElementById("next-deal-step");
+    approveDealBtn?.addEventListener('click', (evt) => {
+        showCurrentDeal(dealID, account, 1);
+    });
+
+    const cancelDealBtn = document.getElementById("cancel-deal");
+    cancelDealBtn?.addEventListener('click', async (evt) => {
+        CreateToast(false, "Deal has been deleted");
+        await deleteDeal(dealID);
+        window.location.reload();
     });
 }
 
-export { 
-    approveByPartner, 
-    changeDeal,
+export {
     showCurrentDeal,
-    updateConnectionBtn
+    updateConnectionBtn,
+    sellerReceive
 };

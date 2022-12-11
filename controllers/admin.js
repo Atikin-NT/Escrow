@@ -10,13 +10,10 @@ const {
 } = require("../lib/adminInfo.js");
 const { ethers } = require('ethers');
 const { createJsonAnswer } = require('../lib/createJsonAns.js');
-const { ESCROW, PROVIDER } = require("../lib/utils.js")
+const { ESCROW } = require("../lib/utils.js")
 
 
 exports.preloadAdminPage = async (req, res) => {
-    // const signer = await PROVIDER.getSigner();
-    // // const tx = await ESCROW.connect(signer[0]).hold();
-    // console.log(signer);
     const account = req.query.account.toLowerCase();
     let msg = 'not admin';
     let code = 403;
