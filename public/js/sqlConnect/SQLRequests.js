@@ -156,7 +156,7 @@ const genList = (list, account, listener, sort) => {
     else if (element.arbitrator != null) span.classList.add("text-danger");
     else span.classList.add("txt-muted");
     //----/
-    span.innerHTML = `${element.value} Ether`;
+    span.innerHTML = `${element.value} ETH`;
     
     li.appendChild(div);
     li.appendChild(span);
@@ -298,4 +298,10 @@ const ETHtoUSD = async (eth) => {
   return ethUsd * eth / 1e8; 
 }
 
-export { updateHistory, createDeal, updateDeal, getDealById, setTxId, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD };
+const USDtoETH = async (usd) => {
+  if (!myStorage.getItem('ethUsd')) await updateEthUsd();
+  const ethUsd = Number(myStorage.getItem('ethUsd'));
+  return usd * 1e8/ethUsd; 
+}
+
+export { updateHistory, createDeal, updateDeal, getDealById, setTxId, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD, USDtoETH };

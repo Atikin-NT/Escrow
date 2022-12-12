@@ -1,6 +1,6 @@
 import { MetaMaskWallet, escrowProvider } from "../web3/Web3Layer.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { updateDeal, updateHistory, getDealById, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD } from "./SQLRequests.js";
+import { updateDeal, updateHistory, getDealById, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD, USDtoETH } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
@@ -59,7 +59,9 @@ async function showCurrentDeal(dealID, account, status){
     }
     updateHistory(account);
     updateEthUsd();
-    CreateToast(false, `Seller will receive ${await ETHtoUSD(sellerGet)} USD`);
+
+    // console.log(document.getElementById("test").selected);
+    // CreateToast(false, `Seller will receive ${await ETHtoUSD(sellerGet)} USD`);
 }
 
 const updateConnectionBtn = (account) => {
@@ -213,6 +215,22 @@ async function blockChainCall(status, dealID, answerDealById) {
     }
 }
 
+async function convertValue(id, oldEthValue) {
+    let value;
+    if (document.getElementById("etherValue").selected) {
+        value = oldEthValue;
+    } else if (document.getElementById("usdValue").selected) {
+        value = await ETHtoUSD(oldEthValue);
+        value = value.toString().slice(0,6);
+    } else {
+        CreateToast(false, "Error with output transaction value!");
+    }
+    // let strValue = value.toString();
+    // console.log(strValue[0]);
+    document.getElementById(id).innerText = value;
+}
+
+
 async function changeDealStatusView(dealID, account, status) {
     try {
         const resp = await fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers });
@@ -226,6 +244,22 @@ async function changeDealStatusView(dealID, account, status) {
     } catch (err) {
         console.log(err);
     }
+
+    var transactionValue = document.getElementById("transaction-amount").innerText;
+    var feeValue = document.getElementById("fee-payment").innerText;
+
+    document.getElementById("ether-unit").addEventListener('change', (evt) => {
+        convertValue("transaction-amount", transactionValue);
+        convertValue("fee-payment", feeValue);
+    
+        if (document.getElementById("etherValue").selected) {
+            document.getElementById("fee-unit").innerText = `Ether`;
+        } else if (document.getElementById("usdValue").selected) {
+            document.getElementById("fee-unit").innerText = `USD`;
+        } else {
+            CreateToast(false, "Error with output fee!");
+        }
+    })
 
     const approveDealBtn = document.getElementById("next-deal-step");
     approveDealBtn?.addEventListener('click', (evt) => {
@@ -249,6 +283,22 @@ async function approveByPartner(dealID, account){
     } catch (err) {
         console.log(err);
     }
+
+    var transactionValue = document.getElementById("transaction-amount").innerText;
+    var feeValue = document.getElementById("fee-payment").innerText;
+
+    document.getElementById("ether-unit").addEventListener('change', (evt) => {
+        convertValue("transaction-amount", transactionValue);
+        convertValue("fee-payment", feeValue);
+    
+        if (document.getElementById("etherValue").selected) {
+            document.getElementById("fee-unit").innerText = `Ether`;
+        } else if (document.getElementById("usdValue").selected) {
+            document.getElementById("fee-unit").innerText = `USD`;
+        } else {
+            CreateToast(false, "Error with output fee!");
+        }
+    })
 
     const changeBtn = document.getElementById("change-deal-step");
     changeBtn?.addEventListener('click', (evt) => {
