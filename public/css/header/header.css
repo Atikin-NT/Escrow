@@ -1,9 +1,10 @@
 #header {
   min-width: 576px;
   width: 100%;
-  height: 4rem;
+  height: 3rem;
   background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
-  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
 }
 
 #header-content {
@@ -15,36 +16,54 @@
 }
 
 #left-part {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: start;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
   padding: 0 !important;
 }
 
 #right-part {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: end;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
   padding: 0 !important;
 }
 
 .div-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin-left: 4rem;
   cursor: pointer;
 }
+
 .div-title svg {
-  width: 1.5rem;
+  width: 1rem;
   margin-right: 0.5rem;
 }
+
 .div-title h3 {
-  font-size: 2rem !important;
+  font-size: calc(2rem * 0.9) !important;
 }
+
 @media (max-width: 992px) {
   .div-title {
     margin-left: 3rem;
   }
 }
+
 @media (max-width: 768px) {
   .div-title {
     margin-left: 2rem;
@@ -61,20 +80,23 @@
 }
 
 #right-part .item {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin-right: 1rem;
 }
 
-.sandwich {
-  height: 2.5rem;
-  width: 3.5rem;
+#profile-button {
+  font-size: calc(1rem * 0.9) !important;
 }
 
-.line {
-  width: 80%;
-  height: 1px;
-  background-color: grey;
-  border-radius: 50px;
-}/*# sourceMappingURL=header.css.map */
+#connectButton {
+  font-size: calc(1rem * 0.9);
+}
+/*# sourceMappingURL=header.css.map */

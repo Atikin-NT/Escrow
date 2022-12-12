@@ -1,7 +1,13 @@
 .historySection {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
+
 .historySection button {
   height: 95%;
-}/*# sourceMappingURL=history.css.map */
+}
+/*# sourceMappingURL=history.css.map */
