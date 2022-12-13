@@ -6,6 +6,8 @@ const viewRoutes = require('./routes/view.js');
 const profileRoutes = require('./routes/profile.js');
 const cookieParser = require('cookie-parser');
 const ethers = require('ethers');
+require("dotenv").config();
+const { ADMIN_PAGE } = process.env;
 const {setTxIdByHash, dbGetDealsByTxID, dbUpdateDealStatus, setArbitrator } = require("./lib/sqlite");
 const { DEAL_STATUS, PROVIDER, ESCROW_ADDRESS } = require("./lib/utils.js")
 
@@ -40,7 +42,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/admin', (req, res) => {
+app.get(`/${ADMIN_PAGE}`, (req, res) => {
   res.render('partials/adminMainPage', {
     title: "Статистика",
     layout: "admin",
