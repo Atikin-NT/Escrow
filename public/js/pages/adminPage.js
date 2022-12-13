@@ -25,7 +25,7 @@ function set_statistic_info(data){
     sol_amount.innerText = data.sol_amount;
 }
 
-const thisUpdateHistory = async (account, sort = false) => updateHistory(account, 'dealsToHelp', dealToHelp, 10, sort);
+const thisUpdateHistory = async (account, sort = false, fetchRequest = 'dealsToHelp',) => updateHistory(account, fetchRequest, dealToHelp, 10, sort);
 
 const solveViewRes = async (dealID, account) => {
   try {
@@ -93,7 +93,12 @@ const initialize = async () => {
 
     document.getElementById("sortList").onchange = function() {
       sort = !sort;
-      thisUpdateHistory(metaMaskAcc, sort);
+      if (sort){
+          thisUpdateHistory(metaMaskAcc, sort, "getAdminHelpDeals");
+      }
+      else{
+          thisUpdateHistory(metaMaskAcc, sort);
+      }
     }
 }
 

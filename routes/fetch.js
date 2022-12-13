@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const {createDeal, deleteDeal, getDeals, getDealsIDDesc, dealsToHelp, updateDealStatus, updateDeal, getDealById, updateTxId, updateTxHash} = require("../controllers/fetch.js");
+const {createDeal, deleteDeal, getDeals, getDealsIDDesc, dealsToHelp, updateDealStatus, updateDeal, getDealById, updateTxId, updateTxHash, getAdminHelpDeals} = require("../controllers/fetch.js");
 const { preloadAdminPage } = require("../controllers/admin.js");
 
 const router = Router();
@@ -37,5 +37,8 @@ router.post("/fetch/updateTxHash", updateTxHash);
 //=> query { account }
 //<= send(JSON)
 router.get('/fetch/preloadAdminPage', preloadAdminPage);
+
+router.get('/fetch/getAdminHelpDeals', getAdminHelpDeals);
+
 
 module.exports = router;
