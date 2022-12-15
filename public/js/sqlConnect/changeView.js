@@ -154,8 +154,8 @@ function changeDeal(dealID, account){
             dealPartnerLabel.innerHTML = "Buyer address";
         });
 
-        transactionAmount?.addEventListener('change', sellerReceive)
-        unit?.addEventListener('change', sellerReceive)
+        // transactionAmount?.addEventListener('change', sellerReceive)
+        // unit?.addEventListener('change', sellerReceive)
     })
     .catch((err) => {
         console.log(err);
@@ -322,5 +322,5 @@ async function approveByPartner(dealID, account){
 export {
     showCurrentDeal,
     updateConnectionBtn,
-    sellerReceive
+    // sellerReceive
 };

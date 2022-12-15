@@ -14,7 +14,7 @@ import { CreateToast } from "../frontend/Toasts.js";
 
 //Main logic
 import { MetaMaskWallet, provider } from "../web3/Web3Layer.js";
-import { showCurrentDeal, sellerReceive } from "../sqlConnect/changeView.js";
+import { showCurrentDeal } from "../sqlConnect/changeView.js";
 
 
 const initialize = async () => {
@@ -40,8 +40,8 @@ const initialize = async () => {
         dealPartnerLabel.innerHTML = "Buyer address";
     });
 
-    transactionAmount?.addEventListener('change', sellerReceive)
-    unit?.addEventListener('change', sellerReceive);
+    // transactionAmount?.addEventListener('change', sellerReceive)
+    // unit?.addEventListener('change', sellerReceive);
 
     const acc = await provider.listAccounts();
     if (acc[0] != undefined) {
