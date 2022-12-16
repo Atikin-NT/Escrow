@@ -114,7 +114,7 @@ contract Escrow is AccessControlUpgradeable {
     function disapprove(bytes32 TxId) external onlyPerson(deals[TxId].arbitrator) {
         require(deals[TxId].status == 3, "Seller did not confirm the transaction");
         hold += deals[TxId].Bfee;
-        payable(msg.sender).transfer(deals[TxId].value);
+        payable(deals[TxId].buyer).transfer(deals[TxId].value);
         delete deals[TxId];
         emit Finished(TxId);
     }
