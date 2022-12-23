@@ -27,6 +27,10 @@ function set_statistic_info(data){
 
 const thisUpdateHistory = async (account, sort = false, fetchRequest = 'dealsToHelp',) => updateHistory(account, fetchRequest, dealToHelp, 10, sort);
 
+/**
+ * @param  {int} dealID
+ * @param  {string} account
+ */
 const solveViewRes = async (dealID, account) => {
   try {
     const resp = await fetch(`view/dealAdminView?dealid=${dealID}&account=${account}`, { headers });
@@ -38,6 +42,10 @@ const solveViewRes = async (dealID, account) => {
   await thisUpdateHistory(account);
 }
 
+/**
+ * @param  {int} dealID
+ * @param  {string} account
+ */
 const dealToHelp = async (dealID, account) => {
   let answerDealById = await getDealById(dealID);
   try {

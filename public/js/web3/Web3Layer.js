@@ -4,13 +4,18 @@ let MetaMaskWallet;
 let escrowProvider;
 let provider;
 
+/**
+ * Сокращает представление адресов
+ * @param  {string[]} wallet
+ * @param  {int} n left side len
+ * @param  {int} m right side len
+ * @returns {string[]} новый вид wallet
+ */
 function shortWallet(wallet, n, m) {
   const newWallet = [];
-
   for (let i = 0; i <  wallet.length; i++) {
     newWallet.push(wallet[i].slice(0, n) + "..." + wallet[i].slice(wallet[i].length - m, wallet[i].length));
   }
-
   return newWallet;
 }
 
@@ -23,20 +28,21 @@ const initialize = async () => {
 
   const isMetaMaskConnected = () => MetaMaskWallet && MetaMaskWallet.length > 0;
 
+  /**
+   * Изменяет кнопку для подключения кошелька к сайту
+   * @param  { string[] } wallet
+   */
   const updateConnectionBtn = (wallet) => {
-    const button = document.getElementById("connectButton");
     if (!isMetaMaskInstalled()) {
       onboardButton.innerText = "Please install MetaMask";
       onboardButton.disabled = false;
     } else if (isMetaMaskConnected()) {
-      if (document.getElementById("connectButton") !== null) {
-        document.getElementById("connectButton").remove();
-      } 
-      if (wallet != null && document.getElementById("show-account") != undefined) {
+      document.getElementById("connectButton")?.remove();
+      if (document.getElementById("show-account")) {
         document.getElementById("show-account").innerText = shortWallet(wallet, 5, 6);
       }
     } else {
-      if (document.getElementById("connectButton") == null) {
+        if (document.getElementById("connectButton") == null) {
         const btn = document.createElement("button");
         btn.id = "connectButton";
         btn.type = "button";
@@ -47,9 +53,16 @@ const initialize = async () => {
       }
 
       document.getElementById("connectButton").onclick = onClickConnect;
+      if (document.getElementById("show-account")) {
+        document.getElementById("show-account").innerText = 'Please connect MetaMask wallet!';
+      }
     }
   };
 
+  /**
+   * Обрабатывает переключение кошелька
+   * @param  { string[] } newAccounts
+   */
   const handleNewAccounts = async (newAccounts) => {
     MetaMaskWallet = newAccounts;
     const signer = provider.getSigner();
@@ -86,11 +99,13 @@ const initialize = async () => {
     }
     ethereum.on("accountsChanged", handleNewAccounts);
   }
-  updateConnectionBtn();
 };
 
 window.addEventListener("DOMContentLoaded", initialize);
 
+/**
+ * @returns {Promise<[number, number]>} [wei/gas, usd/eth * 1e8]   from blockchain
+ */
 const getFeeData = async () => {
   let gasFeedValue = ethers.BigNumber.from(0);
   let ethUsdFeedValue = ethers.BigNumber.from(0);

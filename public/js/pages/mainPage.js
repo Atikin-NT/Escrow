@@ -40,18 +40,16 @@ const initialize = async () => {
         dealPartnerLabel.innerHTML = "Buyer address";
     });
 
-    // transactionAmount?.addEventListener('change', sellerReceive)
-    // unit?.addEventListener('change', sellerReceive);
-
     const acc = await provider.listAccounts();
     if (acc[0] != undefined) {
       await updateHistory(acc[0]);
     }
     const {ethereum} = window;
     ethereum.on("accountsChanged", async (account) => {
-      await updateHistory(account[0])
+      if (account[0])
+        await updateHistory(account[0])
+      updateEthUsd();
     })
-    updateEthUsd();
 }
 
 window.addEventListener("DOMContentLoaded", initialize);

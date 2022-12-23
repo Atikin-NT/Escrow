@@ -6,6 +6,11 @@ const {
 } = require("../lib/userinfo.js");
 const { ethers } = require('ethers');
 
+/**
+ * render page or send BadAddr html
+ * @param  {{params: {address: string}}} req request
+ * @param  {} res response
+ */
 exports.pageLoad = async (req, res) => {
     const address = '0x' + req.params.address.toLowerCase();
     if(!ethers.utils.isAddress(address))

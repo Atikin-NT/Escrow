@@ -16,6 +16,11 @@ const defaulDeal = {
 };
 const feeRoleList = ["Buyer", "50/50", "Seller"];
 
+/**
+ * render page
+ * @param  {{query: {account: string, dealid: int}}} req request
+ * @param  {} res response
+ */
 exports.changeDealView = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();
@@ -45,7 +50,7 @@ exports.changeDealView = async (req, res) => {
         partner: partner, 
         partnerRole: partnerRole,
         value: dbAnswer.value,
-        usdValue: value,
+        usdValue: dbAnswer.value,
         etherSelected: unitListWithSelect[0],
         usdSelected: unitListWithSelect[1],
         discountChecked: feeRoleList[1],
@@ -60,6 +65,11 @@ exports.changeDealView = async (req, res) => {
     });
 }
 
+/**
+ * render page
+ * @param  {{query: {account: string, dealid: int}}} req request
+ * @param  {} res response
+ */
 exports.approveByPartnerView = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();
@@ -97,6 +107,11 @@ exports.approveByPartnerView = async (req, res) => {
     });
 }
 
+/**
+ * render page
+ * @param  {{query: {account: string, dealid: int, status: int}}} req request
+ * @param  {} res response
+ */
 exports.changeDealStatus = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();
@@ -218,6 +233,11 @@ exports.changeDealStatus = async (req, res) => {
     });
 }
 
+/**
+ * render page
+ * @param  {{query: {account: string, dealid: int}}} req request
+ * @param  {} res response
+ */
 exports.dealAdminView = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const address = req.query.account.toLowerCase();
@@ -236,6 +256,11 @@ exports.dealAdminView = async (req, res) => {
     });
 }
 
+/**
+ * render page
+ * @param  {{query: {account: string, dealid: int}}} req request
+ * @param  {} res response
+ */
 exports.dealViewOnly = async (req, res) => {
     const id = parseInt(req.query.dealid);
     const account = req.query.account.toLowerCase();

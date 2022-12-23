@@ -3,6 +3,10 @@ import { updateHistory } from "../sqlConnect/SQLRequests.js";
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
 
+/**
+ * @param  {int} dealID
+ * @param  {string} account
+ */
 const dealViewOnly = async (dealID, account) => {
   try {
     const resp = await fetch(`view/dealViewOnly?dealid=${dealID}&account=${account}`, { headers });

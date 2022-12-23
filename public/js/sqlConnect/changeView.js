@@ -1,6 +1,6 @@
 import { MetaMaskWallet, escrowProvider } from "../web3/Web3Layer.js";
 import { CreateToast } from "../frontend/Toasts.js";
-import { updateDeal, updateHistory, getDealById, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD, USDtoETH } from "./SQLRequests.js";
+import { updateDeal, updateHistory, getDealById, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD, shortWallet } from "./SQLRequests.js";
 
 const headers = { "Content-Type": "application/json" };
 let bodyInput = document.getElementById("inputBody");
@@ -40,16 +40,13 @@ function hiddenLoader() {
     }
 }
 
-const sellerReceive = async () => {
-    const value = Number(document.getElementById("transaction-amount").value) * 0.98;
-    const index = document.getElementById("ether-unit").selectedIndex ?? 1;
-    const res = index == 0 ? await ETHtoUSD(value) : value;
-    CreateToast(false, `Seller will receive ${res} USD`);
-}
-
+/**
+ * @param  {int} dealID
+ * @param  {string} account
+ * @param  {int} status
+ */
 async function showCurrentDeal(dealID, account, status){
     const answerDealById = await getDealById(dealID); //not need here if status == 0
-    const sellerGet = answerDealById.value - answerDealById.fee
     if (status == 0)
         await approveByPartner(dealID, account);
     else {
@@ -59,31 +56,22 @@ async function showCurrentDeal(dealID, account, status){
     }
     updateHistory(account);
     updateEthUsd();
-
-    // console.log(document.getElementById("test").selected);
-    // CreateToast(false, `Seller will receive ${await ETHtoUSD(sellerGet)} USD`);
 }
-
+/**
+ * Когда мы переходим на сделку, а потом в Change нам снова нужно видеть My Address, как на главной странице
+ * @param  {string} account
+ */
 const updateConnectionBtn = (account) => {
-    const button = document.getElementById("connectButton");
-    if (button !== null && account != null) {
-        button.remove();
+    if (account != null) {
         const show = document.getElementById("show-account");
-        show.textContent = account;
-    } else if (button == null && account == null) {
-        console.log(button);
-        const btn = document.createElement("button");
-        btn.id = "connectButton";
-        btn.type = "button";
-        btn.classList.add("btn", "btn-pimary");
-        btn.textContent = "Connect";
-
-        document.getElementById("spanConnectButton").append("btn");
-        console.log(btn);
+        show.textContent = shortWallet(account, 5, 6);
     }
 }
 
 let currentActiveCircle = -1;
+/**
+ * @param  {int} newState
+ */
 async function changeProgressState(newState) {
     const progress = document.getElementById("progress");
     const circles = document.getElementsByClassName("circle");
@@ -116,6 +104,29 @@ async function changeProgressState(newState) {
     }
 }
 
+/**
+ * @param  {string} id
+ * @param  {number} oldEthValue
+ */
+async function convertValue(id, oldEthValue) {
+    let value;
+    if (document.getElementById("etherValue").selected) {
+        value = oldEthValue;
+    } else if (document.getElementById("usdValue").selected) {
+        value = await ETHtoUSD(oldEthValue);
+        value = value.toString().slice(0,6);
+    } else {
+        CreateToast(false, "Error with output transaction value!");
+    }
+    // let strValue = value.toString();
+    // console.log(strValue[0]);
+    document.getElementById(id).innerText = value;
+}
+
+/**
+ * @param  {int} dealID
+ * @param  {string} account
+ */
 function changeDeal(dealID, account){
     fetch(`view/changeDealView?dealid=${dealID}&account=${account}`, { headers })
     .then((resp) => {
@@ -162,6 +173,11 @@ function changeDeal(dealID, account){
     });
 }
 
+/**
+ * @param  {int} status
+ * @param  {int} dealID
+ * @param  {{buyer: string, seller: string, value: float, feeRole: int, txId: string, status: int}} answerDealById
+ */
 async function blockChainCall(status, dealID, answerDealById) {
     try {
         let transaction = "0";
@@ -215,22 +231,11 @@ async function blockChainCall(status, dealID, answerDealById) {
     }
 }
 
-async function convertValue(id, oldEthValue) {
-    let value;
-    if (document.getElementById("etherValue").selected) {
-        value = oldEthValue;
-    } else if (document.getElementById("usdValue").selected) {
-        value = await ETHtoUSD(oldEthValue);
-        value = value.toString().slice(0,6);
-    } else {
-        CreateToast(false, "Error with output transaction value!");
-    }
-    // let strValue = value.toString();
-    // console.log(strValue[0]);
-    document.getElementById(id).innerText = value;
-}
-
-
+/**
+ * @param  {int} dealID
+ * @param  {string} account
+ * @param  {int} status
+ */
 async function changeDealStatusView(dealID, account, status) {
     try {
         const resp = await fetch(`view/inProgressView?dealid=${dealID}&account=${account}&status=${status}`, { headers });
@@ -271,6 +276,10 @@ async function changeDealStatusView(dealID, account, status) {
     });
 }
 
+/**
+ * @param  {int} dealID
+ * @param  {string} account
+ */
 async function approveByPartner(dealID, account){
     try {
         const resp = await fetch(`view/approveByPartner?dealid=${dealID}&account=${account}`, { headers });
@@ -322,5 +331,4 @@ async function approveByPartner(dealID, account){
 export {
     showCurrentDeal,
     updateConnectionBtn,
-    // sellerReceive
 };

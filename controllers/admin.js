@@ -13,6 +13,10 @@ const { createJsonAnswer } = require('../lib/createJsonAns.js');
 const { ESCROW } = require("../lib/utils.js")
 
 
+/**
+ * @param  {{query: {account: string}}} req request
+ * @param  {} res response
+ */
 exports.preloadAdminPage = async (req, res) => {
     const account = req.query.account.toLowerCase();
     let msg = 'not admin';
@@ -21,7 +25,7 @@ exports.preloadAdminPage = async (req, res) => {
         msg = 'bad account';
         code = 601;
     }
-    if((await isAdmin(account)) == 0)
+    if(!(await isAdmin(account)))
         res.status(code).send(createJsonAnswer(code, msg, [
             {
                 dealsDoneCount: 0,

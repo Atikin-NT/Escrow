@@ -23,6 +23,11 @@ function updateElementsID(){
   feeDiscount = document.getElementById("discount");
 }
 
+/**
+ * Collects values from the forms and generates a body
+ * @param  {string} account
+ * @returns {Promise<{buyer: string, seller: string, value: float, sellerIsAdmin: boolean, fee: float, feeRole: int}>} body for req
+ */
 const getBody = async (account) => {
   let value = Number(transactionAmount.value);
   if(!ethers.utils.isAddress(partnerWallet.value) || !ethers.utils.isAddress(account) || partnerWallet.value == account)
@@ -64,6 +69,12 @@ const getBody = async (account) => {
   };
 }
 
+/**
+ * @param  {string} url fetch url
+ * @param  {string?} body req.body
+ * @param  {(json: any) => number} jsonCall handle response
+ * @param  {(err: any) => void} failurCall catch errors
+ */
 const getRes = async (url, body, jsonCall, failurCall) => { 
   let method = (body) ? "post" : "get";
   let res = -1;
@@ -80,12 +91,13 @@ const getRes = async (url, body, jsonCall, failurCall) => {
   return res;
 }
 
+/**
+ * @param  {string} account
+ */
 const createDeal = async (account) => {
   updateElementsID();
   let body = await getBody(account);
   body = JSON.stringify(body);
-
-  console.log(body);
 
   const jsonCall = (json) => {
     let res = -1;
@@ -104,6 +116,13 @@ const createDeal = async (account) => {
   return res;
 }
 
+/**
+ * Сокращает представление адресов
+ * @param  {string} wallet
+ * @param  {int|undefined} n left side len
+ * @param  {int|undefined} m right side len
+ * @returns новый вид wallet
+ */
 function shortWallet(wallet, n, m) {
   if (n === undefined && m === undefined) {
     n = wallet.length;
@@ -113,6 +132,13 @@ function shortWallet(wallet, n, m) {
   return newWallet;
 }
 
+/**
+ * Generate html list on page
+ * @param  {Object[]} list
+ * @param  {string} account
+ * @param  {(dealID: int, account: string, status: int | undefined) => Promise<void>} listener
+ * @param  {boolean|undefined} sort
+ */
 const genList = (list, account, listener, sort) => {
   historyList.innerHTML = '';
   let tmpArr = [];
@@ -174,7 +200,14 @@ const genList = (list, account, listener, sort) => {
   }
 }
 
-async function updateHistory(account, fetchMethod = 'getDeals', listener = showCurrentDeal, count = 5, sort){
+/**
+ * @param  {string} account
+ * @param  {string} fetchMethod='getDeals'
+ * @param  {(dealID: int, account: string, status: int|undefined) => Promise<void>|undefined} listener=showCurrentDeal
+ * @param  {int|undefined} count=5
+ * @param  {boolean|undefined} sort
+ */
+async function updateHistory(account, fetchMethod = 'getDeals', listener = showCurrentDeal, count = 5, sort){ 
   account = account.toLowerCase();
   updateElementsID();
   try {
@@ -193,6 +226,10 @@ async function updateHistory(account, fetchMethod = 'getDeals', listener = showC
   }
 }
 
+/**
+ * @param  {string} account
+ * @param  {int} id
+ */
 const updateDeal = async (account, id) => {
   updateElementsID();
   let body = await getBody(account); body.id = id;
@@ -215,6 +252,10 @@ const updateDeal = async (account, id) => {
   return res;
 }
 
+/**
+ * @param  {int} id
+ * @returns {Promise<Object|number>}
+ */
 const getDealById = async(id) => {
   if(id <= 0)
     throw "invalid value";
@@ -229,6 +270,10 @@ const getDealById = async(id) => {
   return res;
 } 
 
+/**
+ * @param  {int} id
+ * @param  {string} txId
+ */
 const setTxId = async (id, txId) => {
   if(id <= 0)
     throw "invalid value";
@@ -248,6 +293,10 @@ const setTxId = async (id, txId) => {
   return res;
 }
 
+/**
+ * @param  {int} id
+ * @param  {string} txHash
+ */
 const setTxHash = async (id, txHash) => {
   if(id <= 0)
     throw "invalid value";
@@ -267,6 +316,9 @@ const setTxHash = async (id, txHash) => {
   return res;
 }
 
+/**
+ * @param  {int} id
+ */
 const deleteDeal = async (id) => {
   if(id <= 0)
     throw "invalid value";
@@ -303,4 +355,4 @@ const USDtoETH = async (usd) => {
   return usd * 1e8/ethUsd; 
 }
 
-export { updateHistory, createDeal, updateDeal, getDealById, setTxId, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD, USDtoETH };
+export { updateHistory, createDeal, updateDeal, getDealById, setTxId, setTxHash, deleteDeal, updateEthUsd, ETHtoUSD, USDtoETH, shortWallet };
