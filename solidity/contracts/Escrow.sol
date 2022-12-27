@@ -34,7 +34,7 @@ contract Escrow is AccessControlUpgradeable {
     event Created(address indexed buyer, address indexed seller, bytes32 indexed TxId);
     event BuyerConfim(bytes32 indexed TxId);
     event SellerConfim(bytes32 indexed TxId);
-    event Finished(bytes32 indexed TxId);
+    event Finished(bytes32 indexed TxId, uint indexed percent);
     event Conflict(bytes32 indexed TxId);
     event ArbitratorAsked(bytes32 indexed TxId, address indexed arbitrator);
 
@@ -97,7 +97,7 @@ contract Escrow is AccessControlUpgradeable {
             payable(deals[TxId].buyer).transfer(deals[TxId].value + deals[TxId].Bfee);
         }
         delete deals[TxId];
-        emit Finished(TxId);
+        emit Finished(TxId, 100);
     }
 
     function approve(bytes32 TxId) external {
@@ -108,15 +108,20 @@ contract Escrow is AccessControlUpgradeable {
         hold += fee;
         payable(deals[TxId].seller).transfer(InpValue - fee);
         delete deals[TxId];
-        emit Finished(TxId);
+        emit Finished(TxId, 0);
     }
 
-    function disapprove(bytes32 TxId) external onlyPerson(deals[TxId].arbitrator) {
+    function finish(bytes32 TxId, uint percent) public onlyPerson(deals[TxId].arbitrator) {
         require(deals[TxId].status == 3, "Seller did not confirm the transaction");
-        hold += deals[TxId].Bfee;
-        payable(deals[TxId].buyer).transfer(deals[TxId].value);
+        require(percent <= 100);
+        uint toB = deals[TxId].value * percent / 100;
+        uint InpValue = deals[TxId].value + deals[TxId].Bfee;
+        uint toS = (InpValue - getFee(InpValue)) * (100 - percent) / 100;
+        hold += InpValue - toB - toS;
+        payable(deals[TxId].buyer).transfer(toB);
+        payable(deals[TxId].seller).transfer(toS);
         delete deals[TxId];
-        emit Finished(TxId);
+        emit Finished(TxId, percent);
     }
 
     function askArbitrator(bytes32 TxId, address arbitrator) external payable  {
